@@ -24,11 +24,14 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BaseWizardExtensionComponent } from './base-wizard-extension/base-wizard-extension.component';
 import { MaterialModule } from '../sdwizard/material.module'
 import { IconModule } from '@coreui/icons-angular';
+import {
+  ParticipantWizardExtensionComponent
+} from "./participant-wizard-extension/participant-wizard-extension.component";
 
 @NgModule({
-    declarations: [BaseWizardExtensionComponent],
+    declarations: [BaseWizardExtensionComponent, ParticipantWizardExtensionComponent],
     exports: [
-        BaseWizardExtensionComponent
+        BaseWizardExtensionComponent, ParticipantWizardExtensionComponent
     ],
     imports: [
         CommonModule,

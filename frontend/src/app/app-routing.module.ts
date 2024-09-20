@@ -6,11 +6,22 @@ import { DefaultLayoutComponent } from './containers';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'participant/registration',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: DefaultLayoutComponent,
     data: {
       title: 'Home'
     },
-    children: []
+    children: [
+      {
+        path: 'participant',
+        loadChildren: () =>
+          import('./views/participant/participant.module').then((m) => m.ParticipantModule)
+      }
+    ]
   }
 ];
 
