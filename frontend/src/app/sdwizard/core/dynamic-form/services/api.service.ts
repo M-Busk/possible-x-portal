@@ -40,6 +40,7 @@ export class ApiService {
     return undefined;
     //return this.httpClient.get(`${apiUrl}/getAvailableShapes`);
   }
+
   getFilesCategorized(system: any): Observable<any> {
     //const apiUrl = Utils.controlUrl(environment.wizard_api_url);
     //return this.httpClient.get(`${apiUrl}/getAvailableShapesCategorized?ecoSystem=`+system);

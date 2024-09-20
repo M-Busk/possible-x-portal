@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { StatusMessageComponent } from './status-message.component';
+import {StatusMessageComponent} from './status-message.component';
 
 describe('StatusMessageComponent', () => {
   let component: StatusMessageComponent;
@@ -24,9 +24,9 @@ describe('StatusMessageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StatusMessageComponent ]
+      declarations: [StatusMessageComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(StatusMessageComponent);
     component = fixture.componentInstance;

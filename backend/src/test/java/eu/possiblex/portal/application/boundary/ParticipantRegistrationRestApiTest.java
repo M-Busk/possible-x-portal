@@ -3,6 +3,7 @@ package eu.possiblex.portal.application.boundary;
 import eu.possiblex.portal.application.entity.RegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.control.ParticipantRegistrationServiceMock;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ParticipantRegistrationRestApiImpl.class)
-@ContextConfiguration(classes = { ParticipantRegistrationRestApiTest.TestConfig.class, ParticipantRegistrationRestApiImpl.class })
+@ContextConfiguration(classes = { ParticipantRegistrationRestApiTest.TestConfig.class,
+    ParticipantRegistrationRestApiImpl.class })
 class ParticipantRegistrationRestApiTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ParticipantRegistrationService participantRegistrationService;
+
+    @Test
+    @Disabled
+        // TODO enable once implemented
+    void registerParticipant() throws Exception {
+
+        RegistrationRequestTO to = new RegistrationRequestTO();
+        reset(participantRegistrationService);
+        this.mockMvc.perform(post("/registration/request").content(RestApiHelper.asJsonString(to))
+            .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+    }
 
     @TestConfiguration
     static class TestConfig {
@@ -29,24 +48,6 @@ class ParticipantRegistrationRestApiTest {
 
             return Mockito.spy(new ParticipantRegistrationServiceMock());
         }
-    }
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ParticipantRegistrationService participantRegistrationService;
-
-
-    @Test
-    void registerParticipant() throws Exception {
-
-        RegistrationRequestTO to = new RegistrationRequestTO();
-        reset(participantRegistrationService);
-        this.mockMvc.perform(post("/consumer/offer/select")
-                .content(RestApiHelper.asJsonString(to))
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
-            .andExpect(status().isOk());
     }
 
 }

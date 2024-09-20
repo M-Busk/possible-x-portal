@@ -4,7 +4,17 @@
 export interface IParticipantRegistrationRestApi {
 }
 
+export interface IParticipantShapeRestApi {
+    gxLegalParticipantShape: string;
+    gxLegalRegistrationNumberShape: string;
+}
+
 export interface IRegistrationRequestTO {
+    participantCs: any;
+    registrationNumberCs: any;
+}
+
+export interface IRegistrationRequestTOBuilder {
 }
 
 export interface HttpClient {
@@ -21,8 +31,24 @@ export class RestApplicationClient {
      * HTTP POST /registration/request
      * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.registerParticipant
      */
-    registerParticipant(): RestResponse<void> {
-        return this.httpClient.request({ method: "POST", url: uriEncoding`registration/request` });
+    registerParticipant(request: IRegistrationRequestTO): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`registration/request`, data: request });
+    }
+
+    /**
+     * HTTP GET /shapes/gx/legalparticipant
+     * Java method: eu.possiblex.portal.application.boundary.ParticipantShapeRestApiImpl.getGxLegalParticipantShape
+     */
+    getGxLegalParticipantShape(): RestResponse<string> {
+        return this.httpClient.request({ method: "GET", url: uriEncoding`shapes/gx/legalparticipant` });
+    }
+
+    /**
+     * HTTP GET /shapes/gx/legalregistrationnumber
+     * Java method: eu.possiblex.portal.application.boundary.ParticipantShapeRestApiImpl.getGxLegalRegistrationNumberShape
+     */
+    getGxLegalRegistrationNumberShape(): RestResponse<string> {
+        return this.httpClient.request({ method: "GET", url: uriEncoding`shapes/gx/legalregistrationnumber` });
     }
 }
 

@@ -1,12 +1,12 @@
 <div *ngIf="orType == 'datatype'">
   <form [formGroup]="form">
     <div *ngIf="input.controlTypes.length > 1">
-      <small>Select a datatype for {{input.name}} </small> <br>
+      <small>Select a datatype for {{ input.name }} </small> <br>
       <mat-radio-group [name]="groupName">
         <mat-radio-button (change)="onItemChangeDatatype(option, i)"
                           *ngFor="let option of input.controlTypes; let i = index;" [checked]='i==0'
                           [value]="option">
-          {{input.or[i]['datatype']['value']}}
+          {{ input.or[i]['datatype']['value'] }}
         </mat-radio-button>
       </mat-radio-group>
     </div>
@@ -14,9 +14,11 @@
       <div [ngSwitch]="controlType">
         <div *ngSwitchCase="'textbox'">
           <mat-form-field *ngIf="radioButtonSelected == controlType" class="full-width-input">
-            <mat-label>{{input.name}} <span *ngIf="input.required" aria-required="true" class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
+              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-label>
-            <input [formControlName]="input.id" [matTooltip]="input.name" [placeholder]="input.name" [type]="$any(input.datatype)" matInput>
+            <input [formControlName]="input.id" [matTooltip]="input.name" [placeholder]="input.name"
+                   [type]="$any(input.datatype)" matInput>
           </mat-form-field>
           <mat-error>
             <app-show-errors *ngIf="radioButtonSelected == controlType" [ctrl]="$any(form.get(input.id))"
@@ -25,9 +27,11 @@
         </div>
         <div *ngSwitchCase="'textbox_integer'">
           <mat-form-field *ngIf="radioButtonSelected == controlType" class="full-width-input">
-            <mat-label>{{input.name}} <span *ngIf="input.required" aria-required="true" class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
+              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-label>
-            <input [formControlName]="input.id" [matTooltip]="input.name" [placeholder]="input.name" appNumeric matInput type="number">
+            <input [formControlName]="input.id" [matTooltip]="input.name" [placeholder]="input.name" appNumeric matInput
+                   type="number">
           </mat-form-field>
           <mat-error>
             <app-show-errors *ngIf="radioButtonSelected == controlType" [ctrl]="$any(form.get(input.id))"
@@ -36,9 +40,11 @@
         </div>
         <div *ngSwitchCase="'textbox_decimal'">
           <mat-form-field *ngIf="radioButtonSelected == controlType" class="full-width-input">
-            <mat-label>{{input.name}} <span *ngIf="input.required" aria-required="true" class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
+              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-label>
-            <input [id]="input.id" [matTooltip]="input.name" [placeholder]="input.name" appNumeric matInput type="number">
+            <input [id]="input.id" [matTooltip]="input.name" [placeholder]="input.name" appNumeric matInput
+                   type="number">
           </mat-form-field>
           <mat-error>
             <app-show-errors *ngIf="radioButtonSelected == controlType" [ctrl]="$any(form.get(input.id))"
@@ -47,7 +53,8 @@
         </div>
         <div *ngSwitchCase="'textbox_uri'">
           <mat-form-field *ngIf="radioButtonSelected == controlType" class="full-width-input">
-            <mat-label>{{input.name}} <span *ngIf="input.required" aria-required="true" class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
+              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-label>
             <input [formControlName]="input.id" [matTooltip]="input.name" [placeholder]="input.name" matInput>
           </mat-form-field>
@@ -58,7 +65,8 @@
         </div>
         <div *ngSwitchCase="'datepicker'">
           <mat-form-field *ngIf="radioButtonSelected == controlType" class="full-width-input">
-            <mat-label>{{input.name}} <span *ngIf="input.required" aria-required="true" class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
+              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-label>
             <input [formControlName]="input.id" [matDatepicker]="picker" matInput>
             <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
@@ -70,7 +78,8 @@
         </div>
         <div *ngSwitchCase="'datetimepicker'">
           <mat-form-field *ngIf="radioButtonSelected == controlType" class="full-width-input">
-            <mat-label>{{input.name}} <span *ngIf="input.required" aria-required="true" class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
+              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-label>
             <input [formControlName]="input.id" [ngxMatDatetimePicker]="picker" matInput>
             <mat-datepicker-toggle [for]="$any(picker)" matSuffix></mat-datepicker-toggle>
@@ -88,17 +97,18 @@
 
 <div *ngIf="orType == 'class'">
   <form [formGroup]="nestedFormGroup">
-    <small>Select a shape for {{input.name}} <span *ngIf="input.required" aria-required="true"
-                                                   class="required">*</span><span class="field-key">&nbsp;&nbsp;{{ input.key }}</span></small> <br>
+    <small>Select a shape for {{ input.name }} <span *ngIf="input.required" aria-required="true"
+                                                     class="required">*</span><span
+      class="field-key">&nbsp;&nbsp;{{ input.key }}</span></small> <br>
     <mat-radio-group [name]="groupName">
       <mat-radio-button (change)="onItemChangeObject(option, i)" *ngFor="let option of orObjects; let i = index;"
                         [checked]='i==0'
                         [disabled]=!orObjectsFound[i] [value]="option">
         <span *ngIf=orObjectsFound[i]>
-          {{option}}
+          {{ option }}
         </span>
         <span *ngIf=!orObjectsFound[i]>
-          {{option}} (no shape found)
+          {{ option }} (no shape found)
         </span>
       </mat-radio-button>
     </mat-radio-group>

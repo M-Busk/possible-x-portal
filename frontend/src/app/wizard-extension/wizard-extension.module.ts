@@ -14,34 +14,38 @@
  *  limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { WizardAppModule } from '../sdwizard/wizardapp.module';
-import { CommonViewsModule } from '../views/common-views/common-views.module';
-import { ButtonGroupModule, ButtonModule, GridModule, ModalModule } from '@coreui/angular';
-import { FormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { BaseWizardExtensionComponent } from './base-wizard-extension/base-wizard-extension.component';
-import { MaterialModule } from '../sdwizard/material.module'
-import { IconModule } from '@coreui/icons-angular';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {WizardAppModule} from '../sdwizard/wizardapp.module';
+import {CommonViewsModule} from '../views/common-views/common-views.module';
+import {ButtonGroupModule, ButtonModule, GridModule, ModalModule} from '@coreui/angular';
+import {FormsModule} from '@angular/forms';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {BaseWizardExtensionComponent} from './base-wizard-extension/base-wizard-extension.component';
+import {MaterialModule} from '../sdwizard/material.module'
+import {IconModule} from '@coreui/icons-angular';
+import {
+  ParticipantWizardExtensionComponent
+} from "./participant-wizard-extension/participant-wizard-extension.component";
 
 @NgModule({
-    declarations: [BaseWizardExtensionComponent],
-    exports: [
-        BaseWizardExtensionComponent
-    ],
-    imports: [
-        CommonModule,
-        WizardAppModule,
-        CommonViewsModule,
-        FlexLayoutModule,
-        ButtonModule,
-        ButtonGroupModule,
-        FormsModule,
-        GridModule,
-        ModalModule,
-        MaterialModule,
-        IconModule,
-    ]
+  declarations: [BaseWizardExtensionComponent, ParticipantWizardExtensionComponent],
+  exports: [
+    BaseWizardExtensionComponent, ParticipantWizardExtensionComponent
+  ],
+  imports: [
+    CommonModule,
+    WizardAppModule,
+    CommonViewsModule,
+    FlexLayoutModule,
+    ButtonModule,
+    ButtonGroupModule,
+    FormsModule,
+    GridModule,
+    ModalModule,
+    MaterialModule,
+    IconModule,
+  ]
 })
-export class WizardExtensionModule { }
+export class WizardExtensionModule {
+}

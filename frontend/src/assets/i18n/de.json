@@ -1,5 +1,5 @@
 {
-  "startingPage":{
+  "startingPage": {
     "headline": "SD-Creation Wizard",
     "generate": "Gaia-X Self-Descriptions basierend auf",
     "erstellen": "Schema erstellen",
@@ -11,37 +11,34 @@
     "create": "Details der neuen Instanz eingeben",
     "export": "Self-Description exportieren",
     "steps": "In 4 Schritten...",
-    "imprint":"Impressum"
-
-
+    "imprint": "Impressum"
   },
-  "select-shape":{
-    "multiError" :" Wir haben mehrere Shapes in der von Ihnen hochgeladenen Datei identifiziert. Bitte",
+  "select-shape": {
+    "multiError": " Wir haben mehrere Shapes in der von Ihnen hochgeladenen Datei identifiziert. Bitte",
     "multiError2": "Wählen Sie die Form",
     "multiError3": "die Sie für die Erstellung verwenden möchten.",
     "error": "Es ist ein Fehler bei der Anzeige der Formen aufgetreten. Bitte versuchen Sie es erneut."
   },
-  "select-file":{
+  "select-file": {
     "select": "SHACL-Schema auswählen oder ",
     "upload": "hochladen",
     "uploadButton": "Upload",
     "uploadShape": "Form hochladen",
-    "participant":" Participant shapes",
-    "service":"Service Offering shapes",
-    "default":" Resource shapes",
+    "participant": " Participant shapes",
+    "service": "Service Offering shapes",
+    "default": " Resource shapes",
     "search": "Formen suchen...(in Arbeit)",
-    "selectEco":"Ein Ökosystem auswählen: "
-
+    "selectEco": "Ein Ökosystem auswählen: "
   },
-  "home":{
+  "home": {
     "headline": "SD-Kreation"
   },
-  "file-upload":{
+  "file-upload": {
     "typeError": "Bitte laden Sie eine .ttl-Datei hoch.",
     "processError": "Es ist ein Fehler bei der Verarbeitung Ihrer .ttl-Datei aufgetreten. ",
     "try": "Bitte versuchen Sie es erneut."
   },
-  "form":{
+  "form": {
     "displayError": "Das Formular kann nicht angezeigt werden.",
     "complete": "Füllen Sie das",
     "form": "Formular aus",
@@ -50,5 +47,4 @@
     "export": "Exportformat auswählen",
     "save": "Speichern"
   }
-
 }

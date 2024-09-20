@@ -1,0 +1,29 @@
+<div class="mb-3 flex-1">
+  <div class="flex pb-3 text-3xl font-bold text-brand-800">
+    Gaia-X Legal Participant Fields
+  </div>
+  <app-base-wizard-extension #gxParticipantWizard></app-base-wizard-extension>
+</div>
+
+<div class="mb-3 flex-1">
+  <div class="flex pb-3 text-3xl font-bold text-brand-800">
+    Gaia-X Legal Registration Number Fields
+  </div>
+  <app-base-wizard-extension #gxRegistrationNumberWizard></app-base-wizard-extension>
+</div>
+
+<div class="text-right mt-3t">
+  <button (click)="registerParticipant()" [disabled]="isWizardFormInvalid()" cButton color="primary" shape="rounded-0"
+          type="submit">
+    Register
+  </button>
+</div>
+
+<div class="flex justify-center mt-3">
+  <app-status-message
+    #participantRegistrationStatusMessage
+    [errorMessage]="'Participant registration failed.'"
+    [infoMessage]="'Participant registration ongoing.'"
+    [successMessage]="'Participant registration successful.'">
+  </app-status-message>
+</div>

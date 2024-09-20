@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { StatusMessageComponent } from './status-message/status-message.component';
+import {StatusMessageComponent} from './status-message/status-message.component';
 
 @NgModule({
   declarations: [StatusMessageComponent],
@@ -9,4 +9,5 @@ import { StatusMessageComponent } from './status-message/status-message.componen
   exports: [StatusMessageComponent],
 })
 
-export class CommonViewsModule {}
+export class CommonViewsModule {
+}

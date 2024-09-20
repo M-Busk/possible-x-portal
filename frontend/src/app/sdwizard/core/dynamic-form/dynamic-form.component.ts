@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, OnDestroy, ViewChildren, QueryList, AfterViewChecked } from '@angular/core';
+import {AfterViewChecked, Component, Input, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {FormField} from '@models/form-field.model';
 import {FormfieldControlService} from '@services/form-field.service';
@@ -9,15 +9,15 @@ import {ShaclFile} from '@models/shacl-file';
 import {DateHelper} from '@shared/date-helper';
 import {FilesProvider} from '@shared/files-provider';
 import {DownloadFormat} from '@shared/download-format.enum';
-import { DynamicFormInputComponent } from '@components/dynamic-form-input/dynamic-form-input.component';
-import { DynamicFormArrayComponent } from '@components/dynamic-form-array/dynamic-form-array.component';
-import { DynamicFormOrComponent } from '@components/dynamic-form-or/dynamic-form-or.component';
-import { DynamicFormOrArrayComponent } from '@components/dynamic-form-or-array/dynamic-form-or-array.component';
-import { ExpandedFieldsComponent } from '@components/expanded-fields/expanded-fields.component';
-import { DynamicSelfLoopsComponent } from '@components/dynamic-self-loops/dynamic-self-loops.component';
-import { BehaviorSubject } from 'rxjs';
-import { IconSetService } from '@coreui/icons-angular';
-import { brandSet, flagSet, freeSet } from '@coreui/icons';
+import {DynamicFormInputComponent} from '@components/dynamic-form-input/dynamic-form-input.component';
+import {DynamicFormArrayComponent} from '@components/dynamic-form-array/dynamic-form-array.component';
+import {DynamicFormOrComponent} from '@components/dynamic-form-or/dynamic-form-or.component';
+import {DynamicFormOrArrayComponent} from '@components/dynamic-form-or-array/dynamic-form-or-array.component';
+import {ExpandedFieldsComponent} from '@components/expanded-fields/expanded-fields.component';
+import {DynamicSelfLoopsComponent} from '@components/dynamic-self-loops/dynamic-self-loops.component';
+import {BehaviorSubject} from 'rxjs';
+import {IconSetService} from '@coreui/icons-angular';
+import {brandSet, flagSet, freeSet} from '@coreui/icons';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -46,18 +46,18 @@ export class DynamicFormComponent implements OnInit, OnDestroy, AfterViewChecked
 
   submitButtonsDisabled = false;
 
-  @ViewChildren('formInput') formInputViewChildren: QueryList<DynamicFormInputComponent>; 
-  @ViewChildren('formArray') formArrayViewChildren: QueryList<DynamicFormArrayComponent>; 
-  @ViewChildren('formOr') formOrViewChildren: QueryList<DynamicFormOrComponent>; 
-  @ViewChildren('formOrArray') formOrArrayViewChildren: QueryList<DynamicFormOrArrayComponent>; 
-  @ViewChildren('expandedFields') expandedFieldsViewChildren: QueryList<ExpandedFieldsComponent>; 
-  @ViewChildren('selfLoops') selfLoopsViewChildren: QueryList<DynamicSelfLoopsComponent>; 
+  @ViewChildren('formInput') formInputViewChildren: QueryList<DynamicFormInputComponent>;
+  @ViewChildren('formArray') formArrayViewChildren: QueryList<DynamicFormArrayComponent>;
+  @ViewChildren('formOr') formOrViewChildren: QueryList<DynamicFormOrComponent>;
+  @ViewChildren('formOrArray') formOrArrayViewChildren: QueryList<DynamicFormOrArrayComponent>;
+  @ViewChildren('expandedFields') expandedFieldsViewChildren: QueryList<ExpandedFieldsComponent>;
+  @ViewChildren('selfLoops') selfLoopsViewChildren: QueryList<DynamicSelfLoopsComponent>;
   finishedLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private formfieldService: FormfieldControlService,
     private router: Router,
-    private filesProvider: FilesProvider, 
+    private filesProvider: FilesProvider,
     private iconSetService: IconSetService
   ) {
     this.readObjectDataFromRoute();
@@ -65,8 +65,9 @@ export class DynamicFormComponent implements OnInit, OnDestroy, AfterViewChecked
       this.getFormFields();
     }
     this.hasStaticFiles = filesProvider.gethasStaticFiles();
-    iconSetService.icons = { ...freeSet, ...flagSet, ...brandSet };
+    iconSetService.icons = {...freeSet, ...flagSet, ...brandSet};
   }
+
   ngAfterViewChecked(): void {
     if (this.groupsNumber) {
       this.finishedLoading.next(true);
@@ -81,7 +82,7 @@ export class DynamicFormComponent implements OnInit, OnDestroy, AfterViewChecked
       this.getFormFields();
     }
     this.hasStaticFiles = this.filesProvider.gethasStaticFiles();
-  } 
+  }
 
   ngOnInit(): void {
   }
@@ -118,19 +119,19 @@ export class DynamicFormComponent implements OnInit, OnDestroy, AfterViewChecked
   goToFiles(): void {
   }
 
-  makeId(length: number):string {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
+  makeId(length: number): string {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
-      charactersLength));
-   }
-   return result;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() *
+        charactersLength));
+    }
+    return result;
   }
 
   ngOnDestroy() {
-    console.log("Destroying dynamic form component"); 
+    console.log("Destroying dynamic form component");
     this.showSuccessMessage = false;
     this.showErrorMessage = false;
     this.submitButtonsDisabled = false;
@@ -210,7 +211,8 @@ export class DynamicFormComponent implements OnInit, OnDestroy, AfterViewChecked
     }
     return values;
   }
-  reportError(msg:string){
+
+  reportError(msg: string) {
     throw Error(msg);
   }
 }

@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {FormField} from '@models/form-field.model';
 import {Shape} from '@models/shape';
-import {saveAs} from 'file-saver';
 import {Prefix, ShaclFile} from '@models/shacl-file';
 import {Utils} from '@shared/utils';
 import {FormfieldControlService} from './form-field.service';
-import {DownloadFormat} from '@shared/download-format.enum';
 
 @Injectable({
   providedIn: 'root'

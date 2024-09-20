@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NavbarModule, GridModule, CollapseModule, NavModule, FooterModule } from '@coreui/angular';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, ActivatedRoute } from '@angular/router';
-import { DefaultLayoutComponent } from './default-layout.component';
-import { of } from 'rxjs';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {CollapseModule, FooterModule, GridModule, NavbarModule, NavModule} from '@coreui/angular';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivatedRoute, RouterModule} from '@angular/router';
+import {DefaultLayoutComponent} from './default-layout.component';
+import {of} from 'rxjs';
 
 describe('DefaultLayoutComponent', () => {
   let component: DefaultLayoutComponent;
@@ -12,18 +12,18 @@ describe('DefaultLayoutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DefaultLayoutComponent],
-      imports: [ NavbarModule, GridModule, CollapseModule, NoopAnimationsModule, NavModule, RouterModule, FooterModule ],
+      imports: [NavbarModule, GridModule, CollapseModule, NoopAnimationsModule, NavModule, RouterModule, FooterModule],
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
             params: of({}), // Mock route parameters
-            snapshot: { paramMap: { get: () => null } } // Mock snapshot
+            snapshot: {paramMap: {get: () => null}} // Mock snapshot
           }
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DefaultLayoutComponent);
     component = fixture.componentInstance;

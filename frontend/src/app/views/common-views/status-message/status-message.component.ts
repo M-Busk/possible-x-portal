@@ -12,13 +12,13 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- * 
+ *
  * Modifications:
  * - Dataport (part of the POSSIBLE project) - 19 August, 2024 - Adjust type of messageTimeout
  */
 
-import { Component, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {Component, Input} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-status-message',
@@ -27,35 +27,17 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class StatusMessageComponent {
 
-  private messageTimeout: NodeJS.Timeout | undefined = undefined;
-
-  protected successMessageVisible: boolean = false;
-  protected errorMessageVisible: boolean = false;
-  protected infoMessageVisible: boolean = false;
-
   @Input() successMessage: string = "Test";
   @Input() errorMessage: string = "Test";
   @Input() infoMessage: string = "Test";
-
+  public isMessageVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  protected successMessageVisible: boolean = false;
+  protected errorMessageVisible: boolean = false;
+  protected infoMessageVisible: boolean = false;
   protected successDetails: string = "";
   protected errorDetails: string = "";
   protected infoDetails: string = "";
-
-  public isMessageVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  private startHideMessageTimeout(timeout: number) {
-    if (timeout === undefined || timeout === 0) {
-      return;
-    }
-    if (this.messageTimeout !== undefined) {
-      clearTimeout(this.messageTimeout);
-      this.messageTimeout = undefined;
-    }
-    this.messageTimeout = setTimeout(() => {
-      this.hideAllMessages();         
-      this.messageTimeout = undefined;
-    }, 5000);
-  }
+  private messageTimeout: NodeJS.Timeout | undefined = undefined;
 
   public hideAllMessages() {
     if (this.messageTimeout !== undefined) {
@@ -93,6 +75,20 @@ export class StatusMessageComponent {
     this.infoMessageVisible = true;
     this.isMessageVisible.next(true);
     this.startHideMessageTimeout(timeout);
+  }
+
+  private startHideMessageTimeout(timeout: number) {
+    if (timeout === undefined || timeout === 0) {
+      return;
+    }
+    if (this.messageTimeout !== undefined) {
+      clearTimeout(this.messageTimeout);
+      this.messageTimeout = undefined;
+    }
+    this.messageTimeout = setTimeout(() => {
+      this.hideAllMessages();
+      this.messageTimeout = undefined;
+    }, 5000);
   }
 
 }
