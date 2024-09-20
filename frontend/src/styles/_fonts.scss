@@ -1,0 +1,107 @@
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Regular.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Regular.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Regular.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Regular.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Thin.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Thin.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Thin.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Thin.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Semibold.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Semibold.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Semibold.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Semibold.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Medium.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Medium.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Medium.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Medium.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Light.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Light.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Light.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Light.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Black.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Black.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Black.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Black.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-UltraBlack.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-UltraBlack.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-UltraBlack.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-UltraBlack.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-UltraBlack.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Bold.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-Bold.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Bold.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Bold.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Acumin Pro';
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-ExtraLight.eot');
+    src: url('./../assets/fonts/acumin-pro/AcuminPro-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-ExtraLight.woff2') format('woff2'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-ExtraLight.woff') format('woff'),
+        url('./../assets/fonts/acumin-pro/AcuminPro-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: possible-x-portal
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: "/"
+  endpoint:
+    health:
+      enabled: true
