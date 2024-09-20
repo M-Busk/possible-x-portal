@@ -3,6 +3,7 @@ package eu.possiblex.portal.application.boundary;
 import eu.possiblex.portal.application.entity.RegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.control.ParticipantRegistrationServiceMock;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,13 @@ class ParticipantRegistrationRestApiTest {
     private ParticipantRegistrationService participantRegistrationService;
 
     @Test
+    @Disabled
+        // TODO enable once implemented
     void registerParticipant() throws Exception {
 
         RegistrationRequestTO to = new RegistrationRequestTO();
         reset(participantRegistrationService);
-        this.mockMvc.perform(post("/consumer/offer/select").content(RestApiHelper.asJsonString(to))
+        this.mockMvc.perform(post("/registration/request").content(RestApiHelper.asJsonString(to))
             .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
     }
 

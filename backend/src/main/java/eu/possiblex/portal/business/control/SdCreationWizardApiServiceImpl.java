@@ -39,7 +39,7 @@ public class SdCreationWizardApiServiceImpl implements SdCreationWizardApiServic
     @Override
     public List<String> getParticipantShapesByEcosystem(String ecosystem) {
 
-        return sdCreationWizardApiClient.getAvailableShapesCategorized(ecosystem).get("Service");
+        return sdCreationWizardApiClient.getAvailableShapesCategorized(ecosystem).get("Participant");
     }
 
     /**
