@@ -53,8 +53,7 @@ export class ValidationControlService {
     if (input.required) {
       validator.push(Validators.required);
     }
-    if(typeof input.datatype.value === 'string' )
-    {
+    if (typeof input.datatype.value === 'string') {
       if (input.datatype !== undefined && input.datatype.value.toLowerCase().includes('uri')) {
         validator.push(CustomValidators.uriPatternValidator());
       }

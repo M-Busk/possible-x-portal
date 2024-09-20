@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { RuntimeException.class })
     public ResponseEntity<Object> handleException(RuntimeException ex, WebRequest request) {
+
         log.error("Caught boundary exception:", ex);
         throw ex;
     }

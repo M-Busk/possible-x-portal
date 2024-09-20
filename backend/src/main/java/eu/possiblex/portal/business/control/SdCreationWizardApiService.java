@@ -1,7 +1,5 @@
 package eu.possiblex.portal.business.control;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.util.List;
 import java.util.Map;
 

@@ -19,8 +19,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ParticipantRegistrationRestApiImpl.class)
-@ContextConfiguration(classes = { ParticipantRegistrationRestApiTest.TestConfig.class, ParticipantRegistrationRestApiImpl.class })
+@ContextConfiguration(classes = { ParticipantRegistrationRestApiTest.TestConfig.class,
+    ParticipantRegistrationRestApiImpl.class })
 class ParticipantRegistrationRestApiTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ParticipantRegistrationService participantRegistrationService;
+
+    @Test
+    void registerParticipant() throws Exception {
+
+        RegistrationRequestTO to = new RegistrationRequestTO();
+        reset(participantRegistrationService);
+        this.mockMvc.perform(post("/consumer/offer/select").content(RestApiHelper.asJsonString(to))
+            .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+    }
 
     @TestConfiguration
     static class TestConfig {
@@ -29,24 +45,6 @@ class ParticipantRegistrationRestApiTest {
 
             return Mockito.spy(new ParticipantRegistrationServiceMock());
         }
-    }
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ParticipantRegistrationService participantRegistrationService;
-
-
-    @Test
-    void registerParticipant() throws Exception {
-
-        RegistrationRequestTO to = new RegistrationRequestTO();
-        reset(participantRegistrationService);
-        this.mockMvc.perform(post("/consumer/offer/select")
-                .content(RestApiHelper.asJsonString(to))
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
-            .andExpect(status().isOk());
     }
 
 }

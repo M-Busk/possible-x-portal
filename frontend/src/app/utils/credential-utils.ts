@@ -3,9 +3,9 @@
 //import { IPojoCredentialSubject } from "../services/mgmt/api/backend";
 
 export function isGxLegalParticipantCs(cs: any): boolean {
-    return cs?.["@type"] === "gx:LegalParticipant";
+  return cs?.["@type"] === "gx:LegalParticipant";
 }
 
 export function isGxLegalRegistrationNumberCs(cs: any): boolean {
-    return cs?.["@type"] === "gx:LegalRegistrationNumber";
+  return cs?.["@type"] === "gx:LegalRegistrationNumber";
 }

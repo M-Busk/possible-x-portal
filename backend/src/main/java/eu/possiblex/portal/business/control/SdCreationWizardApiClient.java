@@ -1,6 +1,5 @@
 package eu.possiblex.portal.business.control;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 

@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { BaseWizardExtensionComponent } from './base-wizard-extension.component';
+import {BaseWizardExtensionComponent} from './base-wizard-extension.component';
 import {TranslateModule} from "@ngx-translate/core";
 import {HttpClientModule} from "@angular/common/http";
 
@@ -26,13 +26,13 @@ describe('BaseWizardExtensionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BaseWizardExtensionComponent ],
+      declarations: [BaseWizardExtensionComponent],
       imports: [
         TranslateModule.forRoot(),
         HttpClientModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BaseWizardExtensionComponent);
     component = fixture.componentInstance;

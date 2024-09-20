@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ParticipantWizardExtensionComponent } from './participant-wizard-extension.component';
+import {ParticipantWizardExtensionComponent} from './participant-wizard-extension.component';
 
 describe('ParticipantWizardExtensionComponent', () => {
   let component: ParticipantWizardExtensionComponent;

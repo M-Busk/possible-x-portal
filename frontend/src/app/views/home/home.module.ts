@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
 
 import {
   AvatarModule,
@@ -14,10 +14,10 @@ import {
   TableModule,
   TabsModule,
 } from '@coreui/angular';
-import { IconModule } from '@coreui/icons-angular';
+import {IconModule} from '@coreui/icons-angular';
 
-import { HomeRoutingModule } from './home-routing.module';
-import { HomeComponent } from './home.component';
+import {HomeRoutingModule} from './home-routing.module';
+import {HomeComponent} from './home.component';
 
 @NgModule({
   imports: [
@@ -39,4 +39,5 @@ import { HomeComponent } from './home.component';
   ],
   declarations: [HomeComponent],
 })
-export class HomeModule {}
+export class HomeModule {
+}

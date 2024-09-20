@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {DynamicFormComponent} from './core/dynamic-form/dynamic-form.component';
 import {
@@ -16,7 +16,6 @@ import {FormfieldControlService} from '@services/form-field.service';
 import {ValidationControlService} from '@services/validation.service';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ExpandedFieldsComponent} from './core/dynamic-form/components/expanded-fields/expanded-fields.component';
-import {DatePipe} from '@angular/common';
 import {DynamicFormOrArrayComponent} from '@components/dynamic-form-or-array/dynamic-form-or-array.component';
 import {
   DynamicSelfLoopsComponent
@@ -24,11 +23,10 @@ import {
 import {DynamicFormInComponent} from './core/dynamic-form/components/dynamic-form-in/dynamic-form-in.component';
 import {FilesProvider} from '@shared/files-provider';
 
-import { I18nModule } from './i18n/i18n.module';
-import { NgxRerenderModule } from 'ngx-rerender';
+import {I18nModule} from './i18n/i18n.module';
+import {NgxRerenderModule} from 'ngx-rerender';
 
-import { IconModule, IconSetService } from '@coreui/icons-angular';
-
+import {IconModule, IconSetService} from '@coreui/icons-angular';
 
 
 // CoreUI Modules

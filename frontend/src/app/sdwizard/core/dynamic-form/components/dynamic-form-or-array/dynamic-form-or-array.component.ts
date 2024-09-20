@@ -5,7 +5,7 @@ import {FormField} from '@models/form-field.model';
 import {Shape} from '@models/shape';
 import {FormfieldControlService} from '@services/form-field.service';
 import {ValidationControlService} from '@services/validation.service';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dynamic-form-or-array',

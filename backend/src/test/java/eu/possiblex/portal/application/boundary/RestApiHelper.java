@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RestApiHelper {
 
-    private RestApiHelper(){}
+    private RestApiHelper() {
+
+    }
 
     public static String asJsonString(final Object obj) {
 

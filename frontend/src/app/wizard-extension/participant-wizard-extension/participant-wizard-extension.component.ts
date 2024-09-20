@@ -5,6 +5,7 @@ import {ApiService} from "../../services/mgmt/api/api.service";
 import {BehaviorSubject, takeWhile} from "rxjs";
 import {isGxLegalParticipantCs, isGxLegalRegistrationNumberCs} from "../../utils/credential-utils";
 import {HttpErrorResponse} from "@angular/common/http";
+import {IRegistrationRequestTO} from "../../services/mgmt/api/backend";
 
 @Component({
   selector: 'app-participant-wizard-extension',
@@ -12,15 +13,15 @@ import {HttpErrorResponse} from "@angular/common/http";
   styleUrls: ['./participant-wizard-extension.component.scss']
 })
 export class ParticipantWizardExtensionComponent {
+  @ViewChild("participantRegistrationStatusMessage") public participantRegistrationStatusMessage!: StatusMessageComponent;
+  public prefillDone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   @ViewChild("gxParticipantWizard") private gxParticipantWizard: BaseWizardExtensionComponent;
   @ViewChild("gxRegistrationNumberWizard") private gxRegistrationNumberWizard: BaseWizardExtensionComponent;
-  @ViewChild("participantRegistrationStatusMessage") public participantRegistrationStatusMessage!: StatusMessageComponent;
-
-  public prefillDone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private apiService: ApiService
-  ) {}
+  ) {
+  }
 
   public async loadShape(id: string, registrationNumberId: string): Promise<void> {
     this.prefillDone.next(false);
@@ -32,15 +33,6 @@ export class ParticipantWizardExtensionComponent {
 
   public isShapeLoaded(): boolean {
     return this.gxParticipantWizard?.isShapeLoaded() && this.gxRegistrationNumberWizard?.isShapeLoaded();
-  }
-
-  private prefillHandleCs(cs: any) { // TODO add java classes
-    if (isGxLegalParticipantCs(cs)) {
-      this.gxParticipantWizard.prefillFields(cs, ["gx:legalRegistrationNumber", "gx:subOrganization", "gx:parentOrganization"]);
-    }
-    if (isGxLegalRegistrationNumberCs(cs)) {
-      this.gxRegistrationNumberWizard.prefillFields(cs, []);
-    }
   }
 
   public prefillFields(csList: any[]) { // TODO add java classes
@@ -59,8 +51,8 @@ export class ParticipantWizardExtensionComponent {
           )
             .subscribe(done => {
               if (done) {
-                      this.prefillDone.next(true);
-                    }
+                this.prefillDone.next(true);
+              }
             });
         }
       });
@@ -73,12 +65,14 @@ export class ParticipantWizardExtensionComponent {
     let gxParticipantJson: any = this.gxParticipantWizard.generateJsonCs();// TODO add java classes
     let gxRegistrationNumberJson: any = this.gxRegistrationNumberWizard.generateJsonCs();// TODO add java classes
 
-    let createOfferTo: any = {
+    let createOfferTo: IRegistrationRequestTO = {
+      participantCs: gxParticipantJson,
+      registrationNumberCs: gxRegistrationNumberJson
     }
 
     console.log(createOfferTo);
 
-    this.apiService.registerParticipant().then(response => {
+    this.apiService.registerParticipant(createOfferTo).then(response => {
       console.log(response);
       this.participantRegistrationStatusMessage.showSuccessMessage("", 20000);
     }).catch((e: HttpErrorResponse) => {
@@ -100,6 +94,15 @@ export class ParticipantWizardExtensionComponent {
     let registrationNumberWizardInvalid = this.gxRegistrationNumberWizard?.isWizardFormInvalid();
 
     return participantWizardInvalid || registrationNumberWizardInvalid;
+  }
+
+  private prefillHandleCs(cs: any) { // TODO add java classes
+    if (isGxLegalParticipantCs(cs)) {
+      this.gxParticipantWizard.prefillFields(cs, ["gx:legalRegistrationNumber", "gx:subOrganization", "gx:parentOrganization"]);
+    }
+    if (isGxLegalRegistrationNumberCs(cs)) {
+      this.gxRegistrationNumberWizard.prefillFields(cs, []);
+    }
   }
 
 }

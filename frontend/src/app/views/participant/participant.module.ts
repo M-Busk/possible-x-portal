@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RegistrationComponent } from './registration/registration.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RegistrationComponent} from './registration/registration.component';
 import {ParticipantRoutingModule} from "./participant-routing.module";
 import {WizardExtensionModule} from "../../wizard-extension/wizard-extension.module";
 import {ContainerComponent} from "@coreui/angular";
-
 
 
 @NgModule({
@@ -18,4 +17,5 @@ import {ContainerComponent} from "@coreui/angular";
     ContainerComponent
   ]
 })
-export class ParticipantModule { }
+export class ParticipantModule {
+}
