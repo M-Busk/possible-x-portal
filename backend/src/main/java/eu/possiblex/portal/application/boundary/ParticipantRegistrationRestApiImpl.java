@@ -1,9 +1,10 @@
 package eu.possiblex.portal.application.boundary;
 
+import eu.possiblex.portal.application.control.ParticipantCredentialMapper;
 import eu.possiblex.portal.application.entity.RegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
+import eu.possiblex.portal.business.entity.PossibleParticipantBE;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +17,23 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
 
     private final ParticipantRegistrationService participantRegistrationService;
 
-    public ParticipantRegistrationRestApiImpl(
-        @Autowired ParticipantRegistrationService participantRegistrationService) {
+    private final ParticipantCredentialMapper participantCredentialMapper;
+
+    public ParticipantRegistrationRestApiImpl(@Autowired ParticipantRegistrationService participantRegistrationService,
+        @Autowired ParticipantCredentialMapper participantCredentialMapper) {
 
         this.participantRegistrationService = participantRegistrationService;
+        this.participantCredentialMapper = participantCredentialMapper;
     }
 
     @Override
     public void registerParticipant(@RequestBody RegistrationRequestTO request) {
 
-        throw new NotImplementedException("Not implemented yet");
+        log.info("Registering participant with {}", request);
+
+        PossibleParticipantBE be = participantCredentialMapper.credentialSubjectsToBE(request.getParticipantCs(),
+            request.getRegistrationNumberCs());
+
+        participantRegistrationService.registerParticipant(be);
     }
 }

@@ -1,6 +1,7 @@
 package eu.possiblex.portal.application.entity;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
+import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegistrationRequestTO {
-    private JsonNode participantCs;
+    private GxLegalParticipantCredentialSubject participantCs;
 
-    private JsonNode registrationNumberCs;
+    private GxLegalRegistrationNumberCredentialSubject registrationNumberCs;
 }
