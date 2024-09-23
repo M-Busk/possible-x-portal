@@ -1,10 +1,11 @@
 package eu.possiblex.portal.application.boundary;
 
+import eu.possiblex.portal.application.control.ParticipantCredentialMapper;
 import eu.possiblex.portal.application.entity.RegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.control.ParticipantRegistrationServiceMock;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,8 +32,6 @@ class ParticipantRegistrationRestApiTest {
     private ParticipantRegistrationService participantRegistrationService;
 
     @Test
-    @Disabled
-        // TODO enable once implemented
     void registerParticipant() throws Exception {
 
         RegistrationRequestTO to = new RegistrationRequestTO();
@@ -48,6 +47,13 @@ class ParticipantRegistrationRestApiTest {
 
             return Mockito.spy(new ParticipantRegistrationServiceMock());
         }
+
+        @Bean
+        public ParticipantCredentialMapper participantCredentialMapper() {
+
+            return Mappers.getMapper(ParticipantCredentialMapper.class);
+        }
+
     }
 
 }
