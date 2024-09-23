@@ -14,8 +14,6 @@ public interface ParticipantCredentialMapper {
 
     @Mapping(target = "legalRegistrationNumber", source = "registrationNumberCs", qualifiedByName = "registrationNumberMapping")
     @Mapping(target = "id", source = "participantCs.id")
-    @Mapping(target = "type", ignore = true)
-    @Mapping(target = "context", ignore = true)
     PossibleParticipantBE credentialSubjectsToBE(GxLegalParticipantCredentialSubject participantCs,
         GxLegalRegistrationNumberCredentialSubject registrationNumberCs);
 

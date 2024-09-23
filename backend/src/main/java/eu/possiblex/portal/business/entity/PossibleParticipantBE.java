@@ -14,6 +14,7 @@ import java.util.Map;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PossibleParticipantBE {
 
     @Getter(AccessLevel.NONE)
