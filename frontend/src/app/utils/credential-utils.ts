@@ -1,9 +1,11 @@
-import { IPojoCredentialSubject } from "../services/mgmt/api/backend";
+// TODO add java classes
 
-export function isGxLegalParticipantCs(cs: IPojoCredentialSubject): boolean {
+//import { IPojoCredentialSubject } from "../services/mgmt/api/backend";
+
+export function isGxLegalParticipantCs(cs: any): boolean {
   return cs?.["@type"] === "gx:LegalParticipant";
 }
 
-export function isGxLegalRegistrationNumberCs(cs: IPojoCredentialSubject): boolean {
+export function isGxLegalRegistrationNumberCs(cs: any): boolean {
   return cs?.["@type"] === "gx:LegalRegistrationNumber";
 }

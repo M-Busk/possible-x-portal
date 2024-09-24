@@ -5,11 +5,7 @@ import {ApiService} from "../../services/mgmt/api/api.service";
 import {BehaviorSubject, takeWhile} from "rxjs";
 import {isGxLegalParticipantCs, isGxLegalRegistrationNumberCs} from "../../utils/credential-utils";
 import {HttpErrorResponse} from "@angular/common/http";
-import {
-  IGxLegalParticipantCredentialSubject, IGxLegalRegistrationNumberCredentialSubject,
-  IPojoCredentialSubject,
-  IRegistrationRequestTO
-} from "../../services/mgmt/api/backend";
+import {IRegistrationRequestTO} from "../../services/mgmt/api/backend";
 
 @Component({
   selector: 'app-participant-wizard-extension',
@@ -39,7 +35,7 @@ export class ParticipantWizardExtensionComponent {
     return this.gxParticipantWizard?.isShapeLoaded() && this.gxRegistrationNumberWizard?.isShapeLoaded();
   }
 
-  public prefillFields(csList: IPojoCredentialSubject[]) {
+  public prefillFields(csList: any[]) { // TODO add java classes
     for (let cs of csList) {
       this.prefillHandleCs(cs)
     }
@@ -66,8 +62,8 @@ export class ParticipantWizardExtensionComponent {
     console.log("Register participant.");
     this.participantRegistrationStatusMessage.hideAllMessages();
 
-    let gxParticipantJson: IGxLegalParticipantCredentialSubject = this.gxParticipantWizard.generateJsonCs();
-    let gxRegistrationNumberJson: IGxLegalRegistrationNumberCredentialSubject = this.gxRegistrationNumberWizard.generateJsonCs();
+    let gxParticipantJson: any = this.gxParticipantWizard.generateJsonCs();// TODO add java classes
+    let gxRegistrationNumberJson: any = this.gxRegistrationNumberWizard.generateJsonCs();// TODO add java classes
 
     let registerParticipantTo: IRegistrationRequestTO = {
       participantCs: gxParticipantJson,
@@ -100,7 +96,7 @@ export class ParticipantWizardExtensionComponent {
     return participantWizardInvalid || registrationNumberWizardInvalid;
   }
 
-  private prefillHandleCs(cs: IPojoCredentialSubject) {
+  private prefillHandleCs(cs: any) { // TODO add java classes
     if (isGxLegalParticipantCs(cs)) {
       this.gxParticipantWizard.prefillFields(cs, ["gx:legalRegistrationNumber"]);
     }
