@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
   ParticipantWizardExtensionComponent
 } from "../../../wizard-extension/participant-wizard-extension/participant-wizard-extension.component";
-import {IGxLegalParticipantCredentialSubject, INodeKindIRITypeId} from "../../../services/mgmt/api/backend";
 
 @Component({
   selector: 'app-registration',
