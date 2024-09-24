@@ -59,20 +59,20 @@ export class ParticipantWizardExtensionComponent {
   }
 
   async registerParticipant() {
-    console.log("Create offer.");
+    console.log("Register participant.");
     this.participantRegistrationStatusMessage.hideAllMessages();
 
     let gxParticipantJson: any = this.gxParticipantWizard.generateJsonCs();// TODO add java classes
     let gxRegistrationNumberJson: any = this.gxRegistrationNumberWizard.generateJsonCs();// TODO add java classes
 
-    let createOfferTo: IRegistrationRequestTO = {
+    let registerParticipantTo: IRegistrationRequestTO = {
       participantCs: gxParticipantJson,
       registrationNumberCs: gxRegistrationNumberJson
     }
 
-    console.log(createOfferTo);
+    console.log(registerParticipantTo);
 
-    this.apiService.registerParticipant(createOfferTo).then(response => {
+    this.apiService.registerParticipant(registerParticipantTo).then(response => {
       console.log(response);
       this.participantRegistrationStatusMessage.showSuccessMessage("", 20000);
     }).catch((e: HttpErrorResponse) => {
@@ -98,7 +98,7 @@ export class ParticipantWizardExtensionComponent {
 
   private prefillHandleCs(cs: any) { // TODO add java classes
     if (isGxLegalParticipantCs(cs)) {
-      this.gxParticipantWizard.prefillFields(cs, ["gx:legalRegistrationNumber", "gx:subOrganization", "gx:parentOrganization"]);
+      this.gxParticipantWizard.prefillFields(cs, ["gx:legalRegistrationNumber"]);
     }
     if (isGxLegalRegistrationNumberCs(cs)) {
       this.gxRegistrationNumberWizard.prefillFields(cs, []);
