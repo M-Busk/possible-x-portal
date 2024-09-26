@@ -1,5 +1,5 @@
 [versions]
-springBoot = "3.3.2"
+springBoot = "3.3.4"
 springDependencyManagement = "1.1.6"
 lombok = "1.18.34"
 lombokMapStructBinding = "0.2.0"
@@ -9,12 +9,15 @@ reactorTest = "3.6.9"
 jUnit = "1.11.0"
 typescriptGenerator = "3.2.1263"
 mapStruct = "1.6.0"
+postgresql = "42.7.4"
+h2 = "2.3.232"
 
 [libraries]
 springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBoot" }
 springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot" }
 springBootStarterWebflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "springBoot" }
 springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
+springBootStarterDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
 springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springBoot" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 lombokMapStructBinding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombokMapStructBinding" }
@@ -25,6 +28,8 @@ therApi = { module = "com.github.therapi:therapi-runtime-javadoc", version.ref =
 therApiScribe = { module = "com.github.therapi:therapi-runtime-javadoc-scribe", version.ref = "therApi" }
 reactorTest = { module = "io.projectreactor:reactor-test", version.ref = "reactorTest" }
 jUnit = { module = "org.junit.platform:junit-platform-launcher", version.ref = "jUnit" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }

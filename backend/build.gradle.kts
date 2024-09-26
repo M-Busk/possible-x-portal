@@ -32,7 +32,9 @@ dependencies {
   implementation(libs.springBootStarterActuator)
   implementation(libs.springBootStarterWeb)
   implementation(libs.springBootStarterWebflux)
+  implementation(libs.springBootStarterDataJpa)
   implementation(libs.openApi)
+  implementation(libs.postgresql)
   compileOnly(libs.lombok)
   annotationProcessor(libs.lombokMapStructBinding)
   implementation(libs.mapStruct)
@@ -43,6 +45,7 @@ dependencies {
   annotationProcessor(libs.therApiScribe)
   testImplementation(libs.springBootStarterTest)
   testImplementation(libs.reactorTest)
+  testImplementation(libs.h2)
   testRuntimeOnly(libs.jUnit)
 }
 

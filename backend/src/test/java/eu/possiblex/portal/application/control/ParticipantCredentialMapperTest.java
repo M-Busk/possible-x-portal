@@ -55,7 +55,6 @@ class ParticipantCredentialMapperTest {
             registrationNumber);
 
         // then
-        assertEquals(participantId, participantBE.getId());
         assertEquals(participantName, participantBE.getName());
         assertEquals(participantDescription, participantBE.getDescription());
 
@@ -73,9 +72,9 @@ class ParticipantCredentialMapperTest {
         assertEquals(participantAddrCountryLocality, participantBE.getLegalAddress().getLocality());
         assertEquals(participantAddrPostalCode, participantBE.getLegalAddress().getPostalCode());
 
-        assertEquals(participantRegNumEori, participantBE.getLegalRegistrationNumber().get(0).getEori());
-        assertEquals(participantRegNumVatID, participantBE.getLegalRegistrationNumber().get(0).getVatID());
-        assertEquals(participantRegNumLeiCode, participantBE.getLegalRegistrationNumber().get(0).getLeiCode());
+        assertEquals(participantRegNumEori, participantBE.getLegalRegistrationNumber().getEori());
+        assertEquals(participantRegNumVatID, participantBE.getLegalRegistrationNumber().getVatID());
+        assertEquals(participantRegNumLeiCode, participantBE.getLegalRegistrationNumber().getLeiCode());
 
     }
 

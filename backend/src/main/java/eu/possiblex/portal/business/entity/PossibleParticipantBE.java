@@ -29,7 +29,7 @@ public class PossibleParticipantBE {
 
     @NotNull
     @JsonProperty("gx:legalRegistrationNumber")
-    private List<GxLegalRegistrationNumberCredentialSubject> legalRegistrationNumber;
+    private GxLegalRegistrationNumberCredentialSubject legalRegistrationNumber;
 
     @NotNull
     @JsonProperty("gx:legalAddress")

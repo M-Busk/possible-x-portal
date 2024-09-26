@@ -29,7 +29,7 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
     @Override
     public void registerParticipant(@RequestBody RegistrationRequestTO request) {
 
-        log.info("Registering participant with {}", request);
+        log.info("Received participant registration request: {}", request);
 
         PossibleParticipantBE be = participantCredentialMapper.credentialSubjectsToBE(request.getParticipantCs(),
             request.getRegistrationNumberCs());
