@@ -3,7 +3,7 @@
     <mat-error>{{ "form.displayError" | translate }}</mat-error>
     {{ reportError("form.displayError") }}
     <br/><br/>
-    <a color="primary" mat-raised-button>
+    <a color="accent" mat-raised-button>
       {{ "form.ttlError" | translate }}
     </a>
   </div>
@@ -18,7 +18,7 @@
           fxFlex.xs="100%"
         >
           <div class="mb-3">
-            <label class="form-label">Subject-ID*<span class="field-key">&nbsp;&nbsp;id</span></label>
+            <label class="form-label text-brand-50">Subject-ID*<span class="field-key">&nbsp;&nbsp;id</span></label>
             <input
               class="form-control"
               formControlName="user_prefix"

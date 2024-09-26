@@ -25,3 +25,7 @@
 .mat-expansion-panel {
   border-radius: 0 !important;
 }
+
+.bg-possible {
+  @apply bg-brand-700;
+}

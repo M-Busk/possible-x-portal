@@ -13,7 +13,8 @@
 
 .footerWrapper {
   @apply overflow-hidden bg-brand-700;
-  @apply w-full;
+  @apply w-full h-[26rem];
+  @apply divide-y divide-brand-100;
 }
 
 .footer {

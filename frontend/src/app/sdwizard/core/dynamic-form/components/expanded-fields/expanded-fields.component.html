@@ -4,7 +4,7 @@
 
       <div class="flex-container">
 
-        <span>{{ input.name }} hinzufügen</span>
+        <span class="text-brand-200">{{ input.name }} hinzufügen</span>
 
         <button (click)="addInitialShape()" [disabled]="!enableButton" cButton color="primary" size="sm"
                 variant="ghost">
@@ -22,12 +22,12 @@
       <div class="flex-container">
         <mat-expansion-panel (closed)="panelOpenState = false" (opened)="panelOpenState = true"
                              [expanded]="input.required && (i < input.minCount)"
-                             class="flex-item-grow">
+                             class="flex-item-grow bg-possible">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{ inputs[i].name }}<span *ngIf="input.required && (i < input.minCount)" aria-required="true"
-                                        class="required">*</span><span
-              class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+              <span class="text-brand-50">{{ inputs[i].name }}</span>
+              <span *ngIf="input.required && (i < input.minCount)" aria-required="true" class="required text-brand-50">*</span>
+              <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div [formGroup]="nestedShapeForm">
