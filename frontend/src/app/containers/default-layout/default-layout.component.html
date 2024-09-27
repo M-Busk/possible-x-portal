@@ -7,13 +7,17 @@
     </c-container>
   </c-navbar>
 </div>
-<div class="page-container">
+<div class="page-container" [ngClass]="{'admin-page-container': isAdminPage}">
   <c-container class="content">
     <router-outlet></router-outlet>
   </c-container>
 </div>
-<div class="footerWrapper">
-  <img alt="" src="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423"/>
+<div class="footerWrapper" [ngClass]="{'admin-footerWrapper': isAdminPage}">
+  <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423"
+       height="238"/>
+  <ng-template #defaultImage>
+    <img alt="" src="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423"/>
+  </ng-template>
   <div>
     <c-footer class="footer border-0">
       <div class="logo">

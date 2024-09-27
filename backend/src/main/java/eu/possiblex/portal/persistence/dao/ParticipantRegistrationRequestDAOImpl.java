@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 @Transactional(readOnly = true)
 @Slf4j
@@ -33,5 +35,13 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         log.info("Saving participant registration request: {}", entity);
 
         participantRegistrationRequestRepository.save(entity);
+    }
+
+    @Transactional
+    public List<PossibleParticipantBE> getAllParticipantRegistrationRequests() {
+
+        log.info("Getting all participant registration requests");
+        return participantRegistrationRequestRepository.findAll().stream().map(
+            participantRegistrationEntityMapper::entityToPossibleParticipantBE).toList();
     }
 }

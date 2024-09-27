@@ -28,8 +28,13 @@ import {
   SidebarModule,
   TabsModule,
   UtilitiesModule,
+  AccordionComponent,
+  AccordionItemComponent,
+  TemplateIdDirective,
+  AccordionButtonDirective
 } from '@coreui/angular';
-import {DefaultLayoutComponent} from './containers/default-layout/default-layout.component';
+import {DefaultLayoutComponent} from './containers';
+import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -54,6 +59,10 @@ import {DefaultLayoutComponent} from './containers/default-layout/default-layout
     NavModule,
     NavbarModule,
     CollapseModule,
+    AccordionComponent,
+    AccordionItemComponent,
+    TemplateIdDirective,
+    AccordionButtonDirective,
     ProgressModule,
     SharedModule,
     SidebarModule,
@@ -61,7 +70,8 @@ import {DefaultLayoutComponent} from './containers/default-layout/default-layout
     UtilitiesModule,
     BrowserAnimationsModule,
     WizardAppModule,
-    WizardExtensionModule
+    WizardExtensionModule,
+    NgOptimizedImage
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

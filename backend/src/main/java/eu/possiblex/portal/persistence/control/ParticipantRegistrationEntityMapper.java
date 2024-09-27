@@ -21,4 +21,13 @@ public interface ParticipantRegistrationEntityMapper {
 
     @Mapping(target = "id", ignore = true)
     ParticipantRegistrationRequestEntity possibleParticipantBEToEntity(PossibleParticipantBE participantBE);
+
+    GxVcard entityToGxVcard(VcardEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    GxLegalRegistrationNumberCredentialSubject entityToGxLegalRegistrationNumber(
+        RegistrationNumberEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    PossibleParticipantBE entityToPossibleParticipantBE(ParticipantRegistrationRequestEntity entity);
 }

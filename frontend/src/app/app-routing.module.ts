@@ -20,6 +20,11 @@ const routes: Routes = [
         path: 'participant',
         loadChildren: () =>
           import('./views/participant/participant.module').then((m) => m.ParticipantModule)
+      },
+      {
+        path: 'administration',
+        loadChildren: () =>
+          import('./views/administration/administration.module').then((m) => m.AdministrationModule)
       }
     ]
   }

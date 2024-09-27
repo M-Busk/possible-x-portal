@@ -1,0 +1,4 @@
+.custom-page-container {
+  @apply flex flex-col bg-brand-700;
+  min-height: calc(100vh - 5rem - 26rem);
+}

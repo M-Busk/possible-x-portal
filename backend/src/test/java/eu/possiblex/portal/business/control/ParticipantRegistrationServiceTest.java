@@ -1,5 +1,6 @@
 package eu.possiblex.portal.business.control;
 
+import eu.possiblex.portal.application.entity.RegistrationRequestListTO;
 import eu.possiblex.portal.business.entity.PossibleParticipantBE;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOImpl;
@@ -13,6 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -34,6 +38,13 @@ class ParticipantRegistrationServiceTest {
         assertTrue(true);
     }
 
+    @Test
+    void getAllParticipantRegistrationRequests() {
+        // TODO add proper test
+        List<RegistrationRequestListTO> list = participantRegistrationService.getAllParticipantRegistrationRequests();
+        assertNotNull(list);
+    }
+
     // Test-specific configuration to provide mocks
     @TestConfiguration
     static class TestConfig {
@@ -41,6 +52,11 @@ class ParticipantRegistrationServiceTest {
         public ParticipantRegistrationEntityMapper participantRegistrationEntityMapper() {
 
             return Mappers.getMapper(ParticipantRegistrationEntityMapper.class);
+        }
+        @Bean
+        public ParticipantRegistrationServiceMapper participantRegistrationServiceMapper() {
+
+            return Mappers.getMapper(ParticipantRegistrationServiceMapper.class);
         }
     }
 }

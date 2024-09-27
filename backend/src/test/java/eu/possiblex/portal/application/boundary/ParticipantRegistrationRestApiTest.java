@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,6 +43,15 @@ class ParticipantRegistrationRestApiTest {
             .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
         verify(participantRegistrationService).registerParticipant(any());
+    }
+
+    @Test
+    void getAllRegistrationRequests() throws Exception {
+
+        reset(participantRegistrationService);
+        this.mockMvc.perform(get("/registration/request")).andDo(print()).andExpect(status().isOk());
+
+        verify(participantRegistrationService).getAllParticipantRegistrationRequests();
     }
 
     @TestConfiguration

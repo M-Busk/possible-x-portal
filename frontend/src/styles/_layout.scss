@@ -3,6 +3,12 @@
   min-height: calc(100vh - 5rem - 26rem);
 }
 
+.admin-page-container {
+  @apply flex flex-col min-h-screen bg-brand-50;
+  /* Full height with Flexbox */
+}
+
+
 .content {
   @apply flex-1 mx-auto h-auto lg:max-w-screen-xl;
 }

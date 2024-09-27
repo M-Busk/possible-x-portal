@@ -1,0 +1,64 @@
+<div class="max-h-screen overflow-y-auto p-4">
+  <h2 class="font-bold">Registration Requests</h2><br/>
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3 text-left font-medium">
+        Organization Name
+      </th>
+    </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+    <tr *ngFor="let registration of registrationRequests; let i = index">
+      <td class="px-6 py-4 whitespace-nowrap bg-gray-50">
+        <c-accordion>
+          <c-accordion-item [visible]="false" #accordionItem="cAccordionItem">
+            <ng-template cTemplateId="accordionHeaderTemplate">
+              <button (click)="accordionItem.toggleItem()" [collapsed]="!accordionItem.visible" cAccordionButton class="bg-white flex justify-between w-full">
+                <span class="font-bold">{{ registration.name }}</span>
+              </button>
+            </ng-template>
+            <ng-template cTemplateId="accordionBodyTemplate">
+              <div class="accordion-body">
+                <p><span class="font-bold">Organization Name:</span> {{ registration.name }}</p>
+                <br/>
+                <p><span class="font-bold">Organization Description:</span> {{ registration.description }}</p>
+                <br/>
+                <p><span class="font-bold">Legal Registration Number:</span></p>
+                <ul class="pl-2">
+                  <li><span class="font-bold">EORI:</span> {{ registration.legalRegistrationNumber.eori || "-" }}</li>
+                  <li><span class="font-bold">vatID:</span> {{ registration.legalRegistrationNumber.vatID || "-" }}</li>
+                  <li><span class="font-bold">leiCode:</span> {{ registration.legalRegistrationNumber.leiCode || "-" }}</li>
+                </ul>
+                <br/>
+                <div class="flex space-x-8">
+                  <div>
+                    <p><span class="font-bold">Legal Address:</span></p>
+                    <ul class="pl-2">
+                      <li><span class="font-bold">Country Code:</span> {{ registration.legalAddress.countryCode }}</li>
+                      <li><span class="font-bold">Postal Code:</span> {{ registration.legalAddress.postalCode }}</li>
+                      <li><span class="font-bold">City:</span> {{ registration.legalAddress.locality }}</li>
+                      <li><span class="font-bold">Street:</span> {{ registration.legalAddress.streetAddress }}</li>
+                      <li><span class="font-bold">Country Subdivision Code:</span> {{ registration.legalAddress.countrySubdivisionCode }}</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p><span class="font-bold">Headquarter Address:</span></p>
+                    <ul class="pl-2">
+                      <li><span class="font-bold">Country Code:</span> {{ registration.headquarterAddress.countryCode }}</li>
+                      <li><span class="font-bold">Postal Code:</span> {{ registration.headquarterAddress.postalCode }}</li>
+                      <li><span class="font-bold">City:</span> {{ registration.headquarterAddress.locality }}</li>
+                      <li><span class="font-bold">Street:</span> {{ registration.headquarterAddress.streetAddress }}</li>
+                      <li><span class="font-bold">Country Subdivision Code:</span> {{ registration.headquarterAddress.countrySubdivisionCode }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </c-accordion-item>
+        </c-accordion>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

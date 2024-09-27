@@ -17,6 +17,12 @@
   @apply divide-y divide-brand-100;
 }
 
+.admin-footerWrapper {
+  @apply overflow-hidden bg-brand-50;
+  @apply w-full h-[26rem];
+  @apply divide-y divide-brand-100;
+}
+
 .footer {
   @apply grid grid-cols-1 flex-wrap gap-8 md:grid-cols-3;
   @apply mx-auto max-w-screen-4xl px-8 py-10 xl:px-20;
