@@ -29,6 +29,11 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
         this.participantCredentialMapper = participantCredentialMapper;
     }
 
+    /**
+     * Process and store a registration request for a participant.
+     *
+     * @param request participant registration request
+     */
     @Override
     public void registerParticipant(@RequestBody RegistrationRequestTO request) {
 

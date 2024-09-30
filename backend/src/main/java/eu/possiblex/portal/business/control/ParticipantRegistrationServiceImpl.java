@@ -25,6 +25,11 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         this.participantRegistrationServiceMapper = participantRegistrationServiceMapper;
     }
 
+    /**
+     * Given a registration request BE, process and store it for later use.
+     *
+     * @param be request BE
+     */
     @Override
     public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs) {
 

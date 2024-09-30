@@ -1,6 +1,9 @@
 # POSSIBLE-X Portal
 
-TODO description
+The POSSIBLE-X Portal is the centralized landing page for interacting with the POSSIBLE-X Dataspace.
+
+Currently, it allows new users to send a registration request and upon administrative approval, receive a Gaia-X
+compliant participant credential and dataspace identity, which can be used for further functionalities in the dataspace.
 
 ## Repository structure
 
@@ -56,9 +59,9 @@ Alternatively running the jar directly (if built previously):
 java -jar backend/build/libs/backend-x.y.z.jar
 ```
 
-Once the service is running, you can access it at e.g. http://localhost:8080/ (depending on the used configuration).
+Once the service is running, you can access it at e.g. http://localhost:8088/ (depending on the used configuration).
 
-The OpenAPI documentation can be found at http://localhost:8080/swagger-ui.html .
+The OpenAPI documentation can be found at http://localhost:8088/swagger-ui.html .
 
 ## Run Portal Frontend
 
@@ -66,15 +69,8 @@ Consumer (local testing):
 
 ```
 cd frontend/
-npm run ng -- serve --configuration consumer-local --port 4201
+npm start
 ```
 
-Provider (local testing):
-
-```
-cd frontend/
-npm run ng -- serve --configuration provider-local --port 4200
-```
-
-Once the service is running, you can access it at e.g. http://localhost:4200/  (depending on the used configuration).
+Once the service is running, you can access it at e.g. http://localhost:4300/  (depending on the used configuration).
 

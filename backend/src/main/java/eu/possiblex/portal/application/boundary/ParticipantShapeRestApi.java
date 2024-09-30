@@ -6,13 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/shapes")
 public interface ParticipantShapeRestApi {
     /**
-     * GET request for retrieving the Gaia-X service offering shape.
+     * GET request for retrieving the Gaia-X legal participant shape.
      *
      * @return catalog shape
      */
     @GetMapping("/gx/legalparticipant")
     String getGxLegalParticipantShape();
 
+    /**
+     * GET request for retrieving the Gaia-X legal registration number shape.
+     *
+     * @return catalog shape
+     */
     @GetMapping("/gx/legalregistrationnumber")
     String getGxLegalRegistrationNumberShape();
 }

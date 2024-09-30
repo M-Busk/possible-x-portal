@@ -18,12 +18,22 @@ public class ParticipantShapeRestApiImpl implements ParticipantShapeRestApi {
         this.sdCreationWizardApiService = sdCreationWizardApiService;
     }
 
+    /**
+     * Retrieve the Gaia-X legal participant shape from the SD Creation Wizard API and return it.
+     *
+     * @return catalog shape
+     */
     @Override
     public String getGxLegalParticipantShape() {
 
         return sdCreationWizardApiService.getShapeByName(ECOSYSTEM_GAIAX, "Legalparticipant.json");
     }
 
+    /**
+     * Retrieve the Gaia-X legal registration number shape from the SD Creation Wizard API and return it.
+     *
+     * @return catalog shape
+     */
     @Override
     public String getGxLegalRegistrationNumberShape() {
 

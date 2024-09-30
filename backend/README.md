@@ -1,6 +1,8 @@
 # POSSIBLE-X Portal Backend
 
-TODO description
+The backend component of the POSSIBLE-X Portal is a Spring Boot application that provides the REST API for the frontend.
+It interacts with the database to store and retrieve user registration requests for participant credentials.
+It is also responsible for administrating requests as well as sending them to a central catalog upon approval.
 
 ## Build
 
@@ -26,4 +28,4 @@ Alternatively running the jar directly (if built previously):
 java -jar backend/build/libs/backend-x.y.z.jar
 ```
 
-Once the service is running, you can access it at http://localhost:8080/ .
+Once the service is running, you can access it at http://localhost:8088/ .

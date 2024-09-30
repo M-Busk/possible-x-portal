@@ -1,10 +1,11 @@
 # POSSIBLE-X Portal Frontend
 
-TODO description
+The frontend component of the POSSIBLE-X Portal is an Angular application that provides the GUI for the user to interact with the backend.
+It provides a mask for signing up for a participant credential and dataspace identity, as well as allows administrators to view, approve and reject registration requests.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4300/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

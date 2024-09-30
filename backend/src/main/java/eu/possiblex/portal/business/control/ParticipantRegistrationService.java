@@ -6,7 +6,12 @@ import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalPartici
 import java.util.List;
 
 public interface ParticipantRegistrationService {
-
+  
+    /**
+     * Given a registration request, process and store it for later use.
+     *
+     * @param cs registration request
+     */
     void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs);
 
     /**
@@ -15,4 +20,5 @@ public interface ParticipantRegistrationService {
      * @return list of registration requests
      */
     List<RegistrationRequestListTO> getAllParticipantRegistrationRequests();
+  
 }
