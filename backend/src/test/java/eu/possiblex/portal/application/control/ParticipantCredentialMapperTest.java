@@ -3,7 +3,7 @@ package eu.possiblex.portal.application.control;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
-import eu.possiblex.portal.business.entity.PossibleParticipantBE;
+import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,37 +44,37 @@ class ParticipantCredentialMapperTest {
     private ParticipantCredentialMapper participantCredentialMapper;
 
     @Test
-    void mapCredentialSubjectsToBE() {
+    void mapCredentialSubjectsToExtendedLegalParticipantCs() {
 
         // given
         GxLegalParticipantCredentialSubject participant = getGxLegalParticipantCredentialSubjectExample();
         GxLegalRegistrationNumberCredentialSubject registrationNumber = getGxLegalRegistrationNumberCredentialSubjectExample();
 
         // when
-        PossibleParticipantBE participantBE = participantCredentialMapper.credentialSubjectsToBE(participant,
-            registrationNumber);
+        PxExtendedLegalParticipantCredentialSubject participantCs = participantCredentialMapper.credentialSubjectsToExtendedLegalParticipantCs(
+            participant, registrationNumber);
 
         // then
-        assertEquals(participantName, participantBE.getName());
-        assertEquals(participantDescription, participantBE.getDescription());
+        assertEquals(participantName, participantCs.getName());
+        assertEquals(participantDescription, participantCs.getDescription());
 
-        assertEquals(participantAddrCountryCode, participantBE.getHeadquarterAddress().getCountryCode());
+        assertEquals(participantAddrCountryCode, participantCs.getHeadquarterAddress().getCountryCode());
         assertEquals(participantAddrCountrySubdivisionCode,
-            participantBE.getHeadquarterAddress().getCountrySubdivisionCode());
-        assertEquals(participantAddrCountryStreetAddress, participantBE.getHeadquarterAddress().getStreetAddress());
-        assertEquals(participantAddrCountryLocality, participantBE.getHeadquarterAddress().getLocality());
-        assertEquals(participantAddrPostalCode, participantBE.getHeadquarterAddress().getPostalCode());
+            participantCs.getHeadquarterAddress().getCountrySubdivisionCode());
+        assertEquals(participantAddrCountryStreetAddress, participantCs.getHeadquarterAddress().getStreetAddress());
+        assertEquals(participantAddrCountryLocality, participantCs.getHeadquarterAddress().getLocality());
+        assertEquals(participantAddrPostalCode, participantCs.getHeadquarterAddress().getPostalCode());
 
-        assertEquals(participantAddrCountryCode, participantBE.getLegalAddress().getCountryCode());
+        assertEquals(participantAddrCountryCode, participantCs.getLegalAddress().getCountryCode());
         assertEquals(participantAddrCountrySubdivisionCode,
-            participantBE.getLegalAddress().getCountrySubdivisionCode());
-        assertEquals(participantAddrCountryStreetAddress, participantBE.getLegalAddress().getStreetAddress());
-        assertEquals(participantAddrCountryLocality, participantBE.getLegalAddress().getLocality());
-        assertEquals(participantAddrPostalCode, participantBE.getLegalAddress().getPostalCode());
+            participantCs.getLegalAddress().getCountrySubdivisionCode());
+        assertEquals(participantAddrCountryStreetAddress, participantCs.getLegalAddress().getStreetAddress());
+        assertEquals(participantAddrCountryLocality, participantCs.getLegalAddress().getLocality());
+        assertEquals(participantAddrPostalCode, participantCs.getLegalAddress().getPostalCode());
 
-        assertEquals(participantRegNumEori, participantBE.getLegalRegistrationNumber().getEori());
-        assertEquals(participantRegNumVatID, participantBE.getLegalRegistrationNumber().getVatID());
-        assertEquals(participantRegNumLeiCode, participantBE.getLegalRegistrationNumber().getLeiCode());
+        assertEquals(participantRegNumEori, participantCs.getLegalRegistrationNumber().getEori());
+        assertEquals(participantRegNumVatID, participantCs.getLegalRegistrationNumber().getVatID());
+        assertEquals(participantRegNumLeiCode, participantCs.getLegalRegistrationNumber().getLeiCode());
 
     }
 

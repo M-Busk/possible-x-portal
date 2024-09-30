@@ -1,7 +1,7 @@
 package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestListTO;
-import eu.possiblex.portal.business.entity.PossibleParticipantBE;
+import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOImpl;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestRepository;
@@ -34,7 +34,8 @@ class ParticipantRegistrationServiceTest {
     @Test
     void registerParticipant() {
         // TODO add proper test
-        participantRegistrationService.registerParticipant(PossibleParticipantBE.builder().build());
+        participantRegistrationService.registerParticipant(
+            PxExtendedLegalParticipantCredentialSubject.builder().build());
         assertTrue(true);
     }
 
@@ -53,6 +54,7 @@ class ParticipantRegistrationServiceTest {
 
             return Mappers.getMapper(ParticipantRegistrationEntityMapper.class);
         }
+
         @Bean
         public ParticipantRegistrationServiceMapper participantRegistrationServiceMapper() {
 

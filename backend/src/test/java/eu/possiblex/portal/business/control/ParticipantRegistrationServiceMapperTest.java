@@ -4,7 +4,7 @@ import eu.possiblex.portal.application.entity.RegistrationRequestListTO;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
-import eu.possiblex.portal.business.entity.PossibleParticipantBE;
+import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ContextConfiguration(classes = { ParticipantRegistrationServiceMapperTest.TestConfig.class,
@@ -45,12 +46,12 @@ class ParticipantRegistrationServiceMapperTest {
     private ParticipantRegistrationServiceMapper participantRegistrationServiceMapper;
 
     @Test
-    void possibleParticipantBEToRegistrationRequestListTO() {
+    void possibleParticipantCsToRegistrationRequestListTO() {
         // given
         GxLegalParticipantCredentialSubject gxLegalParticipantCredentialSubject = getGxLegalParticipantCredentialSubjectExample();
 
         // when
-        PossibleParticipantBE possibleParticipantBE = PossibleParticipantBE.builder()
+        PxExtendedLegalParticipantCredentialSubject possibleParticipantCs = PxExtendedLegalParticipantCredentialSubject.builder()
             .legalRegistrationNumber(getGxLegalRegistrationNumberCredentialSubjectExample())
             .legalAddress(gxLegalParticipantCredentialSubject.getLegalAddress())
             .headquarterAddress(gxLegalParticipantCredentialSubject.getHeadquarterAddress())
@@ -59,7 +60,8 @@ class ParticipantRegistrationServiceMapperTest {
             .name(gxLegalParticipantCredentialSubject.getName()).build();
 
         // then
-        RegistrationRequestListTO listTO = participantRegistrationServiceMapper.possibleParticipantBEToRegistrationRequestListTO(possibleParticipantBE);
+        RegistrationRequestListTO listTO = participantRegistrationServiceMapper.pxExtendedLegalParticipantCsToRegistrationRequestListTO(
+            possibleParticipantCs);
 
         assertNotNull(listTO);
 
@@ -67,15 +69,13 @@ class ParticipantRegistrationServiceMapperTest {
         assertEquals(participantDescription, listTO.getDescription());
 
         assertEquals(participantAddrCountryCode, listTO.getHeadquarterAddress().getCountryCode());
-        assertEquals(participantAddrCountrySubdivisionCode,
-            listTO.getHeadquarterAddress().getCountrySubdivisionCode());
+        assertEquals(participantAddrCountrySubdivisionCode, listTO.getHeadquarterAddress().getCountrySubdivisionCode());
         assertEquals(participantAddrCountryStreetAddress, listTO.getHeadquarterAddress().getStreetAddress());
         assertEquals(participantAddrCountryLocality, listTO.getHeadquarterAddress().getLocality());
         assertEquals(participantAddrPostalCode, listTO.getHeadquarterAddress().getPostalCode());
 
         assertEquals(participantAddrCountryCode, listTO.getLegalAddress().getCountryCode());
-        assertEquals(participantAddrCountrySubdivisionCode,
-            listTO.getLegalAddress().getCountrySubdivisionCode());
+        assertEquals(participantAddrCountrySubdivisionCode, listTO.getLegalAddress().getCountrySubdivisionCode());
         assertEquals(participantAddrCountryStreetAddress, listTO.getLegalAddress().getStreetAddress());
         assertEquals(participantAddrCountryLocality, listTO.getLegalAddress().getLocality());
         assertEquals(participantAddrPostalCode, listTO.getLegalAddress().getPostalCode());

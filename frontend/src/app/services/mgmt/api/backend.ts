@@ -124,9 +124,9 @@ export interface IClass<T> extends ISerializable, IGenericDeclaration, IType, IA
 }
 
 export interface IValueInstantiator {
+    valueClass: IClass<any>;
     arrayDelegateCreator: IAnnotatedWithParams;
     delegateCreator: IAnnotatedWithParams;
-    valueClass: IClass<any>;
     withArgsCreator: IAnnotatedWithParams;
     valueTypeDesc: string;
     defaultCreator: IAnnotatedWithParams;
@@ -134,16 +134,16 @@ export interface IValueInstantiator {
 
 export interface IJavaType extends IResolvedType, ISerializable, IType {
     javaLangObject: boolean;
+    recordType: boolean;
     typeHandler: any;
     valueHandler: any;
     enumImplType: boolean;
-    recordType: boolean;
+    referencedType: IJavaType;
     contentValueHandler: any;
     contentTypeHandler: any;
     erasedSignature: string;
-    superClass: IJavaType;
     keyType: IJavaType;
-    referencedType: IJavaType;
+    superClass: IJavaType;
     interfaces: IJavaType[];
     genericSignature: string;
     contentType: IJavaType;
@@ -151,19 +151,19 @@ export interface IJavaType extends IResolvedType, ISerializable, IType {
 }
 
 export interface IJsonDeserializer<T> extends INullValueProvider {
-    emptyAccessPattern: IAccessPattern;
-    delegatee: IJsonDeserializer<any>;
-    knownPropertyNames: any[];
-    objectIdReader: IObjectIdReader;
     /**
      * @deprecated
      */
     emptyValue: any;
-    cachable: boolean;
     /**
      * @deprecated
      */
     nullValue: T;
+    emptyAccessPattern: IAccessPattern;
+    delegatee: IJsonDeserializer<any>;
+    knownPropertyNames: any[];
+    objectIdReader: IObjectIdReader;
+    cachable: boolean;
 }
 
 export interface IObjectIdReader extends ISerializable {
@@ -176,8 +176,8 @@ export interface IObjectIdReader extends ISerializable {
 }
 
 export interface IJsonSerializer<T> extends IJsonFormatVisitable {
-    delegatee: IJsonSerializer<any>;
     unwrappingSerializer: boolean;
+    delegatee: IJsonSerializer<any>;
 }
 
 export interface ISerializable {
@@ -210,20 +210,20 @@ export interface ITypeBindings extends ISerializable {
 }
 
 export interface IResolvedType {
+    enumType: boolean;
+    arrayType: boolean;
+    containerType: boolean;
     concrete: boolean;
     collectionLikeType: boolean;
     mapLikeType: boolean;
+    referencedType: IResolvedType;
     /**
      * @deprecated
      */
     parameterSource: IClass<any>;
-    containerType: boolean;
-    enumType: boolean;
     throwable: boolean;
-    rawClass: IClass<any>;
     keyType: IResolvedType;
-    referencedType: IResolvedType;
-    arrayType: boolean;
+    rawClass: IClass<any>;
     interface: boolean;
     primitive: boolean;
     final: boolean;
@@ -250,16 +250,16 @@ export interface IObjectIdResolver {
 }
 
 export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISerializable {
+    ignorable: boolean;
+    valueDeserializer: IJsonDeserializer<any>;
+    creatorIndex: number;
+    objectIdInfo: IObjectIdInfo;
     managedReferenceName: string;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
     injectableValueId: any;
     injectionOnly: boolean;
-    valueDeserializer: IJsonDeserializer<any>;
-    objectIdInfo: IObjectIdInfo;
-    creatorIndex: number;
-    ignorable: boolean;
 }
 
 export interface IStdDeserializer<T> extends IJsonDeserializer<T>, ISerializable, IGettable {
@@ -291,6 +291,12 @@ export interface IOfField<F> extends ITypeDescriptor {
     primitive: boolean;
 }
 
+export interface IAnnotationMap extends IAnnotations {
+}
+
+export interface ITypeResolutionContext {
+}
+
 export interface IMember {
     name: string;
     modifiers: number;
@@ -298,36 +304,30 @@ export interface IMember {
     declaringClass: IClass<any>;
 }
 
-export interface IAnnotationMap extends IAnnotations {
-}
-
-export interface ITypeResolutionContext {
-}
-
 export interface IAnnotatedMember extends IAnnotated, ISerializable {
-    member: IMember;
     allAnnotations: IAnnotationMap;
     /**
      * @deprecated
      */
     typeContext: ITypeResolutionContext;
+    member: IMember;
     declaringClass: IClass<any>;
     fullName: string;
 }
 
-export interface ITypeDeserializer {
-    typeInclusion: IAs;
-    typeIdResolver: ITypeIdResolver;
-    defaultImpl: IClass<any>;
-    propertyName: string;
-}
-
 export interface IObjectIdInfo {
-    alwaysAsId: boolean;
     generatorType: IClass<IObjectIdGenerator<any>>;
     resolverType: IClass<IObjectIdResolver>;
+    alwaysAsId: boolean;
     scope: IClass<any>;
     propertyName: IPropertyName;
+}
+
+export interface ITypeDeserializer {
+    typeIdResolver: ITypeIdResolver;
+    defaultImpl: IClass<any>;
+    typeInclusion: IAs;
+    propertyName: string;
 }
 
 export interface IPropertyMetadata extends ISerializable {
@@ -370,8 +370,8 @@ export interface IAnnotated {
 }
 
 export interface ITypeIdResolver {
-    descForKnownTypeIds: string;
     mechanism: IId;
+    descForKnownTypeIds: string;
 }
 
 export interface IMergeInfo {

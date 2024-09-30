@@ -1,12 +1,11 @@
 package eu.possiblex.portal.persistence.dao;
 
-import eu.possiblex.portal.business.entity.PossibleParticipantBE;
-import eu.possiblex.portal.persistence.entity.ParticipantRegistrationRequestEntity;
+import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 
 import java.util.List;
 
 public interface ParticipantRegistrationRequestDAO {
-    void saveParticipantRegistrationRequest(PossibleParticipantBE request);
+    void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject request);
 
-    List<PossibleParticipantBE> getAllParticipantRegistrationRequests();
+    List<PxExtendedLegalParticipantCredentialSubject> getAllParticipantRegistrationRequests();
 }
