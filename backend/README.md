@@ -16,6 +16,15 @@ after which the built jar can be found at `backend/build/libs/backend-x.y.z.jar`
 
 ## Run
 
+The following environment variables can be set as needed.
+Replace the right hand side with the actual values.
+```
+export SDCREATIONWIZARDAPI_BASEURL="SD Creation Wizard API base URL"
+export SPRING_DATASOURCE_URL="Datasource URL"
+export SPRING_DATASOURCE_USERNAME="Datasource Username"
+export SPRING_DATASOURCE_PASSWORD="Datasource Password"
+```
+
 Through gradle:
 
 ```
