@@ -84,3 +84,5 @@ out/
 **/secret_envs
 
 **/scripts/meta
+
+secret-envs
