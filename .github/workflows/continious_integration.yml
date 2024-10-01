@@ -44,8 +44,8 @@ jobs:
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main'}}
             type=raw,value=latest-${{github.ref_name }},enable=${{ github.ref != 'refs/heads/main'}}
             ${{ github.sha }}
-      - name: Build and push "management"
-        id: build_and_push_management
+      - name: Build and push 
+        id: build_and_push
         uses: docker/build-push-action@v6
         with:
           context: .
