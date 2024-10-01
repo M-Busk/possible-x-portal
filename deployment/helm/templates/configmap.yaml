@@ -1,9 +1,10 @@
-{{- range .Values.application.variables }}
+{{- range $key, $value := .Values.application.variables }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .name }}
+  name: {{ $key }}
 data:
-  {{- toYaml .data | nindent 2 }}
+  {{- toYaml $value | nindent 2 }}
+---
 {{- end }}
 

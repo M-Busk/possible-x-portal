@@ -30,13 +30,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 8080
+            - containerPort: 8088
           envFrom:
-          {{- range .Values.application.secrets }}
-          - secretRef:
-              name: {{ . }}
-          {{- end }}
-          {{- range .Values.application.variables }}
+          {{- range $key, $value := .Values.application.variables }}
           - configMapRef:
-              name: {{ .name }}
+              name: {{ $key }}
+          {{- end }}
+          {{- range $key, $value := .Values.application.secrets }}
+          - secretRef:
+              name: {{ $value }}
           {{- end }}
