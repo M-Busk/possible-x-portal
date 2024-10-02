@@ -17,16 +17,6 @@
           fxFlex.sm="100%"
           fxFlex.xs="100%"
         >
-          <div class="mb-3">
-            <label class="form-label text-brand-50">Subject-ID*<span class="field-key">&nbsp;&nbsp;id</span></label>
-            <input
-              class="form-control"
-              formControlName="user_prefix"
-              placeholder="did:example:123456789abcdefghi"
-              type="text"
-            />
-          </div>
-
           <div
             *ngFor="let formField of group; let j = index"
             class="form-group"

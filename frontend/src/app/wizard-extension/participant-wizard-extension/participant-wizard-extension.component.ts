@@ -30,7 +30,11 @@ export class ParticipantWizardExtensionComponent {
   public async loadShape(id: string, registrationNumberId: string): Promise<void> {
     this.prefillDone.next(false);
     console.log("Loading participant shape");
-    await this.gxParticipantWizard.loadShape(this.apiService.getGxLegalParticipantShape(), id);
+
+    let participantShapeSource = await this.apiService.getGxLegalParticipantShape();
+    participantShapeSource = this.adaptGxShape(participantShapeSource, "LegalParticipant", ["legalRegistrationNumber"]);
+
+    await this.gxParticipantWizard.loadShape(Promise.resolve(participantShapeSource), id);
     await this.gxRegistrationNumberWizard.loadShape(this.apiService.getGxLegalRegistrationNumberShape(), registrationNumberId);
 
   }
@@ -68,7 +72,7 @@ export class ParticipantWizardExtensionComponent {
 
     let gxParticipantJson: IGxLegalParticipantCredentialSubject = this.gxParticipantWizard.generateJsonCs();
     let gxRegistrationNumberJson: IGxLegalRegistrationNumberCredentialSubject = this.gxRegistrationNumberWizard.generateJsonCs();
-
+    gxParticipantJson["gx:legalRegistrationNumber"] = {"@id" : gxRegistrationNumberJson.id} as any;
     let registerParticipantTo: IRegistrationRequestTO = {
       participantCs: gxParticipantJson,
       registrationNumberCs: gxRegistrationNumberJson
@@ -102,11 +106,29 @@ export class ParticipantWizardExtensionComponent {
 
   private prefillHandleCs(cs: IPojoCredentialSubject) {
     if (isGxLegalParticipantCs(cs)) {
-      this.gxParticipantWizard.prefillFields(cs, ["gx:legalRegistrationNumber"]);
+      this.gxParticipantWizard.prefillFields(cs, []);
     }
     if (isGxLegalRegistrationNumberCs(cs)) {
       this.gxRegistrationNumberWizard.prefillFields(cs, []);
     }
+  }
+
+  protected adaptGxShape(shapeSource: any, shapeName: string, excludedFields: string[]) {
+    if (typeof shapeSource !== 'object' || shapeSource === null) {
+      console.error("Invalid input: shape is not of expected type.");
+      return null;
+    }
+
+    shapeSource.shapes.forEach((shape: any) => {
+      if (shape.targetClassName === shapeName) {
+        shape.constraints = shape.constraints.filter((constraint: any) => {
+          return !(constraint.path.prefix === "gx" && excludedFields.includes(constraint.path.value));
+        });
+      }
+    });
+
+    console.log(shapeSource);
+    return shapeSource;
   }
 
 }
