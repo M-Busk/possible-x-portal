@@ -1,3 +1,4 @@
+import cz.habarta.typescript.generator.EnumMapping
 import cz.habarta.typescript.generator.JsonLibrary
 import cz.habarta.typescript.generator.TypeScriptFileType
 import cz.habarta.typescript.generator.TypeScriptOutputKind
@@ -93,5 +94,6 @@ tasks {
     )
     outputFile = "../frontend/src/app/services/mgmt/api/backend.ts"
     noFileComment = true
+    mapEnum = EnumMapping.asEnum
   }
 }

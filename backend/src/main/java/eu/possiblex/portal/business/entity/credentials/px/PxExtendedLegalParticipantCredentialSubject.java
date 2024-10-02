@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@ToString(callSuper = true)
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

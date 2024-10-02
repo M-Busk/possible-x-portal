@@ -1,7 +1,9 @@
 package eu.possiblex.portal.business.control;
 
-import eu.possiblex.portal.application.entity.RegistrationRequestListTO;
+
+import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+
 
 import java.util.List;
 
@@ -19,6 +21,26 @@ public interface ParticipantRegistrationService {
      *
      * @return list of registration requests
      */
-    List<RegistrationRequestListTO> getAllParticipantRegistrationRequests();
-  
+    List<RegistrationRequestEntryTO> getAllParticipantRegistrationRequests();
+
+    /**
+     * Given a registration request id, accept the registration request.
+     *
+     * @param id registration request id
+     */
+    void acceptRegistrationRequest(String id);
+
+    /**
+     * Given a registration request id, reject the registration request.
+     *
+     * @param id registration request id
+     */
+    void rejectRegistrationRequest(String id);
+
+    /**
+     * Given a registration request id, delete the registration request.
+     *
+     * @param id registration request id
+     */
+    void deleteRegistrationRequest(String id);
 }

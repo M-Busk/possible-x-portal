@@ -7,4 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface ParticipantRegistrationRequestRepository
     extends JpaRepository<ParticipantRegistrationRequestEntity, Long> {
+
+    ParticipantRegistrationRequestEntity findByName(String name);
 }

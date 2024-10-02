@@ -1,10 +1,9 @@
 package eu.possiblex.portal.business.control;
 
-import eu.possiblex.portal.application.entity.RegistrationRequestListTO;
+import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
-import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
-import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ContextConfiguration(classes = { ParticipantRegistrationServiceMapperTest.TestConfig.class,
     ParticipantRegistrationServiceMapper.class })
 class ParticipantRegistrationServiceMapperTest {
-    private final String participantId = "1234";
 
     private final String participantName = "SomeOrga Inc.";
 
@@ -48,41 +46,32 @@ class ParticipantRegistrationServiceMapperTest {
     @Test
     void possibleParticipantCsToRegistrationRequestListTO() {
         // given
-        GxLegalParticipantCredentialSubject gxLegalParticipantCredentialSubject = getGxLegalParticipantCredentialSubjectExample();
+        ParticipantRegistrationRequestBE possibleParticipant = getParticipantRegistrationRequestExample();
 
         // when
-        PxExtendedLegalParticipantCredentialSubject possibleParticipantCs = PxExtendedLegalParticipantCredentialSubject.builder()
-            .legalRegistrationNumber(getGxLegalRegistrationNumberCredentialSubjectExample())
-            .legalAddress(gxLegalParticipantCredentialSubject.getLegalAddress())
-            .headquarterAddress(gxLegalParticipantCredentialSubject.getHeadquarterAddress())
-            .id(gxLegalParticipantCredentialSubject.getId())
-            .description(gxLegalParticipantCredentialSubject.getDescription())
-            .name(gxLegalParticipantCredentialSubject.getName()).build();
+        RegistrationRequestEntryTO to = participantRegistrationServiceMapper.participantRegistrationRequestBEToRegistrationRequestEntryTO(possibleParticipant);
 
         // then
-        RegistrationRequestListTO listTO = participantRegistrationServiceMapper.pxExtendedLegalParticipantCsToRegistrationRequestListTO(
-            possibleParticipantCs);
+        assertNotNull(to);
 
-        assertNotNull(listTO);
+        assertEquals(participantName, to.getName());
+        assertEquals(participantDescription, to.getDescription());
 
-        assertEquals(participantName, listTO.getName());
-        assertEquals(participantDescription, listTO.getDescription());
+        assertEquals(participantAddrCountryCode, to.getHeadquarterAddress().getCountryCode());
+        assertEquals(participantAddrCountrySubdivisionCode, to.getHeadquarterAddress().getCountrySubdivisionCode());
+        assertEquals(participantAddrCountryStreetAddress, to.getHeadquarterAddress().getStreetAddress());
+        assertEquals(participantAddrCountryLocality, to.getHeadquarterAddress().getLocality());
+        assertEquals(participantAddrPostalCode, to.getHeadquarterAddress().getPostalCode());
 
-        assertEquals(participantAddrCountryCode, listTO.getHeadquarterAddress().getCountryCode());
-        assertEquals(participantAddrCountrySubdivisionCode, listTO.getHeadquarterAddress().getCountrySubdivisionCode());
-        assertEquals(participantAddrCountryStreetAddress, listTO.getHeadquarterAddress().getStreetAddress());
-        assertEquals(participantAddrCountryLocality, listTO.getHeadquarterAddress().getLocality());
-        assertEquals(participantAddrPostalCode, listTO.getHeadquarterAddress().getPostalCode());
+        assertEquals(participantAddrCountryCode, to.getLegalAddress().getCountryCode());
+        assertEquals(participantAddrCountrySubdivisionCode, to.getLegalAddress().getCountrySubdivisionCode());
+        assertEquals(participantAddrCountryStreetAddress, to.getLegalAddress().getStreetAddress());
+        assertEquals(participantAddrCountryLocality, to.getLegalAddress().getLocality());
+        assertEquals(participantAddrPostalCode, to.getLegalAddress().getPostalCode());
 
-        assertEquals(participantAddrCountryCode, listTO.getLegalAddress().getCountryCode());
-        assertEquals(participantAddrCountrySubdivisionCode, listTO.getLegalAddress().getCountrySubdivisionCode());
-        assertEquals(participantAddrCountryStreetAddress, listTO.getLegalAddress().getStreetAddress());
-        assertEquals(participantAddrCountryLocality, listTO.getLegalAddress().getLocality());
-        assertEquals(participantAddrPostalCode, listTO.getLegalAddress().getPostalCode());
-
-        assertEquals(participantRegNumEori, listTO.getLegalRegistrationNumber().getEori());
-        assertEquals(participantRegNumVatID, listTO.getLegalRegistrationNumber().getVatID());
-        assertEquals(participantRegNumLeiCode, listTO.getLegalRegistrationNumber().getLeiCode());
+        assertEquals(participantRegNumEori, to.getLegalRegistrationNumber().getEori());
+        assertEquals(participantRegNumVatID, to.getLegalRegistrationNumber().getVatID());
+        assertEquals(participantRegNumLeiCode, to.getLegalRegistrationNumber().getLeiCode());
     }
 
     private GxLegalRegistrationNumberCredentialSubject getGxLegalRegistrationNumberCredentialSubjectExample() {
@@ -94,7 +83,7 @@ class ParticipantRegistrationServiceMapperTest {
         return registrationNumber;
     }
 
-    private GxLegalParticipantCredentialSubject getGxLegalParticipantCredentialSubjectExample() {
+    private ParticipantRegistrationRequestBE getParticipantRegistrationRequestExample() {
 
         GxVcard vcard = new GxVcard();
         vcard.setCountryCode(participantAddrCountryCode);
@@ -103,13 +92,12 @@ class ParticipantRegistrationServiceMapperTest {
         vcard.setLocality(participantAddrCountryLocality);
         vcard.setPostalCode(participantAddrPostalCode);
 
-        GxLegalParticipantCredentialSubject participant = new GxLegalParticipantCredentialSubject();
-        participant.setId(participantId);
-        participant.setName(participantName);
-        participant.setDescription(participantDescription);
-        participant.setHeadquarterAddress(vcard);
-        participant.setLegalAddress(vcard);
-        return participant;
+        return ParticipantRegistrationRequestBE.builder()
+            .legalRegistrationNumber(getGxLegalRegistrationNumberCredentialSubjectExample())
+            .legalAddress(vcard)
+            .headquarterAddress(vcard)
+            .description(participantDescription)
+            .name(participantName).build();
     }
 
     @TestConfiguration

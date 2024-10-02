@@ -1,6 +1,6 @@
 package eu.possiblex.portal.business.control;
 
-import eu.possiblex.portal.application.entity.RegistrationRequestListTO;
+import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +26,9 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
     }
 
     /**
-     * Given a registration request BE, process and store it for later use.
+     * Given a registration request, process and store it for later use.
      *
-     * @param be request BE
+     * @param cs request
      */
     @Override
     public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs) {
@@ -38,13 +38,57 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs);
     }
 
+    /**
+     * Get all registration requests.
+     *
+     * @return list of registration requests
+     */
     @Override
-    public List<RegistrationRequestListTO> getAllParticipantRegistrationRequests() {
+    public List<RegistrationRequestEntryTO> getAllParticipantRegistrationRequests() {
 
         log.info("Processing retrieval of all participant registration requests");
 
         return participantRegistrationRequestDAO.getAllParticipantRegistrationRequests().stream()
-            .map(participantRegistrationServiceMapper::pxExtendedLegalParticipantCsToRegistrationRequestListTO)
+            .map(participantRegistrationServiceMapper::participantRegistrationRequestBEToRegistrationRequestEntryTO)
             .toList();
+    }
+
+    /**
+     * Given a registration request id, accept the registration request.
+     *
+     * @param id registration request id
+     */
+    @Override
+    public void acceptRegistrationRequest(String id) {
+
+        log.info("Processing acceptance of participant: {}", id);
+
+        participantRegistrationRequestDAO.acceptRegistrationRequest(id);
+    }
+
+    /**
+     * Given a registration request id, reject the registration request.
+     *
+     * @param id registration request id
+     */
+    @Override
+    public void rejectRegistrationRequest(String id) {
+
+        log.info("Processing rejection of participant: {}", id);
+
+        participantRegistrationRequestDAO.rejectRegistrationRequest(id);
+    }
+
+    /**
+     * Given a registration request id, delete the registration request.
+     *
+     * @param id registration request id
+     */
+    @Override
+    public void deleteRegistrationRequest(String id) {
+
+        log.info("Processing deletion of participant: {}", id);
+
+        participantRegistrationRequestDAO.deleteRegistrationRequest(id);
     }
 }

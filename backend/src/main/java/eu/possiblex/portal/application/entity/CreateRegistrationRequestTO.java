@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationRequestTO {
+public class CreateRegistrationRequestTO {
     private GxLegalParticipantCredentialSubject participantCs;
 
     private GxLegalRegistrationNumberCredentialSubject registrationNumberCs;

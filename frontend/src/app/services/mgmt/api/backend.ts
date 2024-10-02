@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 export interface IParticipantRegistrationRestApi {
-    allRegistrationRequests: IRegistrationRequestListTO[];
+    allRegistrationRequests: IRegistrationRequestEntryTO[];
 }
 
 export interface IParticipantShapeRestApi {
@@ -21,6 +21,14 @@ export interface IAddressTO {
 export interface IAddressTOBuilder {
 }
 
+export interface ICreateRegistrationRequestTO {
+    participantCs: IGxLegalParticipantCredentialSubject;
+    registrationNumberCs: IGxLegalRegistrationNumberCredentialSubject;
+}
+
+export interface ICreateRegistrationRequestTOBuilder {
+}
+
 export interface IRegistrationNumberTO {
     eori: string;
     vatID: string;
@@ -30,23 +38,16 @@ export interface IRegistrationNumberTO {
 export interface IRegistrationNumberTOBuilder {
 }
 
-export interface IRegistrationRequestListTO {
+export interface IRegistrationRequestEntryTO {
     legalRegistrationNumber: IRegistrationNumberTO;
     legalAddress: IAddressTO;
     headquarterAddress: IAddressTO;
     name: string;
     description: string;
+    status: IRequestStatus;
 }
 
-export interface IRegistrationRequestListTOBuilder {
-}
-
-export interface IRegistrationRequestTO {
-    participantCs: IGxLegalParticipantCredentialSubject;
-    registrationNumberCs: IGxLegalRegistrationNumberCredentialSubject;
-}
-
-export interface IRegistrationRequestTOBuilder {
+export interface IRegistrationRequestEntryTOBuilder {
 }
 
 export interface IPojoCredentialSubject {
@@ -124,26 +125,26 @@ export interface IClass<T> extends ISerializable, IGenericDeclaration, IType, IA
 }
 
 export interface IValueInstantiator {
-    valueClass: IClass<any>;
     arrayDelegateCreator: IAnnotatedWithParams;
     delegateCreator: IAnnotatedWithParams;
     withArgsCreator: IAnnotatedWithParams;
     valueTypeDesc: string;
     defaultCreator: IAnnotatedWithParams;
+    valueClass: IClass<any>;
 }
 
 export interface IJavaType extends IResolvedType, ISerializable, IType {
-    javaLangObject: boolean;
-    recordType: boolean;
-    typeHandler: any;
-    valueHandler: any;
     enumImplType: boolean;
+    recordType: boolean;
     referencedType: IJavaType;
     contentValueHandler: any;
     contentTypeHandler: any;
     erasedSignature: string;
-    keyType: IJavaType;
+    typeHandler: any;
+    valueHandler: any;
+    javaLangObject: boolean;
     superClass: IJavaType;
+    keyType: IJavaType;
     interfaces: IJavaType[];
     genericSignature: string;
     contentType: IJavaType;
@@ -176,8 +177,8 @@ export interface IObjectIdReader extends ISerializable {
 }
 
 export interface IJsonSerializer<T> extends IJsonFormatVisitable {
-    unwrappingSerializer: boolean;
     delegatee: IJsonSerializer<any>;
+    unwrappingSerializer: boolean;
 }
 
 export interface ISerializable {
@@ -211,8 +212,6 @@ export interface ITypeBindings extends ISerializable {
 
 export interface IResolvedType {
     enumType: boolean;
-    arrayType: boolean;
-    containerType: boolean;
     concrete: boolean;
     collectionLikeType: boolean;
     mapLikeType: boolean;
@@ -221,9 +220,11 @@ export interface IResolvedType {
      * @deprecated
      */
     parameterSource: IClass<any>;
-    throwable: boolean;
-    keyType: IResolvedType;
+    containerType: boolean;
+    arrayType: boolean;
     rawClass: IClass<any>;
+    keyType: IResolvedType;
+    throwable: boolean;
     interface: boolean;
     primitive: boolean;
     final: boolean;
@@ -250,16 +251,16 @@ export interface IObjectIdResolver {
 }
 
 export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISerializable {
-    ignorable: boolean;
-    valueDeserializer: IJsonDeserializer<any>;
-    creatorIndex: number;
-    objectIdInfo: IObjectIdInfo;
     managedReferenceName: string;
+    objectIdInfo: IObjectIdInfo;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
     injectableValueId: any;
     injectionOnly: boolean;
+    creatorIndex: number;
+    valueDeserializer: IJsonDeserializer<any>;
+    ignorable: boolean;
 }
 
 export interface IStdDeserializer<T> extends IJsonDeserializer<T>, ISerializable, IGettable {
@@ -324,16 +325,16 @@ export interface IObjectIdInfo {
 }
 
 export interface ITypeDeserializer {
+    typeInclusion: IAs;
     typeIdResolver: ITypeIdResolver;
     defaultImpl: IClass<any>;
-    typeInclusion: IAs;
     propertyName: string;
 }
 
 export interface IPropertyMetadata extends ISerializable {
+    mergeInfo: IMergeInfo;
     valueNulls: INulls;
     contentNulls: INulls;
-    mergeInfo: IMergeInfo;
     required: boolean;
     defaultValue: string;
     index: number;
@@ -407,7 +408,7 @@ export class RestApplicationClient {
      * HTTP GET /registration/request
      * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.getAllRegistrationRequests
      */
-    getAllRegistrationRequests(): RestResponse<IRegistrationRequestListTO[]> {
+    getAllRegistrationRequests(): RestResponse<IRegistrationRequestEntryTO[]> {
         return this.httpClient.request({ method: "GET", url: uriEncoding`registration/request` });
     }
 
@@ -415,8 +416,32 @@ export class RestApplicationClient {
      * HTTP POST /registration/request
      * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.registerParticipant
      */
-    registerParticipant(request: IRegistrationRequestTO): RestResponse<void> {
+    registerParticipant(request: ICreateRegistrationRequestTO): RestResponse<void> {
         return this.httpClient.request({ method: "POST", url: uriEncoding`registration/request`, data: request });
+    }
+
+    /**
+     * HTTP DELETE /registration/request/{id}
+     * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.deleteRegistrationRequest
+     */
+    deleteRegistrationRequest(id: string): RestResponse<void> {
+        return this.httpClient.request({ method: "DELETE", url: uriEncoding`registration/request/${id}` });
+    }
+
+    /**
+     * HTTP POST /registration/request/{id}/accept
+     * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.acceptRegistrationRequest
+     */
+    acceptRegistrationRequest(id: string): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`registration/request/${id}/accept` });
+    }
+
+    /**
+     * HTTP POST /registration/request/{id}/reject
+     * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.rejectRegistrationRequest
+     */
+    rejectRegistrationRequest(id: string): RestResponse<void> {
+        return this.httpClient.request({ method: "POST", url: uriEncoding`registration/request/${id}/reject` });
     }
 
     /**
@@ -438,15 +463,44 @@ export class RestApplicationClient {
 
 export type RestResponse<R> = Promise<R>;
 
-export type IAccessPattern = "ALWAYS_NULL" | "CONSTANT" | "DYNAMIC";
-
-export type IAs = "PROPERTY" | "WRAPPER_OBJECT" | "WRAPPER_ARRAY" | "EXTERNAL_PROPERTY" | "EXISTING_PROPERTY";
-
-export type INulls = "SET" | "SKIP" | "FAIL" | "AS_EMPTY" | "DEFAULT";
-
-export type IId = "NONE" | "CLASS" | "MINIMAL_CLASS" | "NAME" | "DEDUCTION" | "CUSTOM";
-
 export type IPojoCredentialSubjectUnion = IGxLegalParticipantCredentialSubject | IGxLegalRegistrationNumberCredentialSubject;
+
+export const enum IRequestStatus {
+    NEW = "NEW",
+    ACCEPTED = "ACCEPTED",
+    REJECTED = "REJECTED",
+}
+
+export const enum IAccessPattern {
+    ALWAYS_NULL = "ALWAYS_NULL",
+    CONSTANT = "CONSTANT",
+    DYNAMIC = "DYNAMIC",
+}
+
+export const enum IAs {
+    PROPERTY = "PROPERTY",
+    WRAPPER_OBJECT = "WRAPPER_OBJECT",
+    WRAPPER_ARRAY = "WRAPPER_ARRAY",
+    EXTERNAL_PROPERTY = "EXTERNAL_PROPERTY",
+    EXISTING_PROPERTY = "EXISTING_PROPERTY",
+}
+
+export const enum INulls {
+    SET = "SET",
+    SKIP = "SKIP",
+    FAIL = "FAIL",
+    AS_EMPTY = "AS_EMPTY",
+    DEFAULT = "DEFAULT",
+}
+
+export const enum IId {
+    NONE = "NONE",
+    CLASS = "CLASS",
+    MINIMAL_CLASS = "MINIMAL_CLASS",
+    NAME = "NAME",
+    DEDUCTION = "DEDUCTION",
+    CUSTOM = "CUSTOM",
+}
 
 function uriEncoding(template: TemplateStringsArray, ...substitutions: any[]): string {
     let result = "";

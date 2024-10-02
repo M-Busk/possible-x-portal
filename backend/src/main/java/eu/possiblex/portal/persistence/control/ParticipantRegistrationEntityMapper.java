@@ -2,6 +2,7 @@ package eu.possiblex.portal.persistence.control;
 
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
+import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.persistence.entity.ParticipantRegistrationRequestEntity;
 import eu.possiblex.portal.persistence.entity.RegistrationNumberEntity;
@@ -28,7 +29,6 @@ public interface ParticipantRegistrationEntityMapper {
     @Mapping(target = "id", ignore = true)
     GxLegalRegistrationNumberCredentialSubject entityToGxLegalRegistrationNumber(RegistrationNumberEntity entity);
 
-    @Mapping(target = "id", ignore = true)
-    PxExtendedLegalParticipantCredentialSubject entityToPxExtendedLegalParticipantCs(
+    ParticipantRegistrationRequestBE entityToParticipantRegistrationRequestBe(
         ParticipantRegistrationRequestEntity entity);
 }

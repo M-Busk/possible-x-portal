@@ -1,9 +1,9 @@
 package eu.possiblex.portal.application.boundary;
 
 import eu.possiblex.portal.application.control.ParticipantCredentialMapper;
-import eu.possiblex.portal.application.entity.RegistrationRequestTO;
+import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
-import eu.possiblex.portal.business.control.ParticipantRegistrationServiceMock;
+import eu.possiblex.portal.business.control.ParticipantRegistrationServiceFake;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +36,7 @@ class ParticipantRegistrationRestApiTest {
     @Test
     void registerParticipant() throws Exception {
 
-        RegistrationRequestTO to = new RegistrationRequestTO();
+        CreateRegistrationRequestTO to = new CreateRegistrationRequestTO();
         reset(participantRegistrationService);
         this.mockMvc.perform(post("/registration/request").content(RestApiHelper.asJsonString(to))
             .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
@@ -54,12 +53,39 @@ class ParticipantRegistrationRestApiTest {
         verify(participantRegistrationService).getAllParticipantRegistrationRequests();
     }
 
+    @Test
+    void acceptRegistrationRequest() throws Exception {
+
+        reset(participantRegistrationService);
+        this.mockMvc.perform(post("/registration/request/validId/accept")).andDo(print()).andExpect(status().isOk());
+
+        verify(participantRegistrationService).acceptRegistrationRequest("validId");
+    }
+
+    @Test
+    void rejectRegistrationRequest() throws Exception {
+
+        reset(participantRegistrationService);
+        this.mockMvc.perform(post("/registration/request/validId/reject")).andDo(print()).andExpect(status().isOk());
+
+        verify(participantRegistrationService).rejectRegistrationRequest("validId");
+    }
+
+    @Test
+    void deleteRegistrationRequest() throws Exception {
+
+        reset(participantRegistrationService);
+        this.mockMvc.perform(delete("/registration/request/validId")).andDo(print()).andExpect(status().isOk());
+
+        verify(participantRegistrationService).deleteRegistrationRequest("validId");
+    }
+
     @TestConfiguration
     static class TestConfig {
         @Bean
         public ParticipantRegistrationService participantRegistrationService() {
 
-            return Mockito.spy(new ParticipantRegistrationServiceMock());
+            return Mockito.spy(new ParticipantRegistrationServiceFake());
         }
 
         @Bean
