@@ -13,3 +13,6 @@ spring:
 
 sd-creation-wizard-api:
   base-url: test
+
+daps-server:
+  base-url: test

@@ -5,11 +5,12 @@ import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
-import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOImpl;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOFake;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -30,6 +31,9 @@ import static org.mockito.Mockito.when;
 class ParticipantRegistrationServiceTest {
     @MockBean
     private ParticipantRegistrationRequestDAOFake participantRegistrationRequestDao;
+
+    @Autowired
+    private OmejdnConnectorApiClientFake omejdnConnectorApiClient;
 
     @Autowired
     private ParticipantRegistrationService participantRegistrationService;
@@ -56,6 +60,7 @@ class ParticipantRegistrationServiceTest {
     void acceptRegistrationRequest() {
         participantRegistrationService.acceptRegistrationRequest("validId");
         verify(participantRegistrationRequestDao).acceptRegistrationRequest("validId");
+        verify(omejdnConnectorApiClient).addConnector(new OmejdnConnectorCertificateRequest("validId"));
     }
 
     @Test
@@ -115,6 +120,12 @@ class ParticipantRegistrationServiceTest {
         public ParticipantRegistrationServiceMapper participantRegistrationServiceMapper() {
 
             return Mappers.getMapper(ParticipantRegistrationServiceMapper.class);
+        }
+
+        @Bean
+        public OmejdnConnectorApiClientFake dapsConnectorApiClient() {
+
+            return Mockito.spy(new OmejdnConnectorApiClientFake());
         }
     }
 }

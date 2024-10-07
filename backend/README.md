@@ -3,6 +3,8 @@
 The backend component of the POSSIBLE-X Portal is a Spring Boot application that provides the REST API for the frontend.
 It interacts with the database to store and retrieve user registration requests for participant credentials.
 It is also responsible for administrating requests as well as sending them to a central catalog upon approval.
+Once a user's registration request is approved, the backend will also request a DAPS certificate / dataspace identity
+from the central DAPS server for the new dataspace participant.
 
 ## Build
 
@@ -20,6 +22,7 @@ The following environment variables can be set as needed.
 Replace the right hand side with the actual values.
 ```
 export SDCREATIONWIZARDAPI_BASEURL="SD Creation Wizard API base URL"
+export DAPSSERVER_BASEURL="DAPS Server base URL"
 export SPRING_DATASOURCE_URL="Datasource URL"
 export SPRING_DATASOURCE_USERNAME="Datasource Username"
 export SPRING_DATASOURCE_PASSWORD="Datasource Password"

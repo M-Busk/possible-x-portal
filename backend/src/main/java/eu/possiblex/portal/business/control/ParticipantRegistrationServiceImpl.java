@@ -2,6 +2,8 @@ package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateDto;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,16 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
     private final ParticipantRegistrationServiceMapper participantRegistrationServiceMapper;
 
+    private final OmejdnConnectorApiClient omejdnConnectorApiClient;
+
     public ParticipantRegistrationServiceImpl(
         @Autowired ParticipantRegistrationRequestDAO participantRegistrationRequestDAO,
-        @Autowired ParticipantRegistrationServiceMapper participantRegistrationServiceMapper) {
+        @Autowired ParticipantRegistrationServiceMapper participantRegistrationServiceMapper,
+        @Autowired OmejdnConnectorApiClient omejdnConnectorApiClient) {
 
         this.participantRegistrationRequestDAO = participantRegistrationRequestDAO;
         this.participantRegistrationServiceMapper = participantRegistrationServiceMapper;
+        this.omejdnConnectorApiClient = omejdnConnectorApiClient;
     }
 
     /**
@@ -64,6 +70,9 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         log.info("Processing acceptance of participant: {}", id);
 
         participantRegistrationRequestDAO.acceptRegistrationRequest(id);
+
+        OmejdnConnectorCertificateDto certificate = requestDapsCertificate(id);
+        log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
     }
 
     /**
@@ -90,5 +99,10 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         log.info("Processing deletion of participant: {}", id);
 
         participantRegistrationRequestDAO.deleteRegistrationRequest(id);
+    }
+
+    private OmejdnConnectorCertificateDto requestDapsCertificate(String clientName){
+        return omejdnConnectorApiClient.addConnector(
+            new OmejdnConnectorCertificateRequest(clientName));
     }
 }

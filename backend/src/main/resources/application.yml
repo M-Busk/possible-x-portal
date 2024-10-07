@@ -23,3 +23,6 @@ management:
 
 sd-creation-wizard-api:
   base-url: http://localhost:8085
+
+daps-server:
+  base-url: http://localhost:4567

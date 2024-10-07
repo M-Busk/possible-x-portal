@@ -1,5 +1,6 @@
 package eu.possiblex.portal.application.configuration;
 
+import eu.possiblex.portal.business.control.OmejdnConnectorApiClient;
 import eu.possiblex.portal.business.control.SdCreationWizardApiClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,9 @@ public class AppConfigurer {
     @Value("${sd-creation-wizard-api.base-url}")
     private String sdCreationWizardApiBaseUri;
 
+    @Value("${daps-server.base-url}")
+    private String dapsServerBaseUri;
+
     @Bean
     public SdCreationWizardApiClient sdCreationWizardApiClient() {
 
@@ -28,5 +32,17 @@ public class AppConfigurer {
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(
             WebClientAdapter.create(webClient)).build();
         return httpServiceProxyFactory.createClient(SdCreationWizardApiClient.class);
+    }
+
+    @Bean
+    public OmejdnConnectorApiClient dapsConnectorApiClient() {
+        WebClient webClient = WebClient.builder()
+            .baseUrl(dapsServerBaseUri + "/api/v1/connectors")
+            .build();
+        HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory
+            .builder()
+            .exchangeAdapter(WebClientAdapter.create(webClient))
+            .build();
+        return httpServiceProxyFactory.createClient(OmejdnConnectorApiClient.class);
     }
 }
