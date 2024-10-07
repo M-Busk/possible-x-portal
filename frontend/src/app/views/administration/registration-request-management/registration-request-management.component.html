@@ -35,6 +35,13 @@
                 Accepted
               </span>
             </ng-container>
+            <ng-container *ngIf="isRegistrationRequestCompleted(request)">
+              <span class="accepted-text">
+                <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Completed Icon" height="20"
+                     width="20"/>
+                Completed
+              </span>
+            </ng-container>
           </div>
 
           <div class="action-buttons-container">

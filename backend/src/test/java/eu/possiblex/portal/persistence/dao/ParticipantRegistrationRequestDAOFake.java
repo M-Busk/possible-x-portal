@@ -34,4 +34,9 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     public void deleteRegistrationRequest(String id) {
         // request worked
     }
+
+    @Override
+    public void completeRegistrationRequest(String id) {
+
+    }
 }

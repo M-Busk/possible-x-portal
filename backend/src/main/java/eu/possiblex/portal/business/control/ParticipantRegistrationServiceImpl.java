@@ -70,9 +70,15 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         log.info("Processing acceptance of participant: {}", id);
 
         participantRegistrationRequestDAO.acceptRegistrationRequest(id);
+        completeRegistrationRequest(id);
+    }
 
+    @Override
+    public void completeRegistrationRequest(String id) {
         OmejdnConnectorCertificateDto certificate = requestDapsCertificate(id);
         log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
+      
+        participantRegistrationRequestDAO.completeRegistrationRequest(id);
     }
 
     /**
@@ -97,7 +103,6 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
     public void deleteRegistrationRequest(String id) {
 
         log.info("Processing deletion of participant: {}", id);
-
         participantRegistrationRequestDAO.deleteRegistrationRequest(id);
     }
 

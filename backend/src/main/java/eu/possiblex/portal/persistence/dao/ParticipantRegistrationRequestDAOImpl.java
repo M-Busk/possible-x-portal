@@ -51,8 +51,13 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         log.info("Accepting participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
-            entity.setStatus(RequestStatus.ACCEPTED);
-            participantRegistrationRequestRepository.save(entity);
+            if (entity.getStatus() == RequestStatus.COMPLETED) {
+                log.error("Cannot accept completed participant registration request: {}", id);
+                throw new RuntimeException("Cannot accept completed participant registration request: " + id);
+            } else {
+                entity.setStatus(RequestStatus.ACCEPTED);
+                participantRegistrationRequestRepository.save(entity);
+            }
         } else {
             log.error("(Accept) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
@@ -64,8 +69,13 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         log.info("Rejecting participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
-            entity.setStatus(RequestStatus.REJECTED);
-            participantRegistrationRequestRepository.save(entity);
+            if (entity.getStatus() == RequestStatus.COMPLETED) {
+                log.error("Cannot reject completed participant registration request: {}", id);
+                throw new RuntimeException("Cannot reject completed participant registration request: " + id);
+            } else {
+                entity.setStatus(RequestStatus.REJECTED);
+                participantRegistrationRequestRepository.save(entity);
+            }
         } else {
             log.error("(Reject) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
@@ -77,9 +87,27 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         log.info("Deleting participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
-            participantRegistrationRequestRepository.delete(entity);
+            if (entity.getStatus() == RequestStatus.COMPLETED) {
+                log.error("Cannot delete completed participant registration request: {}", id);
+                throw new RuntimeException("Cannot delete completed participant registration request: " + id);
+            } else {
+                participantRegistrationRequestRepository.delete(entity);
+            }
         } else {
             log.error("(Delete) Participant not found: {}", id);
+            throw new RuntimeException("Participant not found: " + id);
+        }
+    }
+
+    @Transactional
+    public void completeRegistrationRequest(String id) {
+        log.info("Completing participant registration request: {}", id);
+        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
+        if (entity != null) {
+            entity.setStatus(RequestStatus.COMPLETED);
+            participantRegistrationRequestRepository.save(entity);
+        } else {
+            log.error("(Complete) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
         }
     }

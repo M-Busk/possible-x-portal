@@ -43,4 +43,11 @@ public interface ParticipantRegistrationService {
      * @param id registration request id
      */
     void deleteRegistrationRequest(String id);
+
+    /**
+     * Given a registration request id, complete the registration request.
+     *
+     * @param id registration request id
+     */
+    void completeRegistrationRequest(String id);
 }

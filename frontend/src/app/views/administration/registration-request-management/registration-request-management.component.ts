@@ -45,6 +45,10 @@ export class RegistrationRequestManagementComponent implements OnInit{
     return request.status === IRequestStatus.REJECTED;
   }
 
+  protected isRegistrationRequestCompleted(request: IRegistrationRequestEntryTO): boolean {
+    return request.status === IRequestStatus.COMPLETED;
+  }
+
   async acceptRequest(event: Event, request: IRegistrationRequestEntryTO): Promise<void> {
     event.stopPropagation();
     this.operationStatusMessage.hideAllMessages();
@@ -89,4 +93,5 @@ export class RegistrationRequestManagementComponent implements OnInit{
       this.operationStatusMessage.showErrorMessage("Unknown error occurred");
     });
   }
+
 }

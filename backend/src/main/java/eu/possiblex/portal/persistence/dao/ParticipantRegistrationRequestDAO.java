@@ -14,6 +14,8 @@ public interface ParticipantRegistrationRequestDAO {
 
     void deleteRegistrationRequest(String id);
 
+    void completeRegistrationRequest(String id);
+
     List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests();
 
 }
