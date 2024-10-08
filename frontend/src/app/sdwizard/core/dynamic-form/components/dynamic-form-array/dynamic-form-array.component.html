@@ -10,8 +10,9 @@
                 *ngIf="hasRequiredValidator($any(control))"
                 aria-required="true"
                 class="required"
+                [matTooltip]="'Mandatory Field'"
               >*</span>
-              <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+              <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
             </label>
 
             <div class="flex-container">
@@ -65,8 +66,9 @@
               *ngIf="hasRequiredValidator($any(control))"
               aria-required="true"
               class="required"
+              [matTooltip]="'Mandatory Field'"
             >*</span>
-            <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
           </label>
 
           <div class="flex-container">
@@ -121,8 +123,9 @@
               *ngIf="hasRequiredValidator($any(control))"
               aria-required="true"
               class="required"
+              [matTooltip]="'Mandatory Field'"
             >*</span>
-            <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
           </label>
 
           <div class="flex-container">
@@ -176,8 +179,9 @@
               *ngIf="hasRequiredValidator($any(control))"
               aria-required="true"
               class="required"
+              [matTooltip]="'Mandatory Field'"
             >*</span>
-            <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
           </label>
 
           <div class="flex-container">
@@ -232,8 +236,8 @@
         >
           <mat-label
           >{{ input.name }}
-            <span *ngIf="hasRequiredValidator($any(control))" aria-required="true">*</span>
-            <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <span *ngIf="hasRequiredValidator($any(control))" aria-required="true" [matTooltip]="'Mandatory Field'">*</span>
+            <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
           </mat-label>
           <input
             [formControl]="$any(inputs.controls[i])"
@@ -285,8 +289,9 @@
               *ngIf="hasRequiredValidator($any(control))"
               aria-required="true"
               class="required"
+              [matTooltip]="'Mandatory Field'"
             >*</span>
-            <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
           </mat-label>
           <input
             [formControl]="$any(inputs.controls[i])"
@@ -334,8 +339,9 @@
                 *ngIf="hasRequiredValidator($any(control))"
                 aria-required="true"
                 class="required"
+                [matTooltip]="'Mandatory Field'"
               >*</span>
-              <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+              <span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
             </label>
 
             <div class="flex-container">

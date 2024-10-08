@@ -72,9 +72,9 @@ export class ParticipantWizardExtensionComponent {
 
     let gxParticipantJson: IGxLegalParticipantCredentialSubject = this.gxParticipantWizard.generateJsonCs();
     let gxRegistrationNumberJson: IGxLegalRegistrationNumberCredentialSubject = this.gxRegistrationNumberWizard.generateJsonCs();
-    
+
     gxParticipantJson["gx:legalRegistrationNumber"] = {"@id" : gxRegistrationNumberJson.id} as any;
-    
+
     let registerParticipantTo: ICreateRegistrationRequestTO = {
       participantCs: gxParticipantJson,
       registrationNumberCs: gxRegistrationNumberJson
@@ -84,7 +84,7 @@ export class ParticipantWizardExtensionComponent {
 
     this.apiService.registerParticipant(registerParticipantTo).then(response => {
       console.log(response);
-      this.participantRegistrationStatusMessage.showSuccessMessage("", 20000);
+      this.participantRegistrationStatusMessage.showSuccessMessage();
     }).catch((e: HttpErrorResponse) => {
       this.participantRegistrationStatusMessage.showErrorMessage(e.error.detail);
     }).catch(_ => {

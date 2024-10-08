@@ -18,7 +18,7 @@
 }
 
 .field-key {
-  color: gray;
+  @apply text-brand-200;
   font-style: italic;
 }
 

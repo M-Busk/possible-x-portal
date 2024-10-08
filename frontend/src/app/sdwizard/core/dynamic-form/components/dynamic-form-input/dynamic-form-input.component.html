@@ -4,8 +4,8 @@
 
       <div class="mb-3">
         <label class="form-label text-brand-50">{{ input.name }}<span *ngIf="input.required" aria-required="true"
-                                                        class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+                                                        class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </label>
         <input *ngIf="input.name != 'Description'" [formControlName]="input.id" [type]="input.datatype" class="form-control"
                placeholder="{{input.example}}">
@@ -24,8 +24,8 @@
 
       <div class="mb-3">
         <label class="form-label text-brand-50">{{ input.name }}<span *ngIf="input.required" aria-required="true"
-                                                        class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+                                                        class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </label>
         <input [formControlName]="input.id" class="form-control" placeholder="{{input.example}}" type="number">
         <div class="text-brand-200" cFormText>
@@ -41,8 +41,8 @@
 
       <div class="mb-3">
         <label class="form-label text-brand-50">{{ input.name }}<span *ngIf="input.required" aria-required="true"
-                                                        class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+                                                        class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </label>
         <input [formControlName]="input.id" class="form-control" placeholder="{{input.example}}" type="number">
         <div class="text-brand-200" cFormText>
@@ -58,8 +58,8 @@
 
       <div class="mb-3">
         <label class="form-label text-brand-50">{{ input.name }}<span *ngIf="input.required" aria-required="true"
-                                                        class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+                                                        class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </label>
         <input [formControlName]="input.id" class="form-control" placeholder="{{input.example}}">
         <div class="text-brand-200" cFormText>
@@ -75,8 +75,8 @@
       <div class="mb-3">
 
         <label class="form-label text-brand-50">{{ input.name }}<span *ngIf="input.required" aria-required="true"
-                                                        class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span></label>
+                                                        class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span></label>
         <select [formControlName]="input.id" class="form-select">
           <option *ngFor="let option of input.in" [value]="option.value">{{ option.value }}</option>
         </select>
@@ -95,8 +95,8 @@
 
     <div *ngSwitchCase="'datepicker'">
       <mat-form-field class="full-width-input">
-        <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+        <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </mat-label>
         <input [formControlName]="input.id" [matDatepicker]="picker" matInput>
         <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
@@ -112,8 +112,8 @@
 
     <div *ngSwitchCase="'datetimepicker'">
       <mat-form-field class="full-width-input">
-        <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required">*</span><span
-          class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+        <mat-label>{{ input.name }} <span *ngIf="input.required" aria-required="true" class="required" [matTooltip]="'Mandatory Field'">*</span><span
+          class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </mat-label>
         <input [formControlName]="input.id" [ngxMatDatetimePicker]="picker" matInput>
         <mat-datepicker-toggle [for]="$any(picker)" matSuffix></mat-datepicker-toggle>
@@ -129,7 +129,7 @@
 
     <div *ngSwitchCase="'checkbox'">
       <mat-checkbox [formControlName]="input.id" class="checkbox-style">
-        <mat-label>{{ input.name }}<span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+        <mat-label>{{ input.name }}<span class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </mat-label>
         <div class="text-brand-200" cFormText>
           {{ input.description[this.translate.currentLang] }}
