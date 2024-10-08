@@ -61,6 +61,7 @@ class ParticipantRegistrationServiceTest {
         participantRegistrationService.acceptRegistrationRequest("validId");
         verify(participantRegistrationRequestDao).acceptRegistrationRequest("validId");
         verify(omejdnConnectorApiClient).addConnector(new OmejdnConnectorCertificateRequest("validId"));
+        verify(participantRegistrationRequestDao).completeRegistrationRequest("validId");
     }
 
     @Test
@@ -73,6 +74,12 @@ class ParticipantRegistrationServiceTest {
     void deleteRegistrationRequest() {
         participantRegistrationService.deleteRegistrationRequest("validId");
         verify(participantRegistrationRequestDao).deleteRegistrationRequest("validId");
+    }
+
+    @Test
+    void completeRegistrationRequest() {
+        participantRegistrationService.completeRegistrationRequest("validId");
+        verify(participantRegistrationRequestDao).completeRegistrationRequest("validId");
     }
 
     private PxExtendedLegalParticipantCredentialSubject getParticipantCs() {

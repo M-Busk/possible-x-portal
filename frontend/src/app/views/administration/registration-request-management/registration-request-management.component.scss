@@ -39,6 +39,10 @@
   }
 }
 
+.custom-button:disabled, .custom-button[disabled] {
+  @apply bg-gray-200 text-gray-500 border-gray-500;
+}
+
 .accepted-text {
   font-weight: bold;
   color: #166A39;

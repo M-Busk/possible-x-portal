@@ -48,6 +48,17 @@ class ParticipantRegistrationRequestDAOTest {
     }
 
     @Test
+    void completeRegistrationRequest() {
+
+        PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
+
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant);
+        participantRegistrationRequestDAO.acceptRegistrationRequest("validName");
+        participantRegistrationRequestDAO.completeRegistrationRequest("validName");
+        verify(participantRegistrationRequestRepository, times(3)).save(any());
+    }
+
+    @Test
     void rejectAndDeleteRegistrationRequest() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
