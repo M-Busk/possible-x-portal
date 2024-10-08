@@ -15,4 +15,6 @@ public class CreateRegistrationRequestTO {
     private GxLegalParticipantCredentialSubject participantCs;
 
     private GxLegalRegistrationNumberCredentialSubject registrationNumberCs;
+
+    private String emailAddress;
 }

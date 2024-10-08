@@ -21,4 +21,6 @@ public class RegistrationRequestEntryTO {
     private String description;
 
     private RequestStatus status;
+
+    private String emailAddress;
 }

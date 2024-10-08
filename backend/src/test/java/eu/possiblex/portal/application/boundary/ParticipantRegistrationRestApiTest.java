@@ -1,6 +1,6 @@
 package eu.possiblex.portal.application.boundary;
 
-import eu.possiblex.portal.application.control.ParticipantCredentialMapper;
+import eu.possiblex.portal.application.control.ParticipantRegistrationRestApiMapper;
 import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.control.ParticipantRegistrationServiceFake;
@@ -41,7 +41,7 @@ class ParticipantRegistrationRestApiTest {
         this.mockMvc.perform(post("/registration/request").content(RestApiHelper.asJsonString(to))
             .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
-        verify(participantRegistrationService).registerParticipant(any());
+        verify(participantRegistrationService).registerParticipant(any(), any());
     }
 
     @Test
@@ -89,9 +89,9 @@ class ParticipantRegistrationRestApiTest {
         }
 
         @Bean
-        public ParticipantCredentialMapper participantCredentialMapper() {
+        public ParticipantRegistrationRestApiMapper participantCredentialMapper() {
 
-            return Mappers.getMapper(ParticipantCredentialMapper.class);
+            return Mappers.getMapper(ParticipantRegistrationRestApiMapper.class);
         }
 
     }

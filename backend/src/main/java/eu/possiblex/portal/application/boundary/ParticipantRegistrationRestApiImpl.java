@@ -1,9 +1,10 @@
 package eu.possiblex.portal.application.boundary;
 
-import eu.possiblex.portal.application.control.ParticipantCredentialMapper;
+import eu.possiblex.portal.application.control.ParticipantRegistrationRestApiMapper;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
+import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,13 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
 
     private final ParticipantRegistrationService participantRegistrationService;
 
-    private final ParticipantCredentialMapper participantCredentialMapper;
+    private final ParticipantRegistrationRestApiMapper participantRegistrationRestApiMapper;
 
     public ParticipantRegistrationRestApiImpl(@Autowired ParticipantRegistrationService participantRegistrationService,
-        @Autowired ParticipantCredentialMapper participantCredentialMapper) {
+        @Autowired ParticipantRegistrationRestApiMapper participantRegistrationRestApiMapper) {
 
         this.participantRegistrationService = participantRegistrationService;
-        this.participantCredentialMapper = participantCredentialMapper;
+        this.participantRegistrationRestApiMapper = participantRegistrationRestApiMapper;
     }
 
     /**
@@ -39,10 +40,11 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
     public void registerParticipant(@RequestBody CreateRegistrationRequestTO request) {
 
         log.info("Received participant registration request: {}", request);
-        PxExtendedLegalParticipantCredentialSubject be = participantCredentialMapper.credentialSubjectsToExtendedLegalParticipantCs(
+        PxExtendedLegalParticipantCredentialSubject cs = participantRegistrationRestApiMapper.credentialSubjectsToExtendedLegalParticipantCs(
             request.getParticipantCs(), request.getRegistrationNumberCs());
+        ParticipantMetadataBE be = participantRegistrationRestApiMapper.requestToParticipantMetadata(request);
 
-        participantRegistrationService.registerParticipant(be);
+        participantRegistrationService.registerParticipant(cs, be);
     }
 
     /**

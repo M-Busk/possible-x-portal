@@ -1,6 +1,7 @@
 package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
+import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateDto;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
@@ -37,11 +38,11 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
      * @param cs request
      */
     @Override
-    public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs) {
+    public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs, ParticipantMetadataBE be) {
 
         log.info("Processing participant registration: {}", cs);
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs, be);
     }
 
     /**

@@ -21,6 +21,7 @@ export class ParticipantWizardExtensionComponent {
   public prefillDone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   @ViewChild("gxParticipantWizard") private gxParticipantWizard: BaseWizardExtensionComponent;
   @ViewChild("gxRegistrationNumberWizard") private gxRegistrationNumberWizard: BaseWizardExtensionComponent;
+  emailAddress: string = "";
 
   constructor(
     private apiService: ApiService
@@ -77,7 +78,8 @@ export class ParticipantWizardExtensionComponent {
 
     let registerParticipantTo: ICreateRegistrationRequestTO = {
       participantCs: gxParticipantJson,
-      registrationNumberCs: gxRegistrationNumberJson
+      registrationNumberCs: gxRegistrationNumberJson,
+      emailAddress: this.emailAddress
     }
 
     console.log(registerParticipantTo);
@@ -133,4 +135,15 @@ export class ParticipantWizardExtensionComponent {
     return shapeSource;
   }
 
+  private isFieldFilled(str: string) {
+    if (!str || str.trim().length === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  protected isEmailAddressInvalid(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return !this.isFieldFilled(this.emailAddress) || !emailRegex.test(this.emailAddress);
+  }
 }

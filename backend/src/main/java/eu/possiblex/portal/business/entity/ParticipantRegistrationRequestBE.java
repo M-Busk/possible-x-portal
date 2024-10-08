@@ -20,5 +20,7 @@ public class ParticipantRegistrationRequestBE {
 
     private String description;
 
+    private String emailAddress;
+
     private RequestStatus status;
 }

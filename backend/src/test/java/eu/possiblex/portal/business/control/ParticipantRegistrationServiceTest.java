@@ -3,6 +3,7 @@ package eu.possiblex.portal.business.control;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
+import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
@@ -41,8 +42,9 @@ class ParticipantRegistrationServiceTest {
     @Test
     void registerParticipant() {
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
-        participantRegistrationService.registerParticipant(participant);
-        verify(participantRegistrationRequestDao).saveParticipantRegistrationRequest(any());
+        ParticipantMetadataBE metadata = ParticipantMetadataBE.builder().emailAddress("example@address.com").build();
+        participantRegistrationService.registerParticipant(participant, metadata);
+        verify(participantRegistrationRequestDao).saveParticipantRegistrationRequest(any(), any());
     }
 
     @Test

@@ -49,4 +49,7 @@ public class ParticipantRegistrationRequestEntity {
 
     @NotNull
     private RequestStatus status;
+
+    @NotNull
+    private String emailAddress;
 }

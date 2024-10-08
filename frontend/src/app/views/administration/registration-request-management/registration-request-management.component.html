@@ -69,6 +69,8 @@
           <br/>
           <p><span class="font-bold">Organization Description:</span> {{ request.description || "-" }}</p>
           <br/>
+          <p><span class="font-bold">E-Mail Address (to send registration confirmation to):</span> {{ request.emailAddress }}</p>
+          <br/>
           <p><span class="font-bold">Legal Registration Number:</span></p>
           <ul class="pl-2">
             <li><span class="font-bold">EORI:</span> {{ request.legalRegistrationNumber.eori || "-" }}</li>

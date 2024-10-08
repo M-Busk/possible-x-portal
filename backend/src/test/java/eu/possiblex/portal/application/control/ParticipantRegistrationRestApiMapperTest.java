@@ -15,8 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ContextConfiguration(classes = { ParticipantCredentialMapperTest.TestConfig.class, ParticipantCredentialMapper.class })
-class ParticipantCredentialMapperTest {
+@ContextConfiguration(classes = { ParticipantRegistrationRestApiMapperTest.TestConfig.class, ParticipantRegistrationRestApiMapper.class })
+class ParticipantRegistrationRestApiMapperTest {
 
     private final String participantId = "1234";
 
@@ -41,7 +41,7 @@ class ParticipantCredentialMapperTest {
     private final String participantRegNumLeiCode = "9012";
 
     @Autowired
-    private ParticipantCredentialMapper participantCredentialMapper;
+    private ParticipantRegistrationRestApiMapper participantRegistrationRestApiMapper;
 
     @Test
     void mapCredentialSubjectsToExtendedLegalParticipantCs() {
@@ -51,7 +51,7 @@ class ParticipantCredentialMapperTest {
         GxLegalRegistrationNumberCredentialSubject registrationNumber = getGxLegalRegistrationNumberCredentialSubjectExample();
 
         // when
-        PxExtendedLegalParticipantCredentialSubject participantCs = participantCredentialMapper.credentialSubjectsToExtendedLegalParticipantCs(
+        PxExtendedLegalParticipantCredentialSubject participantCs = participantRegistrationRestApiMapper.credentialSubjectsToExtendedLegalParticipantCs(
             participant, registrationNumber);
 
         // then
@@ -109,9 +109,9 @@ class ParticipantCredentialMapperTest {
     static class TestConfig {
 
         @Bean
-        public ParticipantCredentialMapper participantCredentialMapper() {
+        public ParticipantRegistrationRestApiMapper participantCredentialMapper() {
 
-            return Mappers.getMapper(ParticipantCredentialMapper.class);
+            return Mappers.getMapper(ParticipantRegistrationRestApiMapper.class);
         }
 
     }
