@@ -11,6 +11,7 @@ typescriptGenerator = "3.2.1263"
 mapStruct = "1.6.0"
 postgresql = "42.7.4"
 h2 = "2.3.232"
+hibernateValidator = "8.0.1.Final"
 
 [libraries]
 springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBoot" }
@@ -30,6 +31,7 @@ reactorTest = { module = "io.projectreactor:reactor-test", version.ref = "reacto
 jUnit = { module = "org.junit.platform:junit-platform-launcher", version.ref = "jUnit" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
+hibernateValidator = { module = "org.hibernate:hibernate-validator", version.ref = "hibernateValidator" }
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }

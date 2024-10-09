@@ -5,6 +5,8 @@ import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateDto;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
+import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
+import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +24,18 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
     private final OmejdnConnectorApiClient omejdnConnectorApiClient;
 
+    private final DidWebServiceApiClient didWebServiceApiClient;
+
     public ParticipantRegistrationServiceImpl(
         @Autowired ParticipantRegistrationRequestDAO participantRegistrationRequestDAO,
         @Autowired ParticipantRegistrationServiceMapper participantRegistrationServiceMapper,
-        @Autowired OmejdnConnectorApiClient omejdnConnectorApiClient) {
+        @Autowired OmejdnConnectorApiClient omejdnConnectorApiClient,
+        @Autowired DidWebServiceApiClient didWebServiceApiClient) {
 
         this.participantRegistrationRequestDAO = participantRegistrationRequestDAO;
         this.participantRegistrationServiceMapper = participantRegistrationServiceMapper;
         this.omejdnConnectorApiClient = omejdnConnectorApiClient;
+        this.didWebServiceApiClient = didWebServiceApiClient;
     }
 
     /**
@@ -74,11 +80,15 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         completeRegistrationRequest(id);
     }
 
-    @Override
-    public void completeRegistrationRequest(String id) {
+    private void completeRegistrationRequest(String id) {
+
         OmejdnConnectorCertificateDto certificate = requestDapsCertificate(id);
-        log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
-      
+        ParticipantDidBE didWeb = generateDidWeb(id);
+
+        participantRegistrationRequestDAO.storeRegistrationRequestDid(id, didWeb);
+
+        // TODO store DAPS
+
         participantRegistrationRequestDAO.completeRegistrationRequest(id);
     }
 
@@ -107,8 +117,15 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.deleteRegistrationRequest(id);
     }
 
-    private OmejdnConnectorCertificateDto requestDapsCertificate(String clientName){
-        return omejdnConnectorApiClient.addConnector(
-            new OmejdnConnectorCertificateRequest(clientName));
+    private OmejdnConnectorCertificateDto requestDapsCertificate(String clientName) {
+
+        return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName));
+    }
+
+    private ParticipantDidBE generateDidWeb(String id) {
+
+        ParticipantDidCreateRequestBE createRequestTo = new ParticipantDidCreateRequestBE();
+        createRequestTo.setSubject(id);
+        return didWebServiceApiClient.generateDidWeb(createRequestTo);
     }
 }

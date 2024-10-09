@@ -16,3 +16,7 @@ sd-creation-wizard-api:
 
 daps-server:
   base-url: test
+
+did-web-service:
+  base-url: test
+  ignore-ssl: true

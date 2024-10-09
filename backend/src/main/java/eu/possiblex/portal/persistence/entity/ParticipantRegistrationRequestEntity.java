@@ -3,11 +3,9 @@ package eu.possiblex.portal.persistence.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.Instant;
 
@@ -49,6 +47,10 @@ public class ParticipantRegistrationRequestEntity {
 
     @NotNull
     private RequestStatus status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "did_data_id", referencedColumnName = "id")
+    private DidDataEntity didData;
 
     @NotNull
     private String emailAddress;

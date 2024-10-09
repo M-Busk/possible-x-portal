@@ -22,5 +22,7 @@ public class RegistrationRequestEntryTO {
 
     private RequestStatus status;
 
+    private ParticipantDidDataTO didData;
+
     private String emailAddress;
 }

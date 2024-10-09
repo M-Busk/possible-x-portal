@@ -8,6 +8,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
 server:
   port: 8088
@@ -26,3 +30,7 @@ sd-creation-wizard-api:
 
 daps-server:
   base-url: http://localhost:4567
+
+did-web-service:
+  base-url: https://localhost:4443
+  ignore-ssl: true

@@ -2,7 +2,11 @@ package eu.possiblex.portal.business.entity;
 
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
-import lombok.*;
+import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
 @Data
 @ToString
@@ -23,4 +27,6 @@ public class ParticipantRegistrationRequestBE {
     private String emailAddress;
 
     private RequestStatus status;
+
+    private ParticipantDidBE didData;
 }

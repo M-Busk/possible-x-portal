@@ -1,9 +1,12 @@
 package eu.possiblex.portal.persistence.dao;
 
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
+import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
+import eu.possiblex.portal.persistence.entity.DidDataEntity;
 import eu.possiblex.portal.persistence.entity.ParticipantRegistrationRequestEntity;
 import eu.possiblex.portal.persistence.entity.RequestStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +32,14 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         this.participantRegistrationEntityMapper = participantRegistrationEntityMapper;
     }
 
+    /**
+     * Initially save a participant registration request.
+     *
+     * @param participant registration request CS
+     * @param metadata registration request metadata
+     */
     @Transactional
+    @Override
     public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant, ParticipantMetadataBE metadata) {
 
         ParticipantRegistrationRequestEntity entity = participantRegistrationEntityMapper.pxExtendedLegalParticipantCsAndMetadataToNewEntity(
@@ -39,6 +49,12 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         participantRegistrationRequestRepository.save(entity);
     }
 
+    /**
+     * Get a list of all participant registration requests.
+     *
+     * @return list of participant registration requests
+     */
+    @Override
     public List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests() {
 
         log.info("Getting all participant registration requests");
@@ -46,8 +62,15 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
             .map(participantRegistrationEntityMapper::entityToParticipantRegistrationRequestBe).toList();
     }
 
+    /**
+     * Accept a participant registration request given the id, if the current status allows so.
+     *
+     * @param id registration request id
+     */
     @Transactional
+    @Override
     public void acceptRegistrationRequest(String id) {
+
         log.info("Accepting participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
@@ -56,7 +79,6 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
                 throw new RuntimeException("Cannot accept completed participant registration request: " + id);
             } else {
                 entity.setStatus(RequestStatus.ACCEPTED);
-                participantRegistrationRequestRepository.save(entity);
             }
         } else {
             log.error("(Accept) Participant not found: {}", id);
@@ -64,8 +86,15 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         }
     }
 
+    /**
+     * Reject a participant registration request given the id, if the current status allows so.
+     *
+     * @param id registration request id
+     */
     @Transactional
+    @Override
     public void rejectRegistrationRequest(String id) {
+
         log.info("Rejecting participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
@@ -74,7 +103,6 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
                 throw new RuntimeException("Cannot reject completed participant registration request: " + id);
             } else {
                 entity.setStatus(RequestStatus.REJECTED);
-                participantRegistrationRequestRepository.save(entity);
             }
         } else {
             log.error("(Reject) Participant not found: {}", id);
@@ -82,8 +110,15 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         }
     }
 
+    /**
+     * Delete a participant registration request given the id, if the current status allows so.
+     *
+     * @param id registration request id
+     */
     @Transactional
+    @Override
     public void deleteRegistrationRequest(String id) {
+
         log.info("Deleting participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
@@ -99,15 +134,43 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         }
     }
 
+    /**
+     * Complete a participant registration request given the id.
+     *
+     * @param id registration request id
+     */
     @Transactional
+    @Override
     public void completeRegistrationRequest(String id) {
+
         log.info("Completing participant registration request: {}", id);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
             entity.setStatus(RequestStatus.COMPLETED);
-            participantRegistrationRequestRepository.save(entity);
         } else {
             log.error("(Complete) Participant not found: {}", id);
+            throw new RuntimeException("Participant not found: " + id);
+        }
+    }
+
+    /**
+     * Given an existing registration request, store the corresponding DID data.
+     *
+     * @param id registration request id
+     * @param to DID data to store
+     */
+    @Transactional
+    @Override
+    public void storeRegistrationRequestDid(String id, ParticipantDidBE to) {
+
+        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
+        if (entity != null) {
+            DidDataEntity didData = new DidDataEntity();
+            didData.setDid(to.getDid());
+            didData.setVerificationMethod(to.getVerificationMethod());
+            entity.setDidData(didData);
+        } else {
+            log.error("(Set Did) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
         }
     }
