@@ -5,6 +5,8 @@ import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLega
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
+import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 
 import java.util.List;
@@ -32,6 +34,16 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     }
 
     @Override
+    public void storeRegistrationRequestVpLink(String id, String vpLink) {
+
+    }
+
+    @Override
+    public void storeRegistrationRequestDaps(String id, OmejdnConnectorCertificateBE certificate) {
+
+    }
+
+    @Override
     public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant, ParticipantMetadataBE metadata) {
         // request worked
     }
@@ -53,7 +65,7 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
 
     @Override
     public void completeRegistrationRequest(String id) {
-        // request worked
+
     }
 
     @Override

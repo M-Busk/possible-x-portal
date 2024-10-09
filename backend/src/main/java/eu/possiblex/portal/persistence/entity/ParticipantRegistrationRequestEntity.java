@@ -1,5 +1,6 @@
 package eu.possiblex.portal.persistence.entity;
 
+import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,7 +28,7 @@ public class ParticipantRegistrationRequestEntity {
     @NotNull
     private String name;
 
-    @Size(max = 1023)
+    @Size(max=1023)
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -48,6 +49,12 @@ public class ParticipantRegistrationRequestEntity {
     @NotNull
     private RequestStatus status;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "omejdn_connector_certificate_id", referencedColumnName = "id")
+    private OmejdnConnectorCertificateEntity omejdnConnectorCertificate;
+
+    private String vpLink;
+  
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "did_data_id", referencedColumnName = "id")
     private DidDataEntity didData;

@@ -5,12 +5,14 @@ import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLega
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.persistence.entity.DidDataEntity;
 import eu.possiblex.portal.persistence.entity.ParticipantRegistrationRequestEntity;
 import eu.possiblex.portal.persistence.entity.RegistrationNumberEntity;
 import eu.possiblex.portal.persistence.entity.RequestStatus;
 import eu.possiblex.portal.persistence.entity.VcardEntity;
+import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -38,4 +40,7 @@ public interface ParticipantRegistrationEntityMapper {
 
     ParticipantRegistrationRequestBE entityToParticipantRegistrationRequestBe(
         ParticipantRegistrationRequestEntity entity);
+
+    OmejdnConnectorCertificateEntity omjednConnectorCertificateBEToOmejdnConnectorCertificateEntity(
+        OmejdnConnectorCertificateBE omjednConnectorCertificateBE);
 }

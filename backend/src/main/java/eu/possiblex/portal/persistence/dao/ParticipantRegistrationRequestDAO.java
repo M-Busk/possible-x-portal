@@ -4,6 +4,8 @@ import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
+import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 
 import java.util.List;
@@ -38,11 +40,6 @@ public interface ParticipantRegistrationRequestDAO {
      */
     void deleteRegistrationRequest(String id);
 
-    /**
-     * Given a registration request id, complete the registration request.
-     *
-     * @param id registration request id
-     */
     void completeRegistrationRequest(String id);
 
     /**
@@ -60,4 +57,7 @@ public interface ParticipantRegistrationRequestDAO {
      */
     List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests();
 
+    void storeRegistrationRequestVpLink(String id, String vpLink);
+
+    void storeRegistrationRequestDaps(String id, OmejdnConnectorCertificateBE certificate);
 }

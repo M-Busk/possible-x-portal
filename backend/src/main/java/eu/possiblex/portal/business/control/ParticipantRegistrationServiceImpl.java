@@ -3,7 +3,7 @@ package eu.possiblex.portal.business.control;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
-import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateDto;
+import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
@@ -80,15 +80,17 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         completeRegistrationRequest(id);
     }
 
+
     private void completeRegistrationRequest(String id) {
-
-        OmejdnConnectorCertificateDto certificate = requestDapsCertificate(id);
+        OmejdnConnectorCertificateBE certificate = requestDapsCertificate(id);
+        log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
+        participantRegistrationRequestDAO.storeRegistrationRequestDaps(id, certificate);
+        String vpLink = getVPLink();
+        log.info("Received VP {} for participant: {}", vpLink, id);
+        participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
         ParticipantDidBE didWeb = generateDidWeb(id);
-
+        log.info("Created did {} for participant: {}", didWeb, id);
         participantRegistrationRequestDAO.storeRegistrationRequestDid(id, didWeb);
-
-        // TODO store DAPS
-
         participantRegistrationRequestDAO.completeRegistrationRequest(id);
     }
 
@@ -117,8 +119,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.deleteRegistrationRequest(id);
     }
 
-    private OmejdnConnectorCertificateDto requestDapsCertificate(String clientName) {
 
+    private OmejdnConnectorCertificateBE requestDapsCertificate(String clientName) {
         return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName));
     }
 
@@ -127,5 +129,9 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         ParticipantDidCreateRequestBE createRequestTo = new ParticipantDidCreateRequestBE();
         createRequestTo.setSubject(id);
         return didWebServiceApiClient.generateDidWeb(createRequestTo);
+    }
+
+    private String getVPLink() {
+        return "www.example.com";
     }
 }
