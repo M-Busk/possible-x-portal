@@ -161,7 +161,6 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         if (entity != null) {
             entity.setVpLink(vpLink);
             log.info("Storing the VP Link: {}", vpLink);
-            //participantRegistrationRequestRepository.save(entity);
         } else {
             log.error("(Set VP Link) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
@@ -178,7 +177,6 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
             entity.setStatus(RequestStatus.COMPLETED);
             entity.setOmejdnConnectorCertificate(certificateEntity);
             log.info("Storing the OmejdnConnectorCertificate: {}", certificateEntity);
-            //participantRegistrationRequestRepository.save(entity);
         } else {
             log.error("(Set Daps) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);

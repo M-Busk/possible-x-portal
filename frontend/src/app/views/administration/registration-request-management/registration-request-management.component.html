@@ -71,6 +71,21 @@
           <br/>
           <p><span class="font-bold">E-Mail Address (for sending registration confirmation):</span> {{ request.emailAddress }}</p>
           <br/>
+          <p><span class="font-bold">Verifiable Presentation Link:</span> {{ request.vpLink || "-" }}</p>
+          <br/>
+          <p><span class="font-bold">DID:</span> {{ request.didData.did || "-" }}</p>
+          <br/>
+          <p><span class="font-bold">DAPS:</span></p>
+          <ul class="pl-2">
+            <li><span class="font-bold">Client ID:</span> {{ request.omejdnConnectorCertificate.client_id || "-" }}</li>
+            <li><span class="font-bold">Client Name:</span> {{ request.omejdnConnectorCertificate.client_name || "-" }}</li>
+            <li><span class="font-bold">Password:</span> {{ request.omejdnConnectorCertificate.password || "-" }}</li>
+            <li><span class="font-bold">Scope:</span> {{ request.omejdnConnectorCertificate.scope || "-" }}</li>
+            <a [download]="request.omejdnConnectorCertificate.client_name + '.pfx'" [href]="'data:application/octet-stream;base64,' + request.omejdnConnectorCertificate.keystore" >
+              <Button class="custom-button">Download Keystore</Button>
+            </a>
+          </ul>
+          <br/>
           <p><span class="font-bold">Legal Registration Number:</span></p>
           <ul class="pl-2">
             <li><span class="font-bold">EORI:</span> {{ request.legalRegistrationNumber.eori || "-" }}</li>

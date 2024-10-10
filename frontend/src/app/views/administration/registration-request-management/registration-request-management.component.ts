@@ -1,6 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../../../services/mgmt/api/api.service";
-import {IRegistrationRequestEntryTO, IRequestStatus} from "../../../services/mgmt/api/backend";
+import {
+  IOmejdnConnectorCertificateDto,
+  IRegistrationRequestEntryTO,
+  IRequestStatus
+} from "../../../services/mgmt/api/backend";
 import {StatusMessageComponent} from "../../common-views/status-message/status-message.component";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -93,5 +97,4 @@ export class RegistrationRequestManagementComponent implements OnInit{
       this.operationStatusMessage.showErrorMessage("Unknown error occurred");
     });
   }
-
 }
