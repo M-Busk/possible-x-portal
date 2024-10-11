@@ -82,15 +82,18 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
 
     private void completeRegistrationRequest(String id) {
-        OmejdnConnectorCertificateBE certificate = requestDapsCertificate(id);
-        log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
-        participantRegistrationRequestDAO.storeRegistrationRequestDaps(id, certificate);
-        String vpLink = getVPLink();
-        log.info("Received VP {} for participant: {}", vpLink, id);
-        participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
         ParticipantDidBE didWeb = generateDidWeb(id);
         log.info("Created did {} for participant: {}", didWeb, id);
         participantRegistrationRequestDAO.storeRegistrationRequestDid(id, didWeb);
+
+        OmejdnConnectorCertificateBE certificate = requestDapsCertificate(didWeb.getDid());
+        log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
+        participantRegistrationRequestDAO.storeRegistrationRequestDaps(id, certificate);
+
+        String vpLink = getVPLink();
+        log.info("Received VP {} for participant: {}", vpLink, id);
+        participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
+
         participantRegistrationRequestDAO.completeRegistrationRequest(id);
     }
 
