@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: possible-x-portal
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/possibleportal"
+    username: "postgres"
+    password: "postgres"
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8088
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: "/"
+  endpoint:
+    health:
+      enabled: true
+
+sd-creation-wizard-api:
+  base-url: http://localhost:8085

@@ -1,0 +1,32 @@
+<div class="mb-3 flex-1">
+  <div class="flex pb-3 text-2xl font-bold text-brand-50">
+    Gaia-X Legal Participant Fields
+  </div>
+  <app-base-wizard-extension #gxParticipantWizard></app-base-wizard-extension>
+</div>
+
+<div class="mb-3 flex-1">
+  <div class="flex pb-3 text-2xl font-bold text-brand-50">
+    Gaia-X Legal Registration Number Fields
+  </div>
+  <div class="flex pb-3 text-l text-brand-50">
+    Please enter one of the Legal Registration Numbers: LEI Code, EORI or VatID.
+  </div>
+  <app-base-wizard-extension #gxRegistrationNumberWizard></app-base-wizard-extension>
+</div>
+
+<div class="text-right mt-3t">
+  <button (click)="registerParticipant()" [disabled]="isWizardFormInvalid()" cButton color="secondary" shape="rounded-0"
+          type="submit">
+    Register
+  </button>
+</div>
+
+<div class="flex justify-center mt-3">
+  <app-status-message
+    #participantRegistrationStatusMessage
+    [errorMessage]="'Participant registration failed.'"
+    [infoMessage]="'Participant registration ongoing.'"
+    [successMessage]="'Participant registration successful.'">
+  </app-status-message>
+</div>

@@ -1,0 +1,120 @@
+<div class="max-h-screen overflow-y-auto p-4">
+  <h2 class="font-bold">Registration Requests</h2><br/>
+
+  <div class="accordion-header grid grid-cols-4 gap-5">
+    <span>Organization Name</span>
+    <span>Registration Request Status</span>
+  </div>
+
+  <c-accordion>
+    <c-accordion-item *ngFor="let request of registrationRequests; let i = index" [visible]="false"
+                      #accordionItem="cAccordionItem">
+      <ng-template cTemplateId="accordionHeaderTemplate">
+        <button (click)="accordionItem.toggleItem()" [collapsed]="!accordionItem.visible" cAccordionButton
+                class="accordion-button bg-white w-full">
+          <span class="request-name">{{ request.name }}</span>
+
+          <div class="icon-text-container">
+            <ng-container *ngIf="isRegistrationRequestNew(request)">
+              <span class="new-text">
+                <img class="icon" ngSrc="assets/images/icons/new.svg" alt="New Icon" height="20" width="20"/>
+                New
+              </span>
+            </ng-container>
+            <ng-container *ngIf="isRegistrationRequestRejected(request)">
+              <span class="rejected-text">
+                <img class="icon" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20"
+                     width="20"/>
+                Rejected
+              </span>
+            </ng-container>
+            <ng-container *ngIf="isRegistrationRequestAccepted(request)">
+              <span class="accepted-text">
+                <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20"
+                     width="20"/>
+                Accepted
+              </span>
+            </ng-container>
+          </div>
+
+          <div class="action-buttons-container">
+            <button class="custom-button" (click)="acceptRequest($event, request)">
+              <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20"
+                   width="20"/>
+              Accept
+            </button>
+            <button class="custom-button" (click)="rejectRequest($event, request)">
+              <img class="icon" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20"
+                   width="20"/>
+              Reject
+            </button>
+            <button class="custom-button" (click)="deleteRequest($event, request)">
+              <img class="icon" ngSrc="assets/images/icons/delete.svg" alt="Accepted Icon" height="20"
+                   width="20"/>
+              Delete
+            </button>
+          </div>
+        </button>
+      </ng-template>
+      <ng-template cTemplateId="accordionBodyTemplate">
+        <div class="accordion-body">
+          <p><span class="font-bold">Organization Name:</span> {{ request.name }}</p>
+          <br/>
+          <p><span class="font-bold">Organization Description:</span> {{ request.description || "-" }}</p>
+          <br/>
+          <p><span class="font-bold">Legal Registration Number:</span></p>
+          <ul class="pl-2">
+            <li><span class="font-bold">EORI:</span> {{ request.legalRegistrationNumber.eori || "-" }}</li>
+            <li><span class="font-bold">vatID:</span> {{ request.legalRegistrationNumber.vatID || "-" }}</li>
+            <li><span class="font-bold">leiCode:</span> {{ request.legalRegistrationNumber.leiCode || "-" }}</li>
+          </ul>
+          <br/>
+          <div class="flex space-x-8">
+            <div>
+              <p><span class="font-bold">Legal Address:</span></p>
+              <ul class="pl-2">
+                <li><span class="font-bold">Country Code:</span> {{ request.legalAddress.countryCode }}</li>
+                <li><span class="font-bold">Postal Code:</span> {{ request.legalAddress.postalCode || "-" }}</li>
+                <li><span class="font-bold">City:</span> {{ request.legalAddress.locality || "-" }}</li>
+                <li><span class="font-bold">Street:</span> {{ request.legalAddress.streetAddress || "-" }}</li>
+                <li><span
+                  class="font-bold">Country Subdivision Code:</span> {{ request.legalAddress.countrySubdivisionCode }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p><span class="font-bold">Headquarter Address:</span></p>
+              <ul class="pl-2">
+                <li><span class="font-bold">Country Code:</span> {{ request.headquarterAddress.countryCode }}</li>
+                <li><span class="font-bold">Postal Code:</span> {{ request.headquarterAddress.postalCode || "-" }}</li>
+                <li><span class="font-bold">City:</span> {{ request.headquarterAddress.locality || "-" }}</li>
+                <li><span class="font-bold">Street:</span> {{ request.headquarterAddress.streetAddress || "-" }}</li>
+                <li><span
+                  class="font-bold">Country Subdivision Code:</span> {{ request.headquarterAddress.countrySubdivisionCode }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </c-accordion-item>
+  </c-accordion>
+</div>
+
+<div class="flex justify-center mt-3">
+  <app-status-message
+    #requestListStatusMessage
+    [errorMessage]="'Loading registration requests failed.'"
+    [infoMessage]="'Loading registration requests ongoing.'"
+    [successMessage]="'Loading registration requests successful.'">
+  </app-status-message>
+</div>
+
+<div class="flex justify-center mt-3">
+  <app-status-message
+    #operationStatusMessage
+    [errorMessage]="'Operation failed.'"
+    [infoMessage]="'Operation ongoing.'"
+    [successMessage]="'Operation successful.'">
+  </app-status-message>
+</div>

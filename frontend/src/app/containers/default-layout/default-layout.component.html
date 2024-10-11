@@ -1,0 +1,46 @@
+<div class="headerWrapper">
+  <c-navbar class="header border-0" expand="lg">
+    <c-container fluid>
+      <a [routerLink]="['/']" cNavbarBrand class="logo">
+        <img [alt]="'POSSIBLE-X Logo'" [height]="36" [src]="'assets/images/brand/possible_blue.svg'" [width]="142"/>
+      </a>
+    </c-container>
+  </c-navbar>
+</div>
+<div class="page-container" [ngClass]="{'admin-page-container': isAdminPage}">
+  <c-container class="content">
+    <router-outlet></router-outlet>
+  </c-container>
+</div>
+<div class="footerWrapper" [ngClass]="{'admin-footerWrapper': isAdminPage}">
+  <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423"
+       height="238"/>
+  <ng-template #defaultImage>
+    <img alt="" src="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423"/>
+  </ng-template>
+  <div>
+    <c-footer class="footer border-0">
+      <div class="logo">
+        <div class="circleVisual"></div>
+        <img alt="POSSIBLE-X Logo" height="49" src="assets/images/brand/possible_white.svg" width="190"/>
+      </div>
+      <div>
+        <div class="mb-8">
+          <div class="mb-2 text-2xl">POSSIBLE-X</div>
+          <div class="text-sm">Phoenix Open software stack for interoperable engagement in Dataspaces</div>
+        </div>
+        <div class="text-sm">© 2024 POSSIBLE Consortium</div>
+      </div>
+      <div>
+        <div class="mb-2 text-2xl">Information</div>
+        <div class="text-sm">
+          <ul>
+            <li><a [routerLink]="['/']">POSSIBLE Project</a></li>
+            <li><a [routerLink]="['/']">Imprint - About Us</a></li>
+            <li><a [routerLink]="['/']">Privacy Notice</a></li>
+          </ul>
+        </div>
+      </div>
+    </c-footer>
+  </div>
+</div>
