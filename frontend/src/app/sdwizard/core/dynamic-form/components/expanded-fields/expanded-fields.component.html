@@ -1,0 +1,89 @@
+<div class="expanded">
+  <form [formGroup]="form">
+    <div *ngIf="!input.required && formGroups.length == 0" flex fxLayoutAlign="start center" layout="row">
+
+      <div class="flex-container">
+
+        <span class="text-brand-200">{{ input.name }} hinzufügen</span>
+
+        <button (click)="addInitialShape()" [disabled]="!enableButton" cButton color="primary" size="sm"
+                variant="ghost">
+          <svg
+            cIcon
+            class=""
+            name="cib-addthis"
+            size="xl"
+          ></svg>
+        </button>
+      </div>
+
+    </div>
+    <mat-accordion *ngFor="let nestedShapeForm of formGroups; let i = index">
+      <div class="flex-container">
+        <mat-expansion-panel (closed)="panelOpenState = false" (opened)="panelOpenState = true"
+                             [expanded]="input.required && (i < input.minCount)"
+                             class="flex-item-grow bg-possible">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="text-brand-50">{{ inputs[i].name }}</span>
+              <span *ngIf="input.required && (i < input.minCount)" aria-required="true" class="required text-brand-50">*</span>
+              <span class="field-key">&nbsp;&nbsp;{{ input.key }}</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div [formGroup]="nestedShapeForm">
+            <mat-error *ngIf="inputs[i].childrenFields.length==0">
+              Das Schema konnte in der Datei nicht gefunden werden.
+            </mat-error>
+            <div *ngFor="let child of inputs[i].childrenFields">
+              <app-dynamic-form-input #formInput *ngIf="child.componentType == 'dynamicFormInput'"
+                                      [form]="nestedShapeForm" [input]="child"
+                                      [shapes]="shapes"></app-dynamic-form-input>
+              <app-dynamic-form-array #formArray *ngIf="child.componentType == 'dynamicFormArray'"
+                                      [form]="nestedShapeForm" [input]="child"
+                                      [shapes]="shapes"></app-dynamic-form-array>
+              <app-dynamic-form-or #formOr *ngIf="child.componentType == 'dynamicFormOr'"
+                                   [form]="nestedShapeForm"
+                                   [input]="child" [shapes]="shapes"></app-dynamic-form-or>
+              <app-dynamic-form-or-array #formOrArray *ngIf="child.componentType == 'dynamicFormOrArray'"
+                                         [form]="nestedShapeForm" [input]="child"
+                                         [shapes]="shapes"></app-dynamic-form-or-array>
+              <app-expanded-fields #expandedFields
+                                   *ngIf="child.componentType == 'dynamicExpanded' && !child.selfLoop"
+                                   [form]="nestedShapeForm" [input]="child" [parentId]="input.id"
+                                   [shapes]="shapes"></app-expanded-fields>
+              <app-dynamic-self-loops #selfLoops *ngIf="child.selfLoop" [form]="nestedShapeForm"
+                                      [input]="child" [parentId]="input.id" [shapes]="shapes">
+              </app-dynamic-self-loops>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <button (click)="addInput()" *ngIf="i==0 && displayAddButton" [disabled]="!enableButton" cButton color="primary"
+                size="sm" variant="ghost">
+          <svg
+            cIcon
+            class=""
+            name="cib-addthis"
+            size="xl"
+          ></svg>
+        </button>
+
+        <button (click)="deleteInput(i)" *ngIf="displayDeleteButton(i)" cButton color="primary" size="sm"
+                variant="ghost">
+          <svg
+            cIcon
+            class=""
+            name="cil-trash"
+            size="xl"
+          ></svg>
+        </button>
+      </div>
+
+      <div flex fxLayoutAlign="start center" layout="row">
+        <mat-error>
+          <app-show-errors [ctrl]="nestedShapeForm" [label]="input.name"></app-show-errors>
+        </mat-error>
+      </div>
+    </mat-accordion>
+  </form>
+</div>
