@@ -23,6 +23,14 @@ public interface ParticipantRegistrationService {
     List<RegistrationRequestEntryTO> getAllParticipantRegistrationRequests();
 
     /**
+     * Get a registration request by did
+     *
+     * @param did DID
+     * @return registration request
+     */
+    RegistrationRequestEntryTO getParticipantRegistrationRequestByDid(String did);
+
+    /**
      * Given a registration request id, accept the registration request.
      *
      * @param id registration request id

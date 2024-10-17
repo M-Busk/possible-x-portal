@@ -1,7 +1,6 @@
 package eu.possiblex.portal.persistence.dao;
 
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
@@ -42,7 +41,8 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
      */
     @Transactional
     @Override
-    public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant, ParticipantMetadataBE metadata) {
+    public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant,
+        ParticipantMetadataBE metadata) {
 
         ParticipantRegistrationRequestEntity entity = participantRegistrationEntityMapper.pxExtendedLegalParticipantCsAndMetadataToNewEntity(
             participant, metadata);
@@ -62,6 +62,15 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         log.info("Getting all participant registration requests");
         return participantRegistrationRequestRepository.findAll().stream()
             .map(participantRegistrationEntityMapper::entityToParticipantRegistrationRequestBe).toList();
+    }
+
+    @Override
+    public ParticipantRegistrationRequestBE getRegistrationRequestByDid(String did) {
+
+        log.info("Getting participant registration request by did");
+
+        return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(
+            participantRegistrationRequestRepository.findByDidData_Did(did));
     }
 
     /**
@@ -143,6 +152,7 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
      */
     @Transactional
     public void completeRegistrationRequest(String id) {
+
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
             entity.setStatus(RequestStatus.COMPLETED);
@@ -157,6 +167,7 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     @Transactional
     @Override
     public void storeRegistrationRequestVpLink(String id, String vpLink) {
+
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
             entity.setVpLink(vpLink);
@@ -170,8 +181,9 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     @Transactional
     @Override
     public void storeRegistrationRequestDaps(String id, OmejdnConnectorCertificateBE certificate) {
-        OmejdnConnectorCertificateEntity certificateEntity =
-            participantRegistrationEntityMapper.omjednConnectorCertificateBEToOmejdnConnectorCertificateEntity(certificate);
+
+        OmejdnConnectorCertificateEntity certificateEntity = participantRegistrationEntityMapper.omjednConnectorCertificateBEToOmejdnConnectorCertificateEntity(
+            certificate);
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
             entity.setStatus(RequestStatus.COMPLETED);
@@ -192,6 +204,7 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     @Transactional
     @Override
     public void storeRegistrationRequestDid(String id, ParticipantDidBE to) {
+
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
             DidDataEntity didData = new DidDataEntity();

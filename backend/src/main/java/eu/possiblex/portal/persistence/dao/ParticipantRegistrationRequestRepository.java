@@ -9,4 +9,6 @@ public interface ParticipantRegistrationRequestRepository
     extends JpaRepository<ParticipantRegistrationRequestEntity, Long> {
 
     ParticipantRegistrationRequestEntity findByName(String name);
+
+    ParticipantRegistrationRequestEntity findByDidData_Did(String did);
 }

@@ -19,6 +19,12 @@ public class ParticipantRegistrationServiceFake implements ParticipantRegistrati
     }
 
     @Override
+    public RegistrationRequestEntryTO getParticipantRegistrationRequestByDid(String did) {
+
+        return null;
+    }
+
+    @Override
     public void acceptRegistrationRequest(String id) {
         // request worked
     }

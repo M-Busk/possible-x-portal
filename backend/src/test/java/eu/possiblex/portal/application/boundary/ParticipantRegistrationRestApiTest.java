@@ -54,6 +54,15 @@ class ParticipantRegistrationRestApiTest {
     }
 
     @Test
+    void getRegistrationRequestByDid() throws Exception {
+
+        reset(participantRegistrationService);
+        this.mockMvc.perform(get("/registration/request/someDid")).andDo(print()).andExpect(status().isOk());
+
+        verify(participantRegistrationService).getParticipantRegistrationRequestByDid("someDid");
+    }
+
+    @Test
     void acceptRegistrationRequest() throws Exception {
 
         reset(participantRegistrationService);

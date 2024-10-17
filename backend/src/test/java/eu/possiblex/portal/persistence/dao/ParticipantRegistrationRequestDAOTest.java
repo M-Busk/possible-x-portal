@@ -3,13 +3,11 @@ package eu.possiblex.portal.persistence.dao;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.control.DidWebServiceApiClientFake;
+import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.RequestStatus;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
-import eu.possiblex.portal.persistence.entity.DidDataEntity;
-import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,6 +46,13 @@ class ParticipantRegistrationRequestDAOTest {
 
         participantRegistrationRequestDAO.getAllParticipantRegistrationRequests();
         verify(participantRegistrationRequestRepository).findAll();
+    }
+
+    @Test
+    void getParticipantRegistrationByDid() {
+
+        participantRegistrationRequestDAO.getRegistrationRequestByDid("did:web:1234");
+        verify(participantRegistrationRequestRepository).findByDidData_Did("did:web:1234");
     }
 
     @Test
@@ -130,15 +133,17 @@ class ParticipantRegistrationRequestDAOTest {
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
         ParticipantMetadataBE metadata = getParticipantMetadata();
 
-
         participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant, metadata);
         participantRegistrationRequestDAO.acceptRegistrationRequest(participant.getName());
-        participantRegistrationRequestDAO.storeRegistrationRequestDaps(participant.getName(), new OmejdnConnectorCertificateBE( "validClientId", "validPassword", "validKeystore", "123","1234"));
+        participantRegistrationRequestDAO.storeRegistrationRequestDaps(participant.getName(),
+            new OmejdnConnectorCertificateBE("validClientId", "validPassword", "validKeystore", "123", "1234"));
         participantRegistrationRequestDAO.storeRegistrationRequestVpLink(participant.getName(), "validVpLink");
-        participantRegistrationRequestDAO.storeRegistrationRequestDid(participant.getName(), new ParticipantDidBE("validDid", "validVerificationMethod"));
+        participantRegistrationRequestDAO.storeRegistrationRequestDid(participant.getName(),
+            new ParticipantDidBE("validDid", "validVerificationMethod"));
         participantRegistrationRequestDAO.completeRegistrationRequest(participant.getName());
         verify(participantRegistrationRequestRepository, times(2)).save(any());
-        assertNotNull(participantRegistrationRequestRepository.findByName(participant.getName()).getOmejdnConnectorCertificate());
+        assertNotNull(
+            participantRegistrationRequestRepository.findByName(participant.getName()).getOmejdnConnectorCertificate());
     }
 
     @Test

@@ -66,6 +66,15 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             .toList();
     }
 
+    @Override
+    public RegistrationRequestEntryTO getParticipantRegistrationRequestByDid(String did) {
+
+        log.info("Processing retrieval of participant registration requests with did {}", did);
+
+        return participantRegistrationServiceMapper.participantRegistrationRequestBEToRegistrationRequestEntryTO(
+            participantRegistrationRequestDAO.getRegistrationRequestByDid(did));
+    }
+
     /**
      * Given a registration request id, accept the registration request.
      *
@@ -79,7 +88,6 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.acceptRegistrationRequest(id);
         completeRegistrationRequest(id);
     }
-
 
     private void completeRegistrationRequest(String id) {
         ParticipantDidBE didWeb = generateDidWeb(id);
@@ -122,8 +130,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.deleteRegistrationRequest(id);
     }
 
-
     private OmejdnConnectorCertificateBE requestDapsCertificate(String clientName) {
+
         return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName));
     }
 
@@ -135,6 +143,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
     }
 
     private String getVPLink() {
+
         return "www.example.com";
     }
 }

@@ -1,11 +1,9 @@
 package eu.possiblex.portal.persistence.dao;
 
 import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
-import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 
 import java.util.List;
@@ -17,7 +15,8 @@ public interface ParticipantRegistrationRequestDAO {
      * @param participant registration request CS
      * @param metadata registration request metadata
      */
-    void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant, ParticipantMetadataBE metadata);
+    void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant,
+        ParticipantMetadataBE metadata);
 
     /**
      * Given a registration request id, accept the registration request.
@@ -56,6 +55,14 @@ public interface ParticipantRegistrationRequestDAO {
      * @return list of registration requests
      */
     List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests();
+
+    /**
+     * Get a registration request by DID.
+     *
+     * @param did DID
+     * @return registration request
+     */
+    ParticipantRegistrationRequestBE getRegistrationRequestByDid(String did);
 
     void storeRegistrationRequestVpLink(String id, String vpLink);
 
