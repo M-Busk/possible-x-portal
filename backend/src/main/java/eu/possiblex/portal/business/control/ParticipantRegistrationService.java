@@ -2,6 +2,7 @@ package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface ParticipantRegistrationService {
      *
      * @param id registration request id
      */
-    void acceptRegistrationRequest(String id);
+    void acceptRegistrationRequest(String id) throws ParticipantComplianceException;
 
     /**
      * Given a registration request id, reject the registration request.

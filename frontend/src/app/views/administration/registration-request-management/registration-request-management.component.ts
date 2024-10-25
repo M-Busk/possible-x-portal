@@ -35,7 +35,7 @@ export class RegistrationRequestManagementComponent implements OnInit {
       this.operationStatusMessage.showSuccessMessage("Request accepted successfully. Participant was checked for compliance and stored in the catalog.");
       this.handleGetRegistrationRequests();
     }).catch((e: HttpErrorResponse) => {
-      this.operationStatusMessage.showErrorMessage(e.error.message);
+      this.operationStatusMessage.showErrorMessage(e.error.detail);
     }).catch(_ => {
       this.operationStatusMessage.showErrorMessage("Unknown error occurred");
     });
@@ -50,7 +50,7 @@ export class RegistrationRequestManagementComponent implements OnInit {
       this.operationStatusMessage.showSuccessMessage("Request deleted successfully");
       this.handleGetRegistrationRequests();
     }).catch((e: HttpErrorResponse) => {
-      this.operationStatusMessage.showErrorMessage(e.error.message);
+      this.operationStatusMessage.showErrorMessage(e.error.detail);
     }).catch(_ => {
       this.operationStatusMessage.showErrorMessage("Unknown error occurred");
     });
@@ -65,7 +65,7 @@ export class RegistrationRequestManagementComponent implements OnInit {
       this.operationStatusMessage.showSuccessMessage("Request rejected successfully");
       this.handleGetRegistrationRequests();
     }).catch((e: HttpErrorResponse) => {
-      this.operationStatusMessage.showErrorMessage(e.error.message);
+      this.operationStatusMessage.showErrorMessage(e.error.detail);
     }).catch(_ => {
       this.operationStatusMessage.showErrorMessage("Unknown error occurred");
     });
@@ -89,7 +89,7 @@ export class RegistrationRequestManagementComponent implements OnInit {
 
   private handleGetRegistrationRequests() {
     this.getRegistrationRequests().catch((e: HttpErrorResponse) => {
-      this.requestListStatusMessage.showErrorMessage(e.error.message);
+      this.requestListStatusMessage.showErrorMessage(e.error.detail);
     }).catch(_ => {
       this.requestListStatusMessage.showErrorMessage("Unknown error occurred");
     });

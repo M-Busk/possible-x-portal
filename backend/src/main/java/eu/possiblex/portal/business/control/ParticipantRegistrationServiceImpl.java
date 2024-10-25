@@ -1,5 +1,6 @@
 package eu.possiblex.portal.business.control;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
@@ -7,6 +8,7 @@ import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
+import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +93,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
      * @param id registration request id
      */
     @Override
-    public void acceptRegistrationRequest(String id) {
+    public void acceptRegistrationRequest(String id) throws ParticipantComplianceException {
 
         log.info("Processing acceptance of participant: {}", id);
 
@@ -99,7 +101,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         completeRegistrationRequest(id);
     }
 
-    private void completeRegistrationRequest(String id) {
+    private void completeRegistrationRequest(String id) throws ParticipantComplianceException {
 
         // generate organisation identity for participant
         ParticipantDidBE didWeb = generateDidWeb(id);
@@ -161,7 +163,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         return didWebServiceApiClient.generateDidWeb(createRequestTo);
     }
 
-    private String enrollParticipantInCatalog(ParticipantRegistrationRequestBE be) {
+    private String enrollParticipantInCatalog(ParticipantRegistrationRequestBE be)
+        throws ParticipantComplianceException {
 
         PxExtendedLegalParticipantCredentialSubject cs = participantRegistrationServiceMapper.participantRegistrationRequestBEToCs(
             be);
@@ -175,7 +178,11 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
             return fhCatalogParticipantBaseUrl + idResponse.getId();
         } catch (WebClientResponseException.UnprocessableEntity e) {
-            throw new RuntimeException(e.getResponseBodyAsString());
+            JsonNode error = e.getResponseBodyAs(JsonNode.class);
+            if (error != null && error.get("error") != null) {
+                throw new ParticipantComplianceException(error.get("error").textValue(), e);
+            }
+            throw new ParticipantComplianceException("Unknown catalog processing exception", e);
         }
     }
 }
