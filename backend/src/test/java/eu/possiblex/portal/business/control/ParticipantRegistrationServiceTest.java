@@ -6,6 +6,7 @@ import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalPartici
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
+import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOFake;
@@ -73,7 +74,7 @@ class ParticipantRegistrationServiceTest {
     }
 
     @Test
-    void acceptRegistrationRequest() {
+    void acceptRegistrationRequest() throws ParticipantComplianceException {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
         participantRegistrationService.registerParticipant(participant);
