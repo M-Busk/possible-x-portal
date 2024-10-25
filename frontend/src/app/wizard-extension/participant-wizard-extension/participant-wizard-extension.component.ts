@@ -6,9 +6,11 @@ import {BehaviorSubject, takeWhile} from "rxjs";
 import {isGxLegalParticipantCs, isGxLegalRegistrationNumberCs} from "../../utils/credential-utils";
 import {HttpErrorResponse} from "@angular/common/http";
 import {
-  IGxLegalParticipantCredentialSubject, IGxLegalRegistrationNumberCredentialSubject,
+  ICreateRegistrationRequestTO,
+  IGxLegalParticipantCredentialSubject,
+  IGxLegalRegistrationNumberCredentialSubject,
   IPojoCredentialSubject,
-  ICreateRegistrationRequestTO
+  IPxParticipantExtensionCredentialSubject
 } from "../../services/mgmt/api/backend";
 
 @Component({
@@ -19,9 +21,9 @@ import {
 export class ParticipantWizardExtensionComponent {
   @ViewChild("participantRegistrationStatusMessage") public participantRegistrationStatusMessage!: StatusMessageComponent;
   public prefillDone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  @ViewChild("pxParticipantExtensionWizard") private pxParticipantExtensionWizard: BaseWizardExtensionComponent;
   @ViewChild("gxParticipantWizard") private gxParticipantWizard: BaseWizardExtensionComponent;
   @ViewChild("gxRegistrationNumberWizard") private gxRegistrationNumberWizard: BaseWizardExtensionComponent;
-  emailAddress: string = "";
 
   constructor(
     private apiService: ApiService
@@ -34,14 +36,17 @@ export class ParticipantWizardExtensionComponent {
 
     let participantShapeSource = await this.apiService.getGxLegalParticipantShape();
     participantShapeSource = this.adaptGxShape(participantShapeSource, "LegalParticipant", ["legalRegistrationNumber"]);
+    let participantExtensionShape = await this.apiService.getPxParticipantExtension();
 
+    await this.pxParticipantExtensionWizard.loadShape(Promise.resolve(participantExtensionShape), "will:be:replaced");
     await this.gxParticipantWizard.loadShape(Promise.resolve(participantShapeSource), id);
     await this.gxRegistrationNumberWizard.loadShape(this.apiService.getGxLegalRegistrationNumberShape(), registrationNumberId);
 
   }
 
   public isShapeLoaded(): boolean {
-    return this.gxParticipantWizard?.isShapeLoaded() && this.gxRegistrationNumberWizard?.isShapeLoaded();
+    return this.gxParticipantWizard?.isShapeLoaded() && this.gxRegistrationNumberWizard?.isShapeLoaded()
+      && this.pxParticipantExtensionWizard?.isShapeLoaded();
   }
 
   public prefillFields(csList: IPojoCredentialSubject[]) {
@@ -73,13 +78,14 @@ export class ParticipantWizardExtensionComponent {
 
     let gxParticipantJson: IGxLegalParticipantCredentialSubject = this.gxParticipantWizard.generateJsonCs();
     let gxRegistrationNumberJson: IGxLegalRegistrationNumberCredentialSubject = this.gxRegistrationNumberWizard.generateJsonCs();
+    let pxParticipantExtensionJson: IPxParticipantExtensionCredentialSubject = this.pxParticipantExtensionWizard.generateJsonCs();
 
-    gxParticipantJson["gx:legalRegistrationNumber"] = {"@id" : gxRegistrationNumberJson.id} as any;
+    gxParticipantJson["gx:legalRegistrationNumber"] = {"@id": gxRegistrationNumberJson.id} as any;
 
     let registerParticipantTo: ICreateRegistrationRequestTO = {
       participantCs: gxParticipantJson,
       registrationNumberCs: gxRegistrationNumberJson,
-      emailAddress: this.emailAddress
+      participantExtensionCs: pxParticipantExtensionJson
     }
 
     console.log(registerParticipantTo);
@@ -104,17 +110,9 @@ export class ParticipantWizardExtensionComponent {
   protected isWizardFormInvalid(): boolean {
     let participantWizardInvalid = this.gxParticipantWizard?.isWizardFormInvalid();
     let registrationNumberWizardInvalid = this.gxRegistrationNumberWizard?.isWizardFormInvalid();
+    let participantExtensionWizardInvalid = this.pxParticipantExtensionWizard?.isWizardFormInvalid();
 
-    return participantWizardInvalid || registrationNumberWizardInvalid;
-  }
-
-  private prefillHandleCs(cs: IPojoCredentialSubject) {
-    if (isGxLegalParticipantCs(cs)) {
-      this.gxParticipantWizard.prefillFields(cs, []);
-    }
-    if (isGxLegalRegistrationNumberCs(cs)) {
-      this.gxRegistrationNumberWizard.prefillFields(cs, []);
-    }
+    return participantWizardInvalid || registrationNumberWizardInvalid || participantExtensionWizardInvalid;
   }
 
   protected adaptGxShape(shapeSource: any, shapeName: string, excludedFields: string[]) {
@@ -135,15 +133,13 @@ export class ParticipantWizardExtensionComponent {
     return shapeSource;
   }
 
-  private isFieldFilled(str: string) {
-    if (!str || str.trim().length === 0) {
-      return false;
+  private prefillHandleCs(cs: IPojoCredentialSubject) {
+    if (isGxLegalParticipantCs(cs)) {
+      this.gxParticipantWizard.prefillFields(cs, []);
     }
-    return true;
+    if (isGxLegalRegistrationNumberCs(cs)) {
+      this.gxRegistrationNumberWizard.prefillFields(cs, []);
+    }
   }
 
-  protected isEmailAddressInvalid(): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return !this.isFieldFilled(this.emailAddress) || !emailRegex.test(this.emailAddress);
-  }
 }

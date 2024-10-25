@@ -34,3 +34,8 @@ daps-server:
 did-web-service:
   base-url: https://localhost:4443
   ignore-ssl: true
+
+fh:
+  catalog:
+    url: url
+    secret-key: secret

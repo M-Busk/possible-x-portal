@@ -2,7 +2,6 @@ package eu.possiblex.portal.persistence.dao;
 
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.RequestStatus;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
@@ -62,8 +61,7 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     }
 
     @Override
-    public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant,
-        ParticipantMetadataBE metadata) {
+    public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant) {
         // request worked
     }
 

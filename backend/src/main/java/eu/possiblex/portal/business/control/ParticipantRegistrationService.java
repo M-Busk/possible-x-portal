@@ -1,7 +1,6 @@
 package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public interface ParticipantRegistrationService {
      *
      * @param cs registration request
      */
-    void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs, ParticipantMetadataBE be);
+    void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs);
 
     /**
      * Get all registration requests

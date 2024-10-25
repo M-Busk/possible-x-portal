@@ -2,9 +2,9 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {RegistrationRequestManagementComponent} from './registration-request-management.component';
 import {ApiService} from "../../../services/mgmt/api/api.service";
-import {IRegistrationRequestItemTO} from "../../../services/mgmt/api/backend";
 import {AccordionModule} from '@coreui/angular';
 import {CommonViewsModule} from '../../common-views/common-views.module';
+import {IRegistrationRequestEntryTO} from "../../../services/mgmt/api/backend";
 
 describe('RegistrationRequestManagementComponent', () => {
   let component: RegistrationRequestManagementComponent;
@@ -31,7 +31,7 @@ describe('RegistrationRequestManagementComponent', () => {
   });
 
   it('should call getAllRegistrationRequests on apiService when getAllRegistrationRequests is called', async () => {
-    const emptyList: IRegistrationRequestItemTO[] = [];
+    const emptyList: IRegistrationRequestEntryTO[] = [];
     apiService.getAllRegistrationRequests.and.returnValue(Promise.resolve(emptyList));
 
     component.getRegistrationRequests();
@@ -43,7 +43,7 @@ describe('RegistrationRequestManagementComponent', () => {
   it('should call deleteRegistrationRequest on apiService when deleteRegistrationRequest is called', async () => {
     apiService.deleteRegistrationRequest.and.returnValue(Promise.resolve(undefined));
     const mockEvent = new Event('click');
-    component.deleteRequest(mockEvent, { name: 'test' } as any);
+    component.deleteRequest(mockEvent, {name: 'test'} as any);
 
     expect(apiService.deleteRegistrationRequest).toHaveBeenCalled();
 
@@ -52,7 +52,7 @@ describe('RegistrationRequestManagementComponent', () => {
   it('should call acceptRegistrationRequest on apiService when acceptRegistrationRequest is called', async () => {
     apiService.acceptRegistrationRequest.and.returnValue(Promise.resolve(undefined));
     const mockEvent = new Event('click');
-    component.acceptRequest(mockEvent, { name: 'test' } as any);
+    component.acceptRequest(mockEvent, {name: 'test'} as any);
 
     expect(apiService.acceptRegistrationRequest).toHaveBeenCalled();
 
@@ -61,7 +61,7 @@ describe('RegistrationRequestManagementComponent', () => {
   it('should call rejectRegistrationRequest on apiService when rejectRegistrationRequest is called', async () => {
     apiService.rejectRegistrationRequest.and.returnValue(Promise.resolve(undefined));
     const mockEvent = new Event('click');
-    component.rejectRequest(mockEvent, { name: 'test' } as any);
+    component.rejectRequest(mockEvent, {name: 'test'} as any);
 
     expect(apiService.rejectRegistrationRequest).toHaveBeenCalled();
 

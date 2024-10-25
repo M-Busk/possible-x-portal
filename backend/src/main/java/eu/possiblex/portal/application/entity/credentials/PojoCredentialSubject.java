@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
+import eu.possiblex.portal.application.entity.credentials.px.participants.PxParticipantExtensionCredentialSubject;
 import lombok.*;
 
 @Getter
@@ -28,7 +29,8 @@ import lombok.*;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, defaultImpl = UnknownCredentialSubject.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = GxLegalParticipantCredentialSubject.class, name = GxLegalParticipantCredentialSubject.TYPE),
-    @JsonSubTypes.Type(value = GxLegalRegistrationNumberCredentialSubject.class, name = GxLegalRegistrationNumberCredentialSubject.TYPE), })
+    @JsonSubTypes.Type(value = GxLegalRegistrationNumberCredentialSubject.class, name = GxLegalRegistrationNumberCredentialSubject.TYPE),
+    @JsonSubTypes.Type(value = PxParticipantExtensionCredentialSubject.class, name = PxParticipantExtensionCredentialSubject.TYPE), })
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class PojoCredentialSubject {
