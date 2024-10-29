@@ -89,8 +89,8 @@ export interface IGxLegalParticipantCredentialSubject extends IPojoCredentialSub
     "gx:legalRegistrationNumber": INodeKindIRITypeId[];
     "gx:legalAddress": IGxVcard;
     "gx:headquarterAddress": IGxVcard;
-    "gx:name": string;
-    "gx:description": string;
+    "schema:name": string;
+    "schema:description": string;
     "@context": { [index: string]: string };
     type: string;
 }
@@ -279,16 +279,16 @@ export interface IObjectIdResolver {
 }
 
 export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISerializable {
-    ignorable: boolean;
+    valueDeserializer: IJsonDeserializer<any>;
+    creatorIndex: number;
+    objectIdInfo: IObjectIdInfo;
     managedReferenceName: string;
+    ignorable: boolean;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
     injectableValueId: any;
     injectionOnly: boolean;
-    valueDeserializer: IJsonDeserializer<any>;
-    creatorIndex: number;
-    objectIdInfo: IObjectIdInfo;
 }
 
 export interface IStdDeserializer<T> extends IJsonDeserializer<T>, ISerializable, IGettable {
@@ -320,10 +320,10 @@ export interface IOfField<F> extends ITypeDescriptor {
     primitive: boolean;
 }
 
-export interface ITypeResolutionContext {
+export interface IAnnotationMap extends IAnnotations {
 }
 
-export interface IAnnotationMap extends IAnnotations {
+export interface ITypeResolutionContext {
 }
 
 export interface IMember {
@@ -334,21 +334,14 @@ export interface IMember {
 }
 
 export interface IAnnotatedMember extends IAnnotated, ISerializable {
+    allAnnotations: IAnnotationMap;
     /**
      * @deprecated
      */
     typeContext: ITypeResolutionContext;
-    allAnnotations: IAnnotationMap;
     member: IMember;
     declaringClass: IClass<any>;
     fullName: string;
-}
-
-export interface ITypeDeserializer {
-    typeIdResolver: ITypeIdResolver;
-    defaultImpl: IClass<any>;
-    typeInclusion: IAs;
-    propertyName: string;
 }
 
 export interface IObjectIdInfo {
@@ -357,6 +350,13 @@ export interface IObjectIdInfo {
     alwaysAsId: boolean;
     scope: IClass<any>;
     propertyName: IPropertyName;
+}
+
+export interface ITypeDeserializer {
+    typeIdResolver: ITypeIdResolver;
+    defaultImpl: IClass<any>;
+    typeInclusion: IAs;
+    propertyName: string;
 }
 
 export interface IPropertyMetadata extends ISerializable {

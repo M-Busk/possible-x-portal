@@ -24,7 +24,8 @@ public class PxExtendedLegalParticipantCredentialSubject {
     @Getter(AccessLevel.NONE)
     public static final Map<String, String> CONTEXT = Map.of(GxLegalParticipantCredentialSubject.TYPE_NAMESPACE,
         "https://w3id.org/gaia-x/development#", "vcard", "http://www.w3.org/2006/vcard/ns#", "xsd",
-        "http://www.w3.org/2001/XMLSchema#", "px", "http://w3id.org/gaia-x/possible-x#");
+        "http://www.w3.org/2001/XMLSchema#", "px", "http://w3id.org/gaia-x/possible-x#", "schema",
+        "https://schema.org/");
 
     private String id;
 
@@ -40,10 +41,10 @@ public class PxExtendedLegalParticipantCredentialSubject {
     @JsonProperty("gx:headquarterAddress")
     private GxVcard headquarterAddress;
 
-    @JsonProperty("gx:name")
+    @JsonProperty("schema:name")
     private String name;
 
-    @JsonProperty("gx:description")
+    @JsonProperty("schema:description")
     private String description;
 
     @JsonProperty("px:mailAddress")

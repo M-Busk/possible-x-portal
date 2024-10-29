@@ -54,7 +54,8 @@ public class GxLegalParticipantCredentialSubject extends PojoCredentialSubject {
     @Getter(AccessLevel.NONE)
     public static final Map<String, String> CONTEXT = Map.of(TYPE_NAMESPACE,
         "https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#",
-        "vcard", "http://www.w3.org/2006/vcard/ns#", "xsd", "http://www.w3.org/2001/XMLSchema#");
+        "vcard", "http://www.w3.org/2006/vcard/ns#", "xsd", "http://www.w3.org/2001/XMLSchema#", "schema",
+        "https://schema.org/");
 
     // Tagus
     @NotNull
@@ -73,13 +74,13 @@ public class GxLegalParticipantCredentialSubject extends PojoCredentialSubject {
     private GxVcard headquarterAddress; // contains Tagus gx:countrySubdivisionCode
 
     // Loire
-    @JsonProperty("gx:name")
+    @JsonProperty("schema:name")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String name;
 
     // Loire
-    @JsonProperty("gx:description")
+    @JsonProperty("schema:description")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String description;
