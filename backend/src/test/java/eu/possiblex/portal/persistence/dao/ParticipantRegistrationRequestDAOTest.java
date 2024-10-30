@@ -3,7 +3,6 @@ package eu.possiblex.portal.persistence.dao;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.control.DidWebServiceApiClientFake;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.RequestStatus;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
@@ -35,9 +34,8 @@ class ParticipantRegistrationRequestDAOTest {
     void saveParticipantRegistrationRequest() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant, metadata);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant);
         verify(participantRegistrationRequestRepository).save(any());
     }
 
@@ -59,9 +57,8 @@ class ParticipantRegistrationRequestDAOTest {
     void acceptRegistrationRequest() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant, metadata);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant);
         participantRegistrationRequestDAO.acceptRegistrationRequest(participant.getName());
         verify(participantRegistrationRequestRepository, times(1)).save(any());
 
@@ -105,9 +102,8 @@ class ParticipantRegistrationRequestDAOTest {
     void saveDidData() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant, metadata);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant);
         participantRegistrationRequestDAO.acceptRegistrationRequest(participant.getName());
         participantRegistrationRequestDAO.storeRegistrationRequestDid(participant.getName(),
             new ParticipantDidBE(DidWebServiceApiClientFake.EXAMPLE_DID,
@@ -131,9 +127,8 @@ class ParticipantRegistrationRequestDAOTest {
     void completeRegistrationRequest() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant, metadata);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant);
         participantRegistrationRequestDAO.acceptRegistrationRequest(participant.getName());
         participantRegistrationRequestDAO.storeRegistrationRequestDaps(participant.getName(),
             new OmejdnConnectorCertificateBE("validClientId", "validPassword", "validKeystore", "123", "1234"));
@@ -150,20 +145,14 @@ class ParticipantRegistrationRequestDAOTest {
     void rejectAndDeleteRegistrationRequest() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipant();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant, metadata);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(participant);
         participantRegistrationRequestDAO.rejectRegistrationRequest("validName");
         participantRegistrationRequestDAO.deleteRegistrationRequest("validName");
         verify(participantRegistrationRequestRepository, times(1)).save(any());
 
         verify(participantRegistrationRequestRepository).delete(any());
         assertTrue(participantRegistrationRequestRepository.findAll().isEmpty());
-    }
-
-    private ParticipantMetadataBE getParticipantMetadata() {
-
-        return ParticipantMetadataBE.builder().emailAddress("example@address.com").build();
     }
 
     private PxExtendedLegalParticipantCredentialSubject getParticipant() {
@@ -177,6 +166,7 @@ class ParticipantRegistrationRequestDAOTest {
 
         return PxExtendedLegalParticipantCredentialSubject.builder().id("validId").legalRegistrationNumber(
                 new GxLegalRegistrationNumberCredentialSubject("validEori", "validVatId", "validLeiCode"))
-            .headquarterAddress(vcard).legalAddress(vcard).name("validName").description("validDescription").build();
+            .headquarterAddress(vcard).legalAddress(vcard).name("validName").description("validDescription")
+            .mailAddress("example@address.com").build();
     }
 }

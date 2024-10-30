@@ -12,6 +12,8 @@ mapStruct = "1.6.0"
 postgresql = "42.7.4"
 h2 = "2.3.232"
 hibernateValidator = "8.0.1.Final"
+titaniumJsonLd = "1.4.1"
+jakartaJson = "2.0.1"
 
 [libraries]
 springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBoot" }
@@ -32,6 +34,8 @@ jUnit = { module = "org.junit.platform:junit-platform-launcher", version.ref = "
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 hibernateValidator = { module = "org.hibernate:hibernate-validator", version.ref = "hibernateValidator" }
+titaniumJsonLd = { module = "com.apicatalog:titanium-json-ld-jre8", version.ref = "titaniumJsonLd" }
+jakartaJson = { module = "org.glassfish:jakarta.json", version.ref = "jakartaJson" }
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }

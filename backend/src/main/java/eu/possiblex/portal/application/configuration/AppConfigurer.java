@@ -3,6 +3,7 @@ package eu.possiblex.portal.application.configuration;
 import eu.possiblex.portal.business.control.DidWebServiceApiClient;
 import eu.possiblex.portal.business.control.OmejdnConnectorApiClient;
 import eu.possiblex.portal.business.control.SdCreationWizardApiClient;
+import eu.possiblex.portal.business.control.TechnicalFhCatalogClient;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -37,6 +38,12 @@ public class AppConfigurer {
 
     @Value("${did-web-service.ignore-ssl}")
     private boolean didWebServiceIgnoreSsl;
+
+    @Value("${fh.catalog.url}")
+    private String fhCatalogUrl;
+
+    @Value("${fh.catalog.secret-key}")
+    private String fhCatalogSecretKey;
 
     @Bean
     public SdCreationWizardApiClient sdCreationWizardApiClient() {
@@ -75,5 +82,17 @@ public class AppConfigurer {
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builder()
             .exchangeAdapter(WebClientAdapter.create(webClient)).build();
         return httpServiceProxyFactory.createClient(DidWebServiceApiClient.class);
+    }
+
+    @Bean
+    public TechnicalFhCatalogClient fhCatalogClient() {
+
+        WebClient webClient = WebClient.builder().baseUrl(fhCatalogUrl).defaultHeaders(httpHeaders -> {
+            httpHeaders.set("Content-Type", "application/json");
+            httpHeaders.set("Authorization", "Bearer " + fhCatalogSecretKey);
+        }).build();
+        HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builder()
+            .exchangeAdapter(WebClientAdapter.create(webClient)).build();
+        return httpServiceProxyFactory.createClient(TechnicalFhCatalogClient.class);
     }
 }

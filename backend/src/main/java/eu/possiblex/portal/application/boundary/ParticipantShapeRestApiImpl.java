@@ -11,6 +11,8 @@ public class ParticipantShapeRestApiImpl implements ParticipantShapeRestApi {
 
     private static final String ECOSYSTEM_GAIAX = "gx";
 
+    private static final String ECOSYSTEM_POSSIBLE = "px";
+
     private final SdCreationWizardApiService sdCreationWizardApiService;
 
     public ParticipantShapeRestApiImpl(@Autowired SdCreationWizardApiService sdCreationWizardApiService) {
@@ -38,5 +40,16 @@ public class ParticipantShapeRestApiImpl implements ParticipantShapeRestApi {
     public String getGxLegalRegistrationNumberShape() {
 
         return sdCreationWizardApiService.getShapeByName(ECOSYSTEM_GAIAX, "Legalregistrationnumber.json");
+    }
+
+    /**
+     * Retrieve the Possible-X participant extension shape from the SD Creation Wizard API and return it.
+     *
+     * @return catalog shape
+     */
+    @Override
+    public String getPxParticipantExtension() {
+
+        return sdCreationWizardApiService.getShapeByName(ECOSYSTEM_POSSIBLE, "Possiblexlegalparticipantextension.json");
     }
 }

@@ -1,6 +1,5 @@
 package eu.possiblex.portal.persistence.dao;
 
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
@@ -37,15 +36,13 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
      * Initially save a participant registration request.
      *
      * @param participant registration request CS
-     * @param metadata registration request metadata
      */
     @Transactional
     @Override
-    public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant,
-        ParticipantMetadataBE metadata) {
+    public void saveParticipantRegistrationRequest(PxExtendedLegalParticipantCredentialSubject participant) {
 
-        ParticipantRegistrationRequestEntity entity = participantRegistrationEntityMapper.pxExtendedLegalParticipantCsAndMetadataToNewEntity(
-            participant, metadata);
+        ParticipantRegistrationRequestEntity entity = participantRegistrationEntityMapper.pxExtendedLegalParticipantCsToNewEntity(
+            participant);
         log.info("Saving participant registration request: {}", entity);
 
         participantRegistrationRequestRepository.save(entity);

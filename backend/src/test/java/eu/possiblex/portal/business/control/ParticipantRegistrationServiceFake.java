@@ -1,14 +1,13 @@
 package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 
 import java.util.List;
 
 public class ParticipantRegistrationServiceFake implements ParticipantRegistrationService {
     @Override
-    public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs, ParticipantMetadataBE be) {
+    public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs) {
         // request worked
     }
 

@@ -36,6 +36,8 @@ dependencies {
   implementation(libs.springBootStarterDataJpa)
   implementation(libs.hibernateValidator)
   implementation(libs.openApi)
+  implementation(libs.titaniumJsonLd)
+  implementation(libs.jakartaJson)
   implementation(libs.postgresql)
   compileOnly(libs.lombok)
   annotationProcessor(libs.lombokMapStructBinding)

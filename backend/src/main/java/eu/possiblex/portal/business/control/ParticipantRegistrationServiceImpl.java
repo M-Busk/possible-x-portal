@@ -1,16 +1,21 @@
 package eu.possiblex.portal.business.control;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
+import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
+import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
+import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 
@@ -26,16 +31,23 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
     private final DidWebServiceApiClient didWebServiceApiClient;
 
+    private final FhCatalogClient fhCatalogClient;
+
+    private final String fhCatalogParticipantBaseUrl;
+
     public ParticipantRegistrationServiceImpl(
         @Autowired ParticipantRegistrationRequestDAO participantRegistrationRequestDAO,
         @Autowired ParticipantRegistrationServiceMapper participantRegistrationServiceMapper,
         @Autowired OmejdnConnectorApiClient omejdnConnectorApiClient,
-        @Autowired DidWebServiceApiClient didWebServiceApiClient) {
+        @Autowired DidWebServiceApiClient didWebServiceApiClient, @Autowired FhCatalogClient fhCatalogClient,
+        @Value("${fh.catalog.url}") String fhCatalogUrl) {
 
         this.participantRegistrationRequestDAO = participantRegistrationRequestDAO;
         this.participantRegistrationServiceMapper = participantRegistrationServiceMapper;
         this.omejdnConnectorApiClient = omejdnConnectorApiClient;
         this.didWebServiceApiClient = didWebServiceApiClient;
+        this.fhCatalogClient = fhCatalogClient;
+        this.fhCatalogParticipantBaseUrl = fhCatalogUrl + "/resources/legal-participant/";
     }
 
     /**
@@ -44,11 +56,11 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
      * @param cs request
      */
     @Override
-    public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs, ParticipantMetadataBE be) {
+    public void registerParticipant(PxExtendedLegalParticipantCredentialSubject cs) {
 
         log.info("Processing participant registration: {}", cs);
 
-        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs, be);
+        participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs);
     }
 
     /**
@@ -81,7 +93,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
      * @param id registration request id
      */
     @Override
-    public void acceptRegistrationRequest(String id) {
+    public void acceptRegistrationRequest(String id) throws ParticipantComplianceException {
 
         log.info("Processing acceptance of participant: {}", id);
 
@@ -89,19 +101,28 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         completeRegistrationRequest(id);
     }
 
-    private void completeRegistrationRequest(String id) {
+    private void completeRegistrationRequest(String id) throws ParticipantComplianceException {
+
+        // generate organisation identity for participant
         ParticipantDidBE didWeb = generateDidWeb(id);
         log.info("Created did {} for participant: {}", didWeb, id);
         participantRegistrationRequestDAO.storeRegistrationRequestDid(id, didWeb);
 
+        // retrieve full request from db (including did)
+        ParticipantRegistrationRequestBE be = participantRegistrationRequestDAO.getRegistrationRequestByDid(
+            didWeb.getDid());
+
+        // build credential subject and enroll participant in catalog
+        String vpLink = enrollParticipantInCatalog(be);
+        log.info("Received VP {} for participant: {}", vpLink, id);
+        participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
+
+        // generate consumer/provider component identity
         OmejdnConnectorCertificateBE certificate = requestDapsCertificate(didWeb.getDid());
         log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
         participantRegistrationRequestDAO.storeRegistrationRequestDaps(id, certificate);
 
-        String vpLink = getVPLink();
-        log.info("Received VP {} for participant: {}", vpLink, id);
-        participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
-
+        // set request to completed
         participantRegistrationRequestDAO.completeRegistrationRequest(id);
     }
 
@@ -142,8 +163,26 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         return didWebServiceApiClient.generateDidWeb(createRequestTo);
     }
 
-    private String getVPLink() {
+    private String enrollParticipantInCatalog(ParticipantRegistrationRequestBE be)
+        throws ParticipantComplianceException {
 
-        return "www.example.com";
+        PxExtendedLegalParticipantCredentialSubject cs = participantRegistrationServiceMapper.participantRegistrationRequestBEToCs(
+            be);
+
+        // for local testing
+        //cs.setId("did:web:didwebservice.dev.possible-x.de:participant:0a527305-97fb-3ffa-81fc-117d9e71e3a9");
+
+        try {
+            FhCatalogIdResponse idResponse = fhCatalogClient.addParticipantToCatalog(cs);
+            log.info("Stored CS for participant {} in catalog: {}", idResponse, cs);
+
+            return fhCatalogParticipantBaseUrl + idResponse.getId();
+        } catch (WebClientResponseException.UnprocessableEntity e) {
+            JsonNode error = e.getResponseBodyAs(JsonNode.class);
+            if (error != null && error.get("error") != null) {
+                throw new ParticipantComplianceException(error.get("error").textValue(), e);
+            }
+            throw new ParticipantComplianceException("Unknown catalog processing exception", e);
+        }
     }
 }

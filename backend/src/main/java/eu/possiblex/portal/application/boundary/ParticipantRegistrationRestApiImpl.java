@@ -4,14 +4,16 @@ import eu.possiblex.portal.application.control.ParticipantRegistrationRestApiMap
 import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
+import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -41,10 +43,9 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
 
         log.info("Received participant registration request: {}", request);
         PxExtendedLegalParticipantCredentialSubject cs = participantRegistrationRestApiMapper.credentialSubjectsToExtendedLegalParticipantCs(
-            request.getParticipantCs(), request.getRegistrationNumberCs());
-        ParticipantMetadataBE be = participantRegistrationRestApiMapper.requestToParticipantMetadata(request);
+            request);
 
-        participantRegistrationService.registerParticipant(cs, be);
+        participantRegistrationService.registerParticipant(cs);
     }
 
     /**
@@ -78,7 +79,11 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
     public void acceptRegistrationRequest(@PathVariable String id) {
 
         log.info("Received request to accept participant: {}", id);
-        participantRegistrationService.acceptRegistrationRequest(id);
+        try {
+            participantRegistrationService.acceptRegistrationRequest(id);
+        } catch (ParticipantComplianceException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
     }
 
     /**

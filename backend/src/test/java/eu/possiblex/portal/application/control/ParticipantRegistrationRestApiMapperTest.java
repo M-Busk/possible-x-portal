@@ -1,8 +1,10 @@
 package eu.possiblex.portal.application.control;
 
+import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
+import eu.possiblex.portal.application.entity.credentials.px.participants.PxParticipantExtensionCredentialSubject;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -15,7 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ContextConfiguration(classes = { ParticipantRegistrationRestApiMapperTest.TestConfig.class, ParticipantRegistrationRestApiMapper.class })
+@ContextConfiguration(classes = { ParticipantRegistrationRestApiMapperTest.TestConfig.class,
+    ParticipantRegistrationRestApiMapper.class })
 class ParticipantRegistrationRestApiMapperTest {
 
     private final String participantId = "1234";
@@ -49,10 +52,14 @@ class ParticipantRegistrationRestApiMapperTest {
         // given
         GxLegalParticipantCredentialSubject participant = getGxLegalParticipantCredentialSubjectExample();
         GxLegalRegistrationNumberCredentialSubject registrationNumber = getGxLegalRegistrationNumberCredentialSubjectExample();
+        PxParticipantExtensionCredentialSubject extensionCs = getPxParticipantExtensionCredentialSubjectExample();
+
+        CreateRegistrationRequestTO request = CreateRegistrationRequestTO.builder().participantCs(participant)
+            .registrationNumberCs(registrationNumber).participantExtensionCs(extensionCs).build();
 
         // when
         PxExtendedLegalParticipantCredentialSubject participantCs = participantRegistrationRestApiMapper.credentialSubjectsToExtendedLegalParticipantCs(
-            participant, registrationNumber);
+            request);
 
         // then
         assertEquals(participantName, participantCs.getName());
@@ -85,6 +92,13 @@ class ParticipantRegistrationRestApiMapperTest {
         registrationNumber.setVatID(participantRegNumVatID);
         registrationNumber.setLeiCode(participantRegNumLeiCode);
         return registrationNumber;
+    }
+
+    private PxParticipantExtensionCredentialSubject getPxParticipantExtensionCredentialSubjectExample() {
+
+        PxParticipantExtensionCredentialSubject cs = new PxParticipantExtensionCredentialSubject();
+        cs.setMailAddress("example@example.com");
+        return cs;
     }
 
     private GxLegalParticipantCredentialSubject getGxLegalParticipantCredentialSubjectExample() {

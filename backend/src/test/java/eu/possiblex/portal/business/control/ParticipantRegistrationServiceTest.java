@@ -1,12 +1,12 @@
 package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
-import eu.possiblex.portal.business.entity.ParticipantMetadataBE;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
+import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOFake;
@@ -41,15 +41,17 @@ class ParticipantRegistrationServiceTest {
     private DidWebServiceApiClient didWebServiceApiClient;
 
     @Autowired
+    private FhCatalogClient fhCatalogClient;
+
+    @Autowired
     private ParticipantRegistrationService participantRegistrationService;
 
     @Test
     void registerParticipant() {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
-        participantRegistrationService.registerParticipant(participant, metadata);
-        verify(participantRegistrationRequestDao).saveParticipantRegistrationRequest(any(), any());
+        participantRegistrationService.registerParticipant(participant);
+        verify(participantRegistrationRequestDao).saveParticipantRegistrationRequest(any());
     }
 
     @Test
@@ -72,20 +74,22 @@ class ParticipantRegistrationServiceTest {
     }
 
     @Test
-    void acceptRegistrationRequest() {
+    void acceptRegistrationRequest() throws ParticipantComplianceException {
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
-        ParticipantMetadataBE metadata = getParticipantMetadata();
-        participantRegistrationService.registerParticipant(participant, metadata);
+        participantRegistrationService.registerParticipant(participant);
 
         ArgumentCaptor<OmejdnConnectorCertificateBE> certificateCaptor = ArgumentCaptor.forClass(
             OmejdnConnectorCertificateBE.class);
         participantRegistrationService.acceptRegistrationRequest(participant.getName());
         verify(participantRegistrationRequestDao).acceptRegistrationRequest(participant.getName());
         verify(participantRegistrationRequestDao).completeRegistrationRequest(participant.getName());
-        verify(participantRegistrationRequestDao).storeRegistrationRequestDaps(any(String.class), certificateCaptor.capture());
+        verify(participantRegistrationRequestDao).storeRegistrationRequestDaps(any(String.class),
+            certificateCaptor.capture());
         verify(didWebServiceApiClient).generateDidWeb(new ParticipantDidCreateRequestBE(participant.getName()));
-        verify(omejdnConnectorApiClient).addConnector(new OmejdnConnectorCertificateRequest(DidWebServiceApiClientFake.EXAMPLE_DID));
+        verify(fhCatalogClient).addParticipantToCatalog(any());
+        verify(omejdnConnectorApiClient).addConnector(
+            new OmejdnConnectorCertificateRequest(DidWebServiceApiClientFake.EXAMPLE_DID));
 
         OmejdnConnectorCertificateBE certificate = certificateCaptor.getValue();
         assertEquals(DidWebServiceApiClientFake.EXAMPLE_DID, certificate.getClientName());
@@ -114,12 +118,8 @@ class ParticipantRegistrationServiceTest {
 
         return PxExtendedLegalParticipantCredentialSubject.builder().id("validId")
             .legalRegistrationNumber(be.getLegalRegistrationNumber()).headquarterAddress(be.getHeadquarterAddress())
-            .legalAddress(be.getLegalAddress()).name(be.getName()).description(be.getDescription()).build();
-    }
-
-    private ParticipantMetadataBE getParticipantMetadata() {
-
-        return ParticipantMetadataBE.builder().emailAddress("example@address.com").build();
+            .legalAddress(be.getLegalAddress()).name(be.getName()).description(be.getDescription())
+            .mailAddress("example@address.com").build();
     }
 
     // Test-specific configuration to provide mocks
@@ -147,6 +147,12 @@ class ParticipantRegistrationServiceTest {
         public DidWebServiceApiClient didWebServiceApiClient() {
 
             return Mockito.spy(new DidWebServiceApiClientFake());
+        }
+
+        @Bean
+        public FhCatalogClient fhCatalogClient() {
+
+            return Mockito.spy(new FhCatalogClientFake());
         }
 
         @Bean

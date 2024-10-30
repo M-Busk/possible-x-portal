@@ -41,7 +41,7 @@ class ParticipantRegistrationRestApiTest {
         this.mockMvc.perform(post("/registration/request").content(RestApiHelper.asJsonString(to))
             .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 
-        verify(participantRegistrationService).registerParticipant(any(), any());
+        verify(participantRegistrationService).registerParticipant(any());
     }
 
     @Test

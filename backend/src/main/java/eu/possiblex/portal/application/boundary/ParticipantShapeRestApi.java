@@ -20,4 +20,12 @@ public interface ParticipantShapeRestApi {
      */
     @GetMapping("/gx/legalregistrationnumber")
     String getGxLegalRegistrationNumberShape();
+
+    /**
+     * GET request for retrieving the Possible-X participant extension shape.
+     *
+     * @return catalog shape
+     */
+    @GetMapping("/px/participantextension")
+    String getPxParticipantExtension();
 }
