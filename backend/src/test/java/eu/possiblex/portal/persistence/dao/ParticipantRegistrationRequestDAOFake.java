@@ -12,6 +12,8 @@ import java.util.List;
 
 public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistrationRequestDAO {
 
+    public static final String EXISTING_NAME = "existingName";
+
     public static ParticipantRegistrationRequestBE getExampleParticipant() {
 
         GxVcard vcard = new GxVcard();
@@ -39,7 +41,7 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     }
 
     @Override
-    public List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests() {
+    public List<ParticipantRegistrationRequestBE> getAllRegistrationRequests() {
 
         return List.of(getExampleParticipant());
     }
@@ -88,5 +90,14 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     @Override
     public void storeRegistrationRequestDid(String id, ParticipantDidBE to) {
         // request worked
+    }
+
+    @Override
+    public ParticipantRegistrationRequestBE getRegistrationRequestByName(String name) {
+        if (name.equals(EXISTING_NAME)) {
+            return getExampleParticipant();
+        } else {
+            return null;
+        }
     }
 }

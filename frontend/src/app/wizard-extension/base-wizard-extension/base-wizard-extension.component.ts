@@ -99,6 +99,10 @@ export class BaseWizardExtensionComponent {
     return this.wizard?.form.invalid;
   }
 
+  public isWizardShapePresent(): boolean {
+    return !!this.wizard?.shape;
+  }
+
   public setCredentialId(id: string): void {
     let didField = this.wizard.form.get("user_prefix");
     didField.patchValue(id);

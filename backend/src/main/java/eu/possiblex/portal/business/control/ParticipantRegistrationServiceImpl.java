@@ -9,6 +9,7 @@ import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateReques
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
+import eu.possiblex.portal.business.entity.exception.RegistrationRequestException;
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,10 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing participant registration: {}", cs);
 
+        if (participantRegistrationRequestDAO.getRegistrationRequestByName(cs.getName()) != null) {
+            throw new RegistrationRequestException("A registration request has already been made under this organization name: " + cs.getName());
+        }
+
         participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs);
     }
 
@@ -73,7 +78,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing retrieval of all participant registration requests");
 
-        return participantRegistrationRequestDAO.getAllParticipantRegistrationRequests().stream()
+        return participantRegistrationRequestDAO.getAllRegistrationRequests().stream()
             .map(participantRegistrationServiceMapper::participantRegistrationRequestBEToRegistrationRequestEntryTO)
             .toList();
     }

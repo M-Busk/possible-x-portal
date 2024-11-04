@@ -7,6 +7,7 @@ import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
+import eu.possiblex.portal.business.entity.exception.RegistrationRequestException;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOFake;
@@ -22,10 +23,9 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ContextConfiguration(classes = { ParticipantRegistrationServiceTest.TestConfig.class,
@@ -49,22 +49,56 @@ class ParticipantRegistrationServiceTest {
     @Test
     void registerParticipant() {
 
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
+
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
         participantRegistrationService.registerParticipant(participant);
         verify(participantRegistrationRequestDao).saveParticipantRegistrationRequest(any());
     }
 
     @Test
+    void registerParticipantAlreadyExists() {
+
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
+
+        PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
+        participant.setName(ParticipantRegistrationRequestDAOFake.EXISTING_NAME);
+
+        assertThrows(RegistrationRequestException.class, () -> {
+            participantRegistrationService.registerParticipant(participant);
+        });
+
+        verify(participantRegistrationRequestDao).getRegistrationRequestByName(ParticipantRegistrationRequestDAOFake.EXISTING_NAME);
+        verify(participantRegistrationRequestDao, times(0)).saveParticipantRegistrationRequest(any());
+    }
+
+    @Test
     void getAllParticipantRegistrationRequests() {
+
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
 
         List<RegistrationRequestEntryTO> list = participantRegistrationService.getAllParticipantRegistrationRequests();
         assertEquals(1, list.size());
 
-        verify(participantRegistrationRequestDao).getAllParticipantRegistrationRequests();
+        verify(participantRegistrationRequestDao).getAllRegistrationRequests();
     }
 
     @Test
     void getParticipantRegistrationRequestByDid() {
+
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
 
         RegistrationRequestEntryTO entry = participantRegistrationService.getParticipantRegistrationRequestByDid(
             "validDid");
@@ -75,6 +109,11 @@ class ParticipantRegistrationServiceTest {
 
     @Test
     void acceptRegistrationRequest() throws ParticipantComplianceException {
+
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
 
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
         participantRegistrationService.registerParticipant(participant);
@@ -101,12 +140,22 @@ class ParticipantRegistrationServiceTest {
     @Test
     void rejectRegistrationRequest() {
 
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
+
         participantRegistrationService.rejectRegistrationRequest("validId");
         verify(participantRegistrationRequestDao).rejectRegistrationRequest("validId");
     }
 
     @Test
     void deleteRegistrationRequest() {
+
+        reset(participantRegistrationRequestDao);
+        reset(omejdnConnectorApiClient);
+        reset(didWebServiceApiClient);
+        reset(fhCatalogClient);
 
         participantRegistrationService.deleteRegistrationRequest("validId");
         verify(participantRegistrationRequestDao).deleteRegistrationRequest("validId");
