@@ -1,27 +1,42 @@
-<div class="headerWrapper">
+<div class="header-wrapper">
   <c-navbar class="header border-0" expand="lg">
     <c-container fluid>
       <a [routerLink]="['/']" cNavbarBrand class="logo">
         <img [alt]="'POSSIBLE-X Logo'" [height]="36" [src]="'assets/images/brand/possible_blue.svg'" [width]="142"/>
       </a>
+      <button [cNavbarToggler]="collapseRef"></button>
+      <div #collapseRef="cCollapse" cCollapse navbar>
+        <c-navbar-nav class="navbar-nav ms-auto">
+          <c-nav-item>
+            <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
+          </c-nav-item>
+          <c-nav-item>
+            <a [href]="environment.possible_website_group_url" cNavLink target="_blank">Verbund</a>
+          </c-nav-item>
+          <c-nav-item>
+            <a [href]="environment.imprint_url" cNavLink target="_blank">Impressum</a>
+          </c-nav-item>
+        </c-navbar-nav>
+      </div>
     </c-container>
   </c-navbar>
 </div>
-<div class="page-container" [ngClass]="{'admin-page-container': isAdminPage}">
-  <c-container class="content">
+<div class="page-container" [ngClass]="{'admin-page-container': isAdminPage, 'main-page-container': isMainPage}">
+  <c-container [fluid]="isMainPage" [ngClass]="{'main-page-content': isMainPage}">
     <router-outlet></router-outlet>
   </c-container>
 </div>
-<div class="footerWrapper" [ngClass]="{'admin-footerWrapper': isAdminPage}">
-  <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423"
-       height="238"/>
-  <ng-template #defaultImage>
-    <img alt="" src="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423"/>
-  </ng-template>
+<div class="footer-wrapper" [ngClass]="{'admin-footer-wrapper': isAdminPage, 'main-footer-wrapper': isMainPage}">
+  <ng-container *ngIf="!isMainPage">
+    <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423" height="238"/>
+    <ng-template #defaultImage>
+      <img alt="" ngSrc="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423" height="238"/>
+    </ng-template>
+  </ng-container>
   <div>
     <c-footer class="footer border-0">
       <div class="logo">
-        <div class="circleVisual"></div>
+        <div class="circle-visual"></div>
         <img alt="POSSIBLE-X Logo" height="49" src="assets/images/brand/possible_white.svg" width="190"/>
       </div>
       <div>
@@ -35,8 +50,8 @@
         <div class="mb-2 text-2xl">Information</div>
         <div class="text-sm">
           <ul>
-            <li><a [routerLink]="['/']">POSSIBLE Project</a></li>
-            <li><a [routerLink]="['/']">Imprint - About Us</a></li>
+            <li><a [href]="environment.possible_website_url" target="_blank">POSSIBLE Project</a></li>
+            <li><a [href]="environment.imprint_url" target="_blank">Imprint - About Us</a></li>
             <li><a [routerLink]="['/']">Privacy Notice</a></li>
           </ul>
         </div>

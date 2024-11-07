@@ -18,6 +18,7 @@ import {IconModule} from '@coreui/icons-angular';
 
 import {HomeRoutingModule} from './home-routing.module';
 import {HomeComponent} from './home.component';
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import {HomeComponent} from './home.component';
     ButtonGroupModule,
     AvatarModule,
     TableModule,
+    RouterModule
   ],
   declarations: [HomeComponent],
 })

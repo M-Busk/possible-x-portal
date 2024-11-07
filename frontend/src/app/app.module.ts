@@ -35,6 +35,7 @@ import {
 } from '@coreui/angular';
 import {DefaultLayoutComponent} from './containers';
 import {NgOptimizedImage} from "@angular/common";
+import {HomeModule} from "./views/home/home.module";
 
 @NgModule({
   declarations: [

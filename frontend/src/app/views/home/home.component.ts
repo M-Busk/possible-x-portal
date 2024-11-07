@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {environment} from "../../../environments/environment";
 
 @Component({
   templateUrl: './home.component.html',
@@ -6,4 +7,5 @@ import {Component} from '@angular/core';
 })
 export class HomeComponent {
 
+  protected readonly environment = environment;
 }

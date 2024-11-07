@@ -4,10 +4,20 @@
 }
 
 .admin-page-container {
-  @apply flex flex-col min-h-screen bg-brand-50;
-  /* Full height with Flexbox */
+  @apply min-h-screen bg-brand-50;
 }
 
+.main-page-container {
+  min-height: calc(100vh - 5rem);
+}
+
+.main-page-content {
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
 .content {
   @apply flex-1 mx-auto h-auto lg:max-w-screen-xl;

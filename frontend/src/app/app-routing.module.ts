@@ -2,13 +2,9 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {DefaultLayoutComponent} from './containers';
+import {HomeComponent} from "./views/home/home.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'participant/registration',
-    pathMatch: 'full'
-  },
   {
     path: '',
     component: DefaultLayoutComponent,
@@ -16,6 +12,10 @@ const routes: Routes = [
       title: 'Home'
     },
     children: [
+      {
+        path: '',
+        component: HomeComponent
+      },
       {
         path: 'participant',
         loadChildren: () =>
@@ -27,6 +27,10 @@ const routes: Routes = [
           import('./views/administration/administration.module').then((m) => m.AdministrationModule)
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
 
