@@ -25,4 +25,7 @@ import lombok.Data;
 public class OmejdnConnectorCertificateRequest {
     @JsonProperty("client_name")
     private String clientName;
+
+    @JsonProperty("did")
+    private String did;
 }

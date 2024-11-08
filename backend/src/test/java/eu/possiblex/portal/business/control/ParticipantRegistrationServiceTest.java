@@ -128,7 +128,8 @@ class ParticipantRegistrationServiceTest {
         verify(didWebServiceApiClient).generateDidWeb(new ParticipantDidCreateRequestBE(participant.getName()));
         verify(fhCatalogClient).addParticipantToCatalog(any());
         verify(omejdnConnectorApiClient).addConnector(
-            new OmejdnConnectorCertificateRequest(DidWebServiceApiClientFake.EXAMPLE_DID));
+            new OmejdnConnectorCertificateRequest(DidWebServiceApiClientFake.EXAMPLE_DID,
+                DidWebServiceApiClientFake.EXAMPLE_DID));
 
         OmejdnConnectorCertificateBE certificate = certificateCaptor.getValue();
         assertEquals(DidWebServiceApiClientFake.EXAMPLE_DID, certificate.getClientName());
