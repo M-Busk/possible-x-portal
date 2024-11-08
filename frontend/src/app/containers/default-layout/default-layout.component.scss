@@ -5,6 +5,7 @@
 .header {
   @apply flex items-end justify-between;
   @apply container max-w-screen-4xl px-8 py-4 xl:px-20;
+  @apply pr-4;
 
   .logo {
     @apply flex flex-shrink-0 items-baseline;
