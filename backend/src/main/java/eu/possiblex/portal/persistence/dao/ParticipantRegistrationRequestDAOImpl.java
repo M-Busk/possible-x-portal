@@ -54,7 +54,7 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
      * @return list of participant registration requests
      */
     @Override
-    public List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests() {
+    public List<ParticipantRegistrationRequestBE> getAllRegistrationRequests() {
 
         log.info("Getting all participant registration requests");
         return participantRegistrationRequestRepository.findAll().stream()
@@ -212,6 +212,16 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
         } else {
             log.error("(Set Did) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
+        }
+    }
+
+    @Override
+    public ParticipantRegistrationRequestBE getRegistrationRequestByName(String name) {
+        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(name);
+        if (entity != null) {
+            return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(entity);
+        } else {
+            return null;
         }
     }
 }

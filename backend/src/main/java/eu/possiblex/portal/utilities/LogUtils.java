@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 /*
  * Some util functions for logging.
- */ public class LogUtils {
+ */
+public class LogUtils {
 
     /**
      * Serialize an object to JSON.

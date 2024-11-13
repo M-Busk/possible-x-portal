@@ -1,11 +1,31 @@
-<div #ref>
-  <img [src]="'assets/images/brand/possible_blue.svg'" alt="POSSIBLE Logo" cCardImg="top" cImg height="200"/>
-  <br/><br/><br/><br/>
+<div class="grid-container">
+  <div class="background-container">
+    <div class="text-overlay">
+      <div class="image-container">
+        <img src="assets/images/brand/possible_white.svg" alt="POSSIBLE-X Logo" width="300" id="possible-logo">
+        <label for="possible-logo" class="text-2.5xl">sovereign data sharing</label>
+      </div>
+      <br/><br/>
+      <span class="text-4xl">Welcome to the POSSIBLE-X ecosystem</span>
+      <br/>
+      Discover a new way of sharing data in a secure and sovereign way. Our innovative ecosystem enables organizations
+      and their employees to effortlessly tap into data spaces from different areas while ensuring self-determined handling of their data.
+      <br/><br/>
+      Take advantage of data space technology and accelerate the development of new solutions and services.
+      <br/><br/><br/><br/>
+      <a [href]="environment.possible_website_url" class="custom-button-small" target="_blank">
+        Find out more
+      </a>
+    </div>
+  </div>
+  <div class="text-2xl link-container">
+    <a [href]="environment.catalog_url" class="custom-button" target="_blank">
+      Search in POSSIBLE-X Catalogue
+    </a>
 
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-  magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-  gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-  elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos
-  et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
-  sit amet.
+    <a [routerLink]="['/participant/registration']" class="custom-button">
+      Register Organization
+    </a>
+  </div>
 </div>
+

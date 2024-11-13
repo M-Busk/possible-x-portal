@@ -94,7 +94,7 @@ export class ParticipantWizardExtensionComponent {
       console.log(response);
       this.participantRegistrationStatusMessage.showSuccessMessage();
     }).catch((e: HttpErrorResponse) => {
-      this.participantRegistrationStatusMessage.showErrorMessage(e.error.detail);
+      this.participantRegistrationStatusMessage.showErrorMessage(e.error.detail|| e.error || e.message);
     }).catch(_ => {
       this.participantRegistrationStatusMessage.showErrorMessage("Unbekannter Fehler");
     });
@@ -112,7 +112,21 @@ export class ParticipantWizardExtensionComponent {
     let registrationNumberWizardInvalid = this.gxRegistrationNumberWizard?.isWizardFormInvalid();
     let participantExtensionWizardInvalid = this.pxParticipantExtensionWizard?.isWizardFormInvalid();
 
-    return participantWizardInvalid || registrationNumberWizardInvalid || participantExtensionWizardInvalid;
+    return participantWizardInvalid || registrationNumberWizardInvalid || participantExtensionWizardInvalid || this.isRegistrationNumberInvalid();
+  }
+
+  protected isRegistrationNumberInvalid(): boolean {
+    if (this.gxRegistrationNumberWizard?.isWizardShapePresent()) {
+      let gxRegistrationNumberJson: IGxLegalRegistrationNumberCredentialSubject = this.gxRegistrationNumberWizard.generateJsonCs();
+
+      let leiCode = gxRegistrationNumberJson["gx:leiCode"]?.["@value"];
+      let vatID = gxRegistrationNumberJson["gx:vatID"]?.["@value"];
+      let eori = gxRegistrationNumberJson["gx:EORI"]?.["@value"];
+
+      return !this.isFieldFilled(leiCode) && !this.isFieldFilled(vatID) && !this.isFieldFilled(eori);
+    } else {
+      return false;
+    }
   }
 
   protected adaptGxShape(shapeSource: any, shapeName: string, excludedFields: string[]) {
@@ -140,6 +154,13 @@ export class ParticipantWizardExtensionComponent {
     if (isGxLegalRegistrationNumberCs(cs)) {
       this.gxRegistrationNumberWizard.prefillFields(cs, []);
     }
+  }
+
+  private isFieldFilled(str: string) {
+    if (!str || str.trim().length === 0) {
+      return false;
+    }
+    return true;
   }
 
 }

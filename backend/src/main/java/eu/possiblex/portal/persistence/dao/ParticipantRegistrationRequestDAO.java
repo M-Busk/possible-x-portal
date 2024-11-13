@@ -51,7 +51,7 @@ public interface ParticipantRegistrationRequestDAO {
      *
      * @return list of registration requests
      */
-    List<ParticipantRegistrationRequestBE> getAllParticipantRegistrationRequests();
+    List<ParticipantRegistrationRequestBE> getAllRegistrationRequests();
 
     /**
      * Get a registration request by DID.
@@ -64,4 +64,6 @@ public interface ParticipantRegistrationRequestDAO {
     void storeRegistrationRequestVpLink(String id, String vpLink);
 
     void storeRegistrationRequestDaps(String id, OmejdnConnectorCertificateBE certificate);
+
+    ParticipantRegistrationRequestBE getRegistrationRequestByName(String name);
 }

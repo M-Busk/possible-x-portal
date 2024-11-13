@@ -1,26 +1,32 @@
-.headerWrapper {
+.header-wrapper {
   @apply bg-white;
 }
 
 .header {
   @apply flex items-end justify-between;
   @apply container max-w-screen-4xl px-8 py-4 xl:px-20;
+  @apply pr-4;
 
   .logo {
     @apply flex flex-shrink-0 items-baseline;
   }
 }
 
-.footerWrapper {
+.footer-wrapper {
   @apply overflow-hidden bg-brand-700;
   @apply w-full h-[26rem];
   @apply divide-y divide-brand-100;
 }
 
-.admin-footerWrapper {
+.admin-footer-wrapper {
   @apply overflow-hidden bg-brand-50;
   @apply w-full h-[26rem];
   @apply divide-y divide-brand-100;
+}
+
+.main-footer-wrapper {
+  @apply border-t border-brand-100;
+  height: calc(26rem - 238px);
 }
 
 .footer {
@@ -28,7 +34,7 @@
   @apply mx-auto max-w-screen-4xl px-8 py-10 xl:px-20;
   @apply bg-brand-700 text-white;
 
-  .circleVisual {
+  .circle-visual {
     @apply absolute;
     @apply rounded-full border border-white;
     @apply h-[435px] w-[436px];

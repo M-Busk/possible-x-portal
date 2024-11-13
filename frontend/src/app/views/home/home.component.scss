@@ -1,0 +1,92 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 4fr 3fr;
+  height: 100vh;
+}
+
+.custom-button {
+  @apply text-brand-50 border-2 border-brand-50 p-2;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    @apply bg-brand-600;
+  }
+}
+
+.custom-button-small {
+  @apply text-White border-2 border-White p-2;
+  width: 100%;
+  max-width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    @apply bg-brand-200 bg-opacity-60;
+  }
+}
+
+.link-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 50px;
+  @apply bg-brand-700;
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.image-container img {
+  margin-bottom: 10px;
+}
+
+.background-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../../../assets/images/stock/possible_hero.jpg');
+    background-size: cover;
+    background-position: 60% center;
+    opacity: 0.5;
+    z-index: 0;
+  }
+}
+
+.text-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  @apply text-White;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  margin: auto;
+  max-width: 500px;
+}

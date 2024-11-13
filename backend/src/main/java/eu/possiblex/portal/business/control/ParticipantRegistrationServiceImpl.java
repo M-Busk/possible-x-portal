@@ -9,6 +9,7 @@ import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateReques
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
+import eu.possiblex.portal.business.entity.exception.RegistrationRequestException;
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,10 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing participant registration: {}", cs);
 
+        if (participantRegistrationRequestDAO.getRegistrationRequestByName(cs.getName()) != null) {
+            throw new RegistrationRequestException("A registration request has already been made under this organization name: " + cs.getName());
+        }
+
         participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs);
     }
 
@@ -73,7 +78,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing retrieval of all participant registration requests");
 
-        return participantRegistrationRequestDAO.getAllParticipantRegistrationRequests().stream()
+        return participantRegistrationRequestDAO.getAllRegistrationRequests().stream()
             .map(participantRegistrationServiceMapper::participantRegistrationRequestBEToRegistrationRequestEntryTO)
             .toList();
     }
@@ -118,7 +123,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
 
         // generate consumer/provider component identity
-        OmejdnConnectorCertificateBE certificate = requestDapsCertificate(didWeb.getDid());
+        // currently we set both the (daps internal) id and the attested did to the same value
+        OmejdnConnectorCertificateBE certificate = requestDapsCertificate(didWeb.getDid(), didWeb.getDid());
         log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
         participantRegistrationRequestDAO.storeRegistrationRequestDaps(id, certificate);
 
@@ -151,9 +157,9 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         participantRegistrationRequestDAO.deleteRegistrationRequest(id);
     }
 
-    private OmejdnConnectorCertificateBE requestDapsCertificate(String clientName) {
+    private OmejdnConnectorCertificateBE requestDapsCertificate(String clientName, String did) {
 
-        return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName));
+        return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName, did));
     }
 
     private ParticipantDidBE generateDidWeb(String id) {
