@@ -7,9 +7,9 @@
                                                         class="required" [matTooltip]="'Mandatory Field'">*</span><span
           class="field-key" [matTooltip]="'Name of the Gaia-X Attribute'">&nbsp;&nbsp;{{ input.key }}</span>
         </label>
-        <input *ngIf="input.name != 'Description'" [formControlName]="input.id" [type]="input.datatype" class="form-control"
+        <input *ngIf="input.name != 'Organization Description'" [formControlName]="input.id" [type]="input.datatype" class="form-control"
                placeholder="{{input.example}}">
-        <textarea *ngIf="input.name == 'Description'" [formControlName]="input.id" class="form-control" rows="4" placeholder="{{input.example}}"></textarea>
+        <textarea *ngIf="input.name == 'Organization Description'" [formControlName]="input.id" class="form-control" rows="4" placeholder="{{input.example}}"></textarea>
         <div class="text-brand-200" cFormText>
           {{ input.description[this.translate.currentLang] }}
         </div>
