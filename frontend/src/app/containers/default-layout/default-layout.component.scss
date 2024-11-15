@@ -10,6 +10,10 @@
   .logo {
     @apply flex flex-shrink-0 items-baseline;
   }
+
+  .navbar-nav{
+    @apply flex flex-row ml-auto;
+  }
 }
 
 .footer-wrapper {
@@ -47,5 +51,13 @@
 
   a {
     @apply no-underline text-white;
+  }
+}
+
+@media (max-width: 1024px) {
+  /* Maintain padding on smaller screens */
+  .navbar-nav c-nav-item a[cNavLink] {
+    padding-left: 0.5rem; /* Ensure padding remains */
+    padding-right: 0.5rem; /* Ensure padding remains */
   }
 }
