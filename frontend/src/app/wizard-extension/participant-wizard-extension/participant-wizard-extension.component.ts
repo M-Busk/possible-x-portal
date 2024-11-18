@@ -88,9 +88,11 @@ export class ParticipantWizardExtensionComponent {
       participantExtensionCs: pxParticipantExtensionJson
     }
 
-    console.log(registerParticipantTo);
+    const trimmedRegisterParticipantTo = this.trimStringsInDataStructure(registerParticipantTo);
 
-    this.apiService.registerParticipant(registerParticipantTo).then(response => {
+    console.log(trimmedRegisterParticipantTo);
+
+    this.apiService.registerParticipant(trimmedRegisterParticipantTo).then(response => {
       console.log(response);
       this.participantRegistrationStatusMessage.showSuccessMessage();
     }).catch((e: HttpErrorResponse) => {
@@ -161,6 +163,20 @@ export class ParticipantWizardExtensionComponent {
       return false;
     }
     return true;
+  }
+
+  trimStringsInDataStructure(obj: any): any {
+    if (typeof obj === 'string') {
+      return obj.trim();
+    } else if (Array.isArray(obj)) {
+      return obj.map(this.trimStringsInDataStructure);
+    } else if (typeof obj === 'object' && obj !== null) {
+      return Object.keys(obj).reduce((acc, key) => {
+        acc[key] = this.trimStringsInDataStructure(obj[key]);
+        return acc;
+      }, {} as any);
+    }
+    return obj;
   }
 
 }

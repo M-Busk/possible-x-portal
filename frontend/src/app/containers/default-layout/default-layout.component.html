@@ -19,7 +19,7 @@
   </c-navbar>
 </div>
 <div class="page-container" [ngClass]="{'admin-page-container': isAdminPage, 'main-page-container': isMainPage}">
-  <c-container [fluid]="isMainPage" [ngClass]="{'main-page-content': isMainPage}">
+  <c-container [fluid]="isMainPage" [ngClass]="{'main-page-content': isMainPage, 'content': !isMainPage}">
     <router-outlet></router-outlet>
   </c-container>
 </div>
