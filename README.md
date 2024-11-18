@@ -2,12 +2,7 @@
 
 The POSSIBLE-X Portal is the centralized landing page for interacting with the POSSIBLE-X Dataspace.
 
-It consists of three different parts:
-* The main page which is the landing page and links to other pages.
-* The registration page for registering new participants.
-* An administrative page to manage registration requests.
-
-For registration, it allows new users to send a registration request and upon administrative approval, receive a Gaia-X
+Currently, it allows new users to send a registration request and upon administrative approval, receive a Gaia-X
 compliant participant credential and dataspace identity, which can be used for further functionalities in the dataspace.
 
 ## Repository structure

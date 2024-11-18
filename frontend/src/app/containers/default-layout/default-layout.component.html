@@ -2,16 +2,19 @@
   <c-navbar class="header border-0" expand="lg">
     <c-container fluid>
       <a [routerLink]="['/']" cNavbarBrand class="logo">
-        <img [alt]="'POSSIBLE-X Logo'" width="142" src="assets/images/brand/possible_blue.svg"/>
+        <img [alt]="'POSSIBLE-X Logo'" [height]="36" [src]="'assets/images/brand/possible_blue.svg'" [width]="142"/>
       </a>
-      <c-navbar-nav class="navbar-nav">
-        <c-nav-item>
-          <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
-        </c-nav-item>
-        <c-nav-item>
-          <a [href]="environment.possible_website_group_url" cNavLink target="_blank">Verbund</a>
-        </c-nav-item>
-      </c-navbar-nav>
+      <button [cNavbarToggler]="collapseRef"></button>
+      <div #collapseRef="cCollapse" cCollapse navbar>
+        <c-navbar-nav class="navbar-nav ms-auto">
+          <c-nav-item>
+            <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
+          </c-nav-item>
+          <c-nav-item>
+            <a [href]="environment.possible_website_group_url" cNavLink target="_blank">Verbund</a>
+          </c-nav-item>
+        </c-navbar-nav>
+      </div>
     </c-container>
   </c-navbar>
 </div>
