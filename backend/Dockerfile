@@ -1,6 +1,4 @@
 FROM gradle:8.9.0-jdk17 AS build
-ARG VERSION_NO="unknown"
-ENV VERSION_NO=$VERSION_NO
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build -PnpmEnv=dev --no-daemon
@@ -12,5 +10,6 @@ EXPOSE 8088
 RUN mkdir /app
 
 COPY --from=build /home/gradle/src/backend/build/libs/*.jar /app/backend.jar
-
+ARG VERSION_NO="unknown"
+ENV VERSION_NO=$VERSION_NO
 ENTRYPOINT ["java","-jar","/app/backend.jar"]
