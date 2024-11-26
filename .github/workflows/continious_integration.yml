@@ -53,6 +53,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VERSION_NO=${{ github.sha }}
       - name: 'Invoke Kubectl Provider'
         uses: actions-hub/kubectl@v1.31.0
         env:
