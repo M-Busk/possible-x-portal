@@ -1,0 +1,111 @@
+<c-accordion-item [visible]="false" #accordionItem="cAccordionItem">
+  <ng-template cTemplateId="accordionHeaderTemplate">
+    <button (click)="accordionItem.toggleItem()" [collapsed]="!accordionItem.visible" cAccordionButton
+            class="accordion-button bg-white w-full">
+      <span class="request-name">{{ request.name }}</span>
+
+      <div class="icon-text-container">
+        <ng-container *ngIf="isRegistrationRequestNew(request)">
+              <span class="new-text">
+                <img class="icon" ngSrc="assets/images/icons/new.svg" alt="New Icon" height="20" width="20"/>
+                New
+              </span>
+        </ng-container>
+        <ng-container *ngIf="isRegistrationRequestRejected(request)">
+              <span class="rejected-text">
+                <img class="icon" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20"
+                     width="20"/>
+                Rejected
+              </span>
+        </ng-container>
+        <ng-container *ngIf="isRegistrationRequestAccepted(request)">
+              <span class="accepted-text">
+                <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20"
+                     width="20"/>
+                Accepted
+              </span>
+        </ng-container>
+        <ng-container *ngIf="isRegistrationRequestCompleted(request)">
+              <span class="accepted-text">
+                <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Completed Icon" height="20"
+                     width="20"/>
+                Completed
+              </span>
+        </ng-container>
+      </div>
+
+      <div class="action-buttons-container">
+        <button class="custom-button" (click)="acceptRequest($event, request)" [disabled]="!isClickableAccept">
+          <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20" width="20"/>
+          Accept
+        </button>
+        <button class="custom-button" (click)="rejectRequest($event, request)" [disabled]="!isClickableReject">
+          <img class="icon" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20" width="20"/>
+          Reject
+        </button>
+        <button class="custom-button" (click)="deleteRequest($event, request)" [disabled]="!isClickableDelete">
+          <img class="icon" ngSrc="assets/images/icons/delete.svg" alt="Accepted Icon" height="20" width="20"/>
+          Delete
+        </button>
+      </div>
+    </button>
+  </ng-template>
+  <ng-template cTemplateId="accordionBodyTemplate">
+    <div class="accordion-body" style="white-space: pre-wrap;">
+      <p><span class="font-bold">Organization Name:</span> {{ request.name }}</p>
+      <br/>
+      <p><span class="font-bold">Organization Description:</span> {{ request.description || "-" }}</p>
+      <br/>
+      <p><span class="font-bold">E-Mail Address (for sending registration confirmation):</span> {{ request.emailAddress }}</p>
+      <br/>
+      <p><span class="font-bold">Verifiable Presentation Link:</span> {{ request.vpLink || "-" }}</p>
+      <br/>
+      <p><span class="font-bold">DID:</span> {{ request?.didData?.did || "-" }}</p>
+      <br/>
+      <p><span class="font-bold">DAPS:</span></p>
+      <ul class="pl-2">
+        <li><span class="font-bold">Client ID:</span> {{ request?.omejdnConnectorCertificate?.client_id || "-" }}</li>
+        <li><span class="font-bold">Client Name:</span> {{ request?.omejdnConnectorCertificate?.client_name || "-" }}</li>
+        <li><span class="font-bold">Password:</span> {{ request?.omejdnConnectorCertificate?.password || "-" }}</li>
+        <li><span class="font-bold">Scope:</span> {{ request?.omejdnConnectorCertificate?.scope || "-" }}</li>
+        <a *ngIf="request.omejdnConnectorCertificate" [download]="request.omejdnConnectorCertificate.client_name + '.pfx'" [href]="'data:application/octet-stream;base64,' + request.omejdnConnectorCertificate.keystore" >
+          <Button class="custom-button">Download Keystore</Button>
+        </a>
+      </ul>
+      <br/>
+      <p><span class="font-bold">Legal Registration Number:</span></p>
+      <ul class="pl-2">
+        <li><span class="font-bold">EORI:</span> {{ request.legalRegistrationNumber.eori || "-" }}</li>
+        <li><span class="font-bold">vatID:</span> {{ request.legalRegistrationNumber.vatID || "-" }}</li>
+        <li><span class="font-bold">leiCode:</span> {{ request.legalRegistrationNumber.leiCode || "-" }}</li>
+      </ul>
+      <br/>
+      <div class="flex space-x-8">
+        <div>
+          <p><span class="font-bold">Legal Address:</span></p>
+          <ul class="pl-2">
+            <li><span class="font-bold">Country Code:</span> {{ request.legalAddress.countryCode }}</li>
+            <li><span class="font-bold">Postal Code:</span> {{ request.legalAddress.postalCode || "-" }}</li>
+            <li><span class="font-bold">City:</span> {{ request.legalAddress.locality || "-" }}</li>
+            <li><span class="font-bold">Street:</span> {{ request.legalAddress.streetAddress || "-" }}</li>
+            <li><span
+              class="font-bold">Country Subdivision Code:</span> {{ request.legalAddress.countrySubdivisionCode }}
+            </li>
+          </ul>
+        </div>
+        <div>
+          <p><span class="font-bold">Headquarter Address:</span></p>
+          <ul class="pl-2">
+            <li><span class="font-bold">Country Code:</span> {{ request.headquarterAddress.countryCode }}</li>
+            <li><span class="font-bold">Postal Code:</span> {{ request.headquarterAddress.postalCode || "-" }}</li>
+            <li><span class="font-bold">City:</span> {{ request.headquarterAddress.locality || "-" }}</li>
+            <li><span class="font-bold">Street:</span> {{ request.headquarterAddress.streetAddress || "-" }}</li>
+            <li><span
+              class="font-bold">Country Subdivision Code:</span> {{ request.headquarterAddress.countrySubdivisionCode }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</c-accordion-item>
