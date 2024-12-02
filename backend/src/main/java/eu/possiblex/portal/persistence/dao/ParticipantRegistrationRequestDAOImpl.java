@@ -148,75 +148,39 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
      * @param id registration request id
      */
     @Transactional
-    public void completeRegistrationRequest(String id) {
+    @Override
+    public void completeRegistrationRequest(String id, ParticipantDidBE did, String vpLink,
+        OmejdnConnectorCertificateBE certificate) {
 
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
         if (entity != null) {
-            entity.setStatus(RequestStatus.COMPLETED);
             log.info("Completing participant registration request: {}", id);
-            participantRegistrationRequestRepository.save(entity);
+
+            // set did data
+            DidDataEntity didData = new DidDataEntity();
+            didData.setDid(did.getDid());
+            didData.setVerificationMethod(did.getVerificationMethod());
+            entity.setDidData(didData);
+
+            // set daps data
+            OmejdnConnectorCertificateEntity certificateEntity = participantRegistrationEntityMapper.omejdnConnectorCertificateBEToOmejdnConnectorCertificateEntity(
+                certificate);
+            entity.setOmejdnConnectorCertificate(certificateEntity);
+
+            // set vp link
+            entity.setVpLink(vpLink);
+
+            // complete request
+            entity.setStatus(RequestStatus.COMPLETED);
         } else {
             log.error("(Complete) Participant not found: {}", id);
             throw new RuntimeException("Participant not found: " + id);
         }
     }
 
-    @Transactional
-    @Override
-    public void storeRegistrationRequestVpLink(String id, String vpLink) {
-
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            entity.setVpLink(vpLink);
-            log.info("Storing the VP Link: {}", vpLink);
-        } else {
-            log.error("(Set VP Link) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
-        }
-    }
-
-    @Transactional
-    @Override
-    public void storeRegistrationRequestDaps(String id, OmejdnConnectorCertificateBE certificate) {
-
-        OmejdnConnectorCertificateEntity certificateEntity = participantRegistrationEntityMapper.omjednConnectorCertificateBEToOmejdnConnectorCertificateEntity(
-            certificate);
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            entity.setStatus(RequestStatus.COMPLETED);
-            entity.setOmejdnConnectorCertificate(certificateEntity);
-            log.info("Storing the OmejdnConnectorCertificate: {}", certificateEntity);
-        } else {
-            log.error("(Set Daps) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
-        }
-    }
-
-    /**
-     * Given an existing registration request, store the corresponding DID data.
-     *
-     * @param id registration request id
-     * @param to DID data to store
-     */
-    @Transactional
-    @Override
-    public void storeRegistrationRequestDid(String id, ParticipantDidBE to) {
-
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            DidDataEntity didData = new DidDataEntity();
-            didData.setDid(to.getDid());
-            didData.setVerificationMethod(to.getVerificationMethod());
-            entity.setDidData(didData);
-            log.info("Storing the DidDataEntity: {}", didData);
-        } else {
-            log.error("(Set Did) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
-        }
-    }
-
     @Override
     public ParticipantRegistrationRequestBE getRegistrationRequestByName(String name) {
+
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(name);
         if (entity != null) {
             return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(entity);

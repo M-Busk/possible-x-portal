@@ -8,7 +8,9 @@ import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
+import eu.possiblex.portal.business.entity.did.ParticipantDidUpdateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
+import eu.possiblex.portal.business.entity.exception.ParticipantNotFoundException;
 import eu.possiblex.portal.business.entity.exception.RegistrationRequestException;
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
@@ -36,12 +38,14 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
     private final String fhCatalogParticipantBaseUrl;
 
+    private final String dapsIdBaseUrl;
+
     public ParticipantRegistrationServiceImpl(
         @Autowired ParticipantRegistrationRequestDAO participantRegistrationRequestDAO,
         @Autowired ParticipantRegistrationServiceMapper participantRegistrationServiceMapper,
         @Autowired OmejdnConnectorApiClient omejdnConnectorApiClient,
         @Autowired DidWebServiceApiClient didWebServiceApiClient, @Autowired FhCatalogClient fhCatalogClient,
-        @Value("${fh.catalog.url}") String fhCatalogUrl) {
+        @Value("${fh.catalog.url}") String fhCatalogUrl, @Value("${daps-server.base-url}") String dapsServerBaseUrl) {
 
         this.participantRegistrationRequestDAO = participantRegistrationRequestDAO;
         this.participantRegistrationServiceMapper = participantRegistrationServiceMapper;
@@ -49,6 +53,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         this.didWebServiceApiClient = didWebServiceApiClient;
         this.fhCatalogClient = fhCatalogClient;
         this.fhCatalogParticipantBaseUrl = fhCatalogUrl + "/resources/legal-participant/";
+        this.dapsIdBaseUrl = dapsServerBaseUrl + "/api/v1/connectors/";
     }
 
     /**
@@ -62,7 +67,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         log.info("Processing participant registration: {}", cs);
 
         if (participantRegistrationRequestDAO.getRegistrationRequestByName(cs.getName()) != null) {
-            throw new RegistrationRequestException("A registration request has already been made under this organization name: " + cs.getName());
+            throw new RegistrationRequestException(
+                "A registration request has already been made under this organization name: " + cs.getName());
         }
 
         participantRegistrationRequestDAO.saveParticipantRegistrationRequest(cs);
@@ -108,28 +114,61 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
     private void completeRegistrationRequest(String id) throws ParticipantComplianceException {
 
+        // load registration request entity from db
+        ParticipantRegistrationRequestBE be = participantRegistrationRequestDAO.getRegistrationRequestByName(id);
+
         // generate organisation identity for participant
         ParticipantDidBE didWeb = generateDidWeb(id);
         log.info("Created did {} for participant: {}", didWeb, id);
-        participantRegistrationRequestDAO.storeRegistrationRequestDid(id, didWeb);
-
-        // retrieve full request from db (including did)
-        ParticipantRegistrationRequestBE be = participantRegistrationRequestDAO.getRegistrationRequestByDid(
-            didWeb.getDid());
 
         // build credential subject and enroll participant in catalog
-        String vpLink = enrollParticipantInCatalog(be);
+        FhCatalogIdResponse idResponse;
+        try {
+            idResponse = enrollParticipantInCatalog(be, didWeb.getDid());
+        } catch (ParticipantComplianceException e) {
+            // revert did if catalog won't work
+            deleteDidWeb(didWeb.getDid());
+            throw e;
+        }
+        String vpLink = fhCatalogParticipantBaseUrl + idResponse.getId();
         log.info("Received VP {} for participant: {}", vpLink, id);
-        participantRegistrationRequestDAO.storeRegistrationRequestVpLink(id, vpLink);
 
         // generate consumer/provider component identity
         // currently we set both the (daps internal) id and the attested did to the same value
-        OmejdnConnectorCertificateBE certificate = requestDapsCertificate(didWeb.getDid(), didWeb.getDid());
+        OmejdnConnectorCertificateBE certificate;
+        try {
+            certificate = requestDapsCertificate(didWeb.getDid(), didWeb.getDid());
+        } catch (RegistrationRequestException e) {
+            // revert catalog and did if daps won't work
+            deleteParticipantFromCatalog(idResponse.getId());
+            deleteDidWeb(didWeb.getDid());
+            throw e;
+        }
         log.info("Created DAPS digital identity {} for participant: {}", certificate.getClientId(), id);
-        participantRegistrationRequestDAO.storeRegistrationRequestDaps(id, certificate);
+
+        String dapsIdUrl = dapsIdBaseUrl + certificate.getClientId();
+        try {
+            updateDidWebWithAliases(didWeb.getDid(), List.of(dapsIdUrl));
+        } catch (RegistrationRequestException e) {
+            // revert all changes if something goes wrong
+            deleteDapsCertificate(certificate.getClientId());
+            deleteParticipantFromCatalog(idResponse.getId());
+            deleteDidWeb(didWeb.getDid());
+            throw e;
+        }
+        log.info("Updated did document {} with daps identity {}", didWeb.getDid(), dapsIdUrl);
 
         // set request to completed
-        participantRegistrationRequestDAO.completeRegistrationRequest(id);
+        try {
+            participantRegistrationRequestDAO.completeRegistrationRequest(id, didWeb, vpLink, certificate);
+        } catch (Exception e) {
+            // revert all changes if something goes wrong
+            deleteDapsCertificate(certificate.getClientId());
+            deleteParticipantFromCatalog(idResponse.getId());
+            deleteDidWeb(didWeb.getDid());
+            throw e;
+        }
+        log.info("Stored finalized registration request for participant: {}", id);
     }
 
     /**
@@ -159,36 +198,82 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
     private OmejdnConnectorCertificateBE requestDapsCertificate(String clientName, String did) {
 
-        return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName, did));
+        try {
+            return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName, did));
+        } catch (WebClientResponseException e) {
+            log.error("Failed to request DAPS certificate: {}", e.getResponseBodyAsString());
+            throw new RegistrationRequestException("Failed to request DAPS certificate", e);
+        }
+    }
+
+    private void deleteDapsCertificate(String clientId) {
+
+        try {
+            omejdnConnectorApiClient.deleteConnector(clientId);
+        } catch (WebClientResponseException e) {
+            log.error("Failed to delete DAPS certificate", e);
+        }
     }
 
     private ParticipantDidBE generateDidWeb(String id) {
 
-        ParticipantDidCreateRequestBE createRequestTo = new ParticipantDidCreateRequestBE();
-        createRequestTo.setSubject(id);
-        return didWebServiceApiClient.generateDidWeb(createRequestTo);
+        ParticipantDidCreateRequestBE createRequestBE = new ParticipantDidCreateRequestBE();
+        createRequestBE.setSubject(id);
+        try {
+            return didWebServiceApiClient.generateDidWeb(createRequestBE);
+        } catch (WebClientResponseException e) {
+            log.error("Failed to generate DID: {}", e.getResponseBodyAsString());
+            throw new RegistrationRequestException("Failed to generate DID", e);
+        }
     }
 
-    private String enrollParticipantInCatalog(ParticipantRegistrationRequestBE be)
+    private void updateDidWebWithAliases(String did, List<String> aliases) {
+
+        ParticipantDidUpdateRequestBE updateRequestBE = new ParticipantDidUpdateRequestBE(did, aliases);
+        try {
+            didWebServiceApiClient.updateDidWeb(updateRequestBE);
+        } catch (WebClientResponseException e) {
+            log.error("Failed to update DID: {}", e.getResponseBodyAsString());
+            throw new RegistrationRequestException("Failed to update DID document with DAPS ID", e);
+        }
+    }
+
+    private void deleteDidWeb(String id) {
+
+        try {
+            didWebServiceApiClient.deleteDidWeb(id);
+        } catch (WebClientResponseException e) {
+            log.error("Failed to delete DID: {}", e.getResponseBodyAsString());
+        }
+    }
+
+    private FhCatalogIdResponse enrollParticipantInCatalog(ParticipantRegistrationRequestBE be, String did)
         throws ParticipantComplianceException {
 
         PxExtendedLegalParticipantCredentialSubject cs = participantRegistrationServiceMapper.participantRegistrationRequestBEToCs(
             be);
-
-        // for local testing
-        //cs.setId("did:web:didwebservice.dev.possible-x.de:participant:0a527305-97fb-3ffa-81fc-117d9e71e3a9");
+        cs.setId(did);
 
         try {
             FhCatalogIdResponse idResponse = fhCatalogClient.addParticipantToCatalog(cs);
             log.info("Stored CS for participant {} in catalog: {}", idResponse, cs);
 
-            return fhCatalogParticipantBaseUrl + idResponse.getId();
+            return idResponse;
         } catch (WebClientResponseException.UnprocessableEntity e) {
             JsonNode error = e.getResponseBodyAs(JsonNode.class);
             if (error != null && error.get("error") != null) {
                 throw new ParticipantComplianceException(error.get("error").textValue(), e);
             }
             throw new ParticipantComplianceException("Unknown catalog processing exception", e);
+        }
+    }
+
+    private void deleteParticipantFromCatalog(String id) {
+
+        try {
+            fhCatalogClient.deleteParticipantFromCatalog(id);
+        } catch (WebClientResponseException | ParticipantNotFoundException e) {
+            log.error("Failed to delete participant from catalog", e);
         }
     }
 }

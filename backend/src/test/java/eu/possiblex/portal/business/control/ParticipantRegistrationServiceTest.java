@@ -74,7 +74,8 @@ class ParticipantRegistrationServiceTest {
             participantRegistrationService.registerParticipant(participant);
         });
 
-        verify(participantRegistrationRequestDao).getRegistrationRequestByName(ParticipantRegistrationRequestDAOFake.EXISTING_NAME);
+        verify(participantRegistrationRequestDao).getRegistrationRequestByName(
+            ParticipantRegistrationRequestDAOFake.EXISTING_NAME);
         verify(participantRegistrationRequestDao, times(0)).saveParticipantRegistrationRequest(any());
     }
 
@@ -120,16 +121,18 @@ class ParticipantRegistrationServiceTest {
 
         ArgumentCaptor<OmejdnConnectorCertificateBE> certificateCaptor = ArgumentCaptor.forClass(
             OmejdnConnectorCertificateBE.class);
-        participantRegistrationService.acceptRegistrationRequest(participant.getName());
-        verify(participantRegistrationRequestDao).acceptRegistrationRequest(participant.getName());
-        verify(participantRegistrationRequestDao).completeRegistrationRequest(participant.getName());
-        verify(participantRegistrationRequestDao).storeRegistrationRequestDaps(any(String.class),
-            certificateCaptor.capture());
-        verify(didWebServiceApiClient).generateDidWeb(new ParticipantDidCreateRequestBE(participant.getName()));
+        participantRegistrationService.acceptRegistrationRequest(ParticipantRegistrationRequestDAOFake.EXISTING_NAME);
+        verify(participantRegistrationRequestDao).acceptRegistrationRequest(
+            eq(ParticipantRegistrationRequestDAOFake.EXISTING_NAME));
+        verify(participantRegistrationRequestDao).completeRegistrationRequest(
+            eq(ParticipantRegistrationRequestDAOFake.EXISTING_NAME), any(), any(), certificateCaptor.capture());
+        verify(didWebServiceApiClient).generateDidWeb(
+            new ParticipantDidCreateRequestBE(ParticipantRegistrationRequestDAOFake.EXISTING_NAME));
         verify(fhCatalogClient).addParticipantToCatalog(any());
         verify(omejdnConnectorApiClient).addConnector(
             new OmejdnConnectorCertificateRequest(DidWebServiceApiClientFake.EXAMPLE_DID,
                 DidWebServiceApiClientFake.EXAMPLE_DID));
+        verify(didWebServiceApiClient).updateDidWeb(any());
 
         OmejdnConnectorCertificateBE certificate = certificateCaptor.getValue();
         assertEquals(DidWebServiceApiClientFake.EXAMPLE_DID, certificate.getClientName());

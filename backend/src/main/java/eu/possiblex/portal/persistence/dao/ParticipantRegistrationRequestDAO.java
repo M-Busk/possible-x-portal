@@ -36,15 +36,8 @@ public interface ParticipantRegistrationRequestDAO {
      */
     void deleteRegistrationRequest(String id);
 
-    void completeRegistrationRequest(String id);
-
-    /**
-     * Given the id of an existing registration request, store the corresponding DID data.
-     *
-     * @param id registration request id
-     * @param to DID data
-     */
-    void storeRegistrationRequestDid(String id, ParticipantDidBE to);
+    void completeRegistrationRequest(String id, ParticipantDidBE did, String vpLink,
+        OmejdnConnectorCertificateBE certificate);
 
     /**
      * Get a list of all registration requests.
@@ -60,10 +53,6 @@ public interface ParticipantRegistrationRequestDAO {
      * @return registration request
      */
     ParticipantRegistrationRequestBE getRegistrationRequestByDid(String did);
-
-    void storeRegistrationRequestVpLink(String id, String vpLink);
-
-    void storeRegistrationRequestDaps(String id, OmejdnConnectorCertificateBE certificate);
 
     ParticipantRegistrationRequestBE getRegistrationRequestByName(String name);
 }

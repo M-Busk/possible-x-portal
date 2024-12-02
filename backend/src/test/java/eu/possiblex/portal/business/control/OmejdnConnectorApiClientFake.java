@@ -25,6 +25,7 @@ import java.util.UUID;
 public class OmejdnConnectorApiClientFake implements OmejdnConnectorApiClient {
     @Override
     public OmejdnConnectorCertificateBE addConnector(OmejdnConnectorCertificateRequest request) {
+
         OmejdnConnectorCertificateBE dto = new OmejdnConnectorCertificateBE();
         dto.setClientId("12:34:56");
         dto.setClientName((request == null || StringUtil.isNullOrEmpty(request.getClientName()))
@@ -33,5 +34,10 @@ public class OmejdnConnectorApiClientFake implements OmejdnConnectorApiClient {
         dto.setKeystore("keystore123");
         dto.setPassword("password1234");
         return dto;
+    }
+
+    @Override
+    public void deleteConnector(String clientId) {
+        // request worked
     }
 }

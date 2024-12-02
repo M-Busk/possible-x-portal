@@ -94,4 +94,18 @@ public class FhCatalogClientImpl implements FhCatalogClient {
             throw new RuntimeException("failed to parse fh catalog participant json: " + participantJsonContent, e);
         }
     }
+
+    @Override
+    public void deleteParticipantFromCatalog(String participantId) throws ParticipantNotFoundException {
+
+        log.info("deleting participant from fh catalog with ID {}", participantId);
+        try {
+            technicalFhCatalogClient.deleteParticipantFromCatalog(participantId);
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == 404) {
+                throw new ParticipantNotFoundException("no FH Catalog participant found with ID " + participantId);
+            }
+            throw e;
+        }
+    }
 }
