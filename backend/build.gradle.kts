@@ -55,6 +55,9 @@ dependencies {
 
 tasks.withType<Test> {
   useJUnitPlatform()
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
 }
 
 
@@ -76,11 +79,22 @@ tasks.register<Copy>("copyWebApp") {
 }
 
 tasks.named("compileJava") {
-  dependsOn(":frontend:npmBuild")
+  if (!project.hasProperty("backendOnly")) { // skip frontend if user wants only backend
+    println("Hint: You can skip frontend build with '-PbackendOnly'")
+    dependsOn(":frontend:npmTestConditional")
+  }
+  else {
+    println("skipping frontend")
+  }
 }
 
 tasks.named("processResources") {
-  dependsOn("copyWebApp")
+  if (!project.hasProperty("backendOnly")) { // skip frontend if user wants only backend
+    dependsOn("copyWebApp")
+  }
+  else {
+    println("skipping frontend")
+  }
 }
 
 tasks {
