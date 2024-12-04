@@ -6,6 +6,7 @@ import {AccordionModule, ModalModule} from '@coreui/angular';
 import {CommonViewsModule} from '../../common-views/common-views.module';
 import {IRegistrationRequestEntryTO} from "../../../services/mgmt/api/backend";
 import {provideAnimations} from "@angular/platform-browser/animations";
+import {MatSortModule} from "@angular/material/sort";
 
 describe('RegistrationRequestManagementComponent', () => {
   let component: RegistrationRequestManagementComponent;
@@ -16,7 +17,7 @@ describe('RegistrationRequestManagementComponent', () => {
     const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getAllRegistrationRequests']);
     TestBed.configureTestingModule({
       declarations: [RegistrationRequestManagementComponent],
-      imports: [AccordionModule, ModalModule, CommonViewsModule],
+      imports: [AccordionModule, ModalModule, CommonViewsModule, MatSortModule],
       providers: [
         {provide: ApiService, useValue: apiServiceSpy},
         provideAnimations()
@@ -36,7 +37,7 @@ describe('RegistrationRequestManagementComponent', () => {
     const emptyList: IRegistrationRequestEntryTO[] = [];
     apiService.getAllRegistrationRequests.and.returnValue(Promise.resolve(emptyList));
 
-    component.getRegistrationRequests();
+    component.getRegistrationRequestsWithSort();
 
     expect(apiService.getAllRegistrationRequests).toHaveBeenCalled();
 

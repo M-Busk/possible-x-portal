@@ -1,13 +1,13 @@
 <div class="p-4">
   <h2 class="font-bold">Registration Requests</h2><br/>
 
-  <div class="accordion-header grid grid-cols-4 gap-5">
-    <span>Organization Name</span>
-    <span>Registration Request Status</span>
+  <div matSort class="accordion-header grid grid-cols-4 gap-5">
+    <span mat-sort-header="organizationName" id="organizationName">Organization Name</span>
+    <span mat-sort-header="status" id="status">Registration Request Status</span>
   </div>
 
   <c-accordion>
-    <app-registration-request *ngFor="let request of registrationRequests" [request]="request"
+    <app-registration-request *ngFor="let request of registrationRequests.data" [request]="request"
                               (response)="showResponse($event)"></app-registration-request>
   </c-accordion>
 </div>

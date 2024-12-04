@@ -15,6 +15,7 @@ import {
 } from "@coreui/angular";
 import {CommonViewsModule} from "../common-views/common-views.module";
 import { RegistrationRequestComponent } from './registration-request/registration-request.component';
+import {MatSortModule} from "@angular/material/sort";
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { RegistrationRequestComponent } from './registration-request/registratio
     ModalBodyComponent,
     ModalHeaderComponent,
     ModalFooterComponent,
-    ModalToggleDirective
+    ModalToggleDirective,
+    MatSortModule
   ]
 })
 export class AdministrationModule { }
