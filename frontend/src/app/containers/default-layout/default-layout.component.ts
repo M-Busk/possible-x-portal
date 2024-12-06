@@ -1,18 +1,21 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
+import {ApiService} from "../../services/mgmt/api/api.service";
 
 @Component({
   selector: 'app-default-layout',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss']
 })
-export class DefaultLayoutComponent {
+export class DefaultLayoutComponent implements OnInit {
   isAdminPage = false;
   environment = environment;
   isMainPage = false;
+  versionNumber: string = '';
+  versionDate: string = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private apiService: ApiService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isAdminPage = event.urlAfterRedirects.includes('administration/management');
@@ -21,4 +24,10 @@ export class DefaultLayoutComponent {
     });
   }
 
+  ngOnInit() {
+    this.apiService.getVersion().then(response => {
+      this.versionNumber = response.version;
+      this.versionDate = response.date;
+    });
+  }
 }

@@ -22,7 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-@TestPropertySource(properties = {"version.no = thisistheversion"})
+@TestPropertySource(properties = {"version.no = thisistheversion", "version.date = 21.03.2022"})
 @Transactional
 class ParticipantRegistrationRequestDAOTest {
     @SpyBean
