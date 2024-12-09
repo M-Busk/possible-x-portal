@@ -6,5 +6,5 @@ export const environment = {
   possible_website_possible_url: "https://www.possible-gaia-x.eu/#possible",
   possible_website_url: "https://www.possible-gaia-x.eu/",
   possible_website_group_url: "https://www.possible-gaia-x.eu/#verbund",
-  catalog_url: "https://possible.fokus.fraunhofer.de/resources/service-offering?locale=en"
+  catalog_url: "https://catalog.dev.possible-x.de/resources/service-offering?locale=en"
 };

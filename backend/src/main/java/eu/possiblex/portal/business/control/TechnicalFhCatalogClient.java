@@ -23,6 +23,8 @@ import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalPartici
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.PutExchange;
 
@@ -33,9 +35,12 @@ public interface TechnicalFhCatalogClient {
 
     @PutExchange("/trust/legal-participant")
     FhCatalogIdResponse addParticipantToFhCatalog(
-        @RequestBody PxExtendedLegalParticipantCredentialSubject participantCs);
+        @RequestBody PxExtendedLegalParticipantCredentialSubject participantCs, @RequestParam String verificationMethod);
 
     @GetExchange("/resources/legal-participant/{participantId}")
     String getParticipantFromCatalog(@PathVariable String participantId);
+
+    @DeleteExchange("/resources/legal-participant/{participantId}")
+    void deleteParticipantFromCatalog(@PathVariable String participantId);
 }
 

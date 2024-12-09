@@ -39,3 +39,7 @@ fh:
   catalog:
     url: url
     secret-key: secret
+
+version.no: "1.0.0"
+
+version.date: "01.01.1970"

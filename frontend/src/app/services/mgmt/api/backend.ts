@@ -1,6 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export interface ICommonPortalRestApi {
+    version: IVersionTO;
+}
+
 export interface IParticipantRegistrationRestApi {
     allRegistrationRequests: IRegistrationRequestEntryTO[];
 }
@@ -61,6 +65,14 @@ export interface IRegistrationRequestEntryTO {
 }
 
 export interface IRegistrationRequestEntryTOBuilder {
+}
+
+export interface IVersionTO {
+    version: string;
+    date: string;
+}
+
+export interface IVersionTOBuilder {
 }
 
 export interface IPojoCredentialSubject {
@@ -156,9 +168,9 @@ export interface IValueInstantiator {
     valueClass: IClass<any>;
     arrayDelegateCreator: IAnnotatedWithParams;
     delegateCreator: IAnnotatedWithParams;
-    withArgsCreator: IAnnotatedWithParams;
     valueTypeDesc: string;
     defaultCreator: IAnnotatedWithParams;
+    withArgsCreator: IAnnotatedWithParams;
 }
 
 export interface IJavaType extends IResolvedType, ISerializable, IType {
@@ -250,8 +262,8 @@ export interface IResolvedType {
      * @deprecated
      */
     parameterSource: IClass<any>;
-    rawClass: IClass<any>;
     throwable: boolean;
+    rawClass: IClass<any>;
     keyType: IResolvedType;
     interface: boolean;
     primitive: boolean;
@@ -283,12 +295,12 @@ export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISeria
     creatorIndex: number;
     objectIdInfo: IObjectIdInfo;
     managedReferenceName: string;
-    ignorable: boolean;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
     injectableValueId: any;
     injectionOnly: boolean;
+    ignorable: boolean;
 }
 
 export interface IStdDeserializer<T> extends IJsonDeserializer<T>, ISerializable, IGettable {
@@ -353,8 +365,8 @@ export interface IObjectIdInfo {
 }
 
 export interface ITypeDeserializer {
-    typeIdResolver: ITypeIdResolver;
     defaultImpl: IClass<any>;
+    typeIdResolver: ITypeIdResolver;
     typeInclusion: IAs;
     propertyName: string;
 }
@@ -430,6 +442,14 @@ export interface HttpClient {
 export class RestApplicationClient {
 
     constructor(protected httpClient: HttpClient) {
+    }
+
+    /**
+     * HTTP GET /common/version
+     * Java method: eu.possiblex.portal.application.boundary.CommonPortalRestApiImpl.getVersion
+     */
+    getVersion(): RestResponse<IVersionTO> {
+        return this.httpClient.request({ method: "GET", url: uriEncoding`common/version` });
     }
 
     /**

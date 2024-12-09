@@ -1,0 +1,52 @@
+.accordion-button {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.request-name {
+  font-weight: bold;
+}
+
+.icon-text-container {
+  display: flex;
+  align-items: center;
+}
+
+.action-buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.custom-button {
+  @apply bg-white text-black border-2 border-black p-2;
+
+  &:hover {
+    @apply bg-brand-50;
+  }
+}
+
+.custom-button:disabled, .custom-button[disabled] {
+  @apply bg-gray-200 text-gray-500 border-gray-500;
+}
+
+.accepted-text {
+  font-weight: bold;
+  color: #166A39;
+}
+
+.rejected-text {
+  font-weight: bold;
+  color: #B91C1C;
+}
+
+.new-text {
+  font-weight: bold;
+  @apply text-brand-700;
+}

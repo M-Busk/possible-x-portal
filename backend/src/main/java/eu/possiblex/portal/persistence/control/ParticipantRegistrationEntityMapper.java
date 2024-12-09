@@ -40,6 +40,6 @@ public interface ParticipantRegistrationEntityMapper {
     ParticipantRegistrationRequestBE entityToParticipantRegistrationRequestBe(
         ParticipantRegistrationRequestEntity entity);
 
-    OmejdnConnectorCertificateEntity omjednConnectorCertificateBEToOmejdnConnectorCertificateEntity(
+    OmejdnConnectorCertificateEntity omejdnConnectorCertificateBEToOmejdnConnectorCertificateEntity(
         OmejdnConnectorCertificateBE omjednConnectorCertificateBE);
 }

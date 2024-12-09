@@ -15,6 +15,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -52,12 +53,12 @@ public class FhCatalogClientImpl implements FhCatalogClient {
 
     @Override
     public FhCatalogIdResponse addParticipantToCatalog(PxExtendedLegalParticipantCredentialSubject cs) {
-
-        log.info("sending to catalog: {}", LogUtils.serializeObjectToJson(cs));
+        String verMethod = cs.getId() + "#JWK2020-PossibleLetsEncrypt";
+        log.info("sending to catalog: {} with verMethod {}", LogUtils.serializeObjectToJson(cs), verMethod);
 
         FhCatalogIdResponse catalogParticipantId;
         try {
-            catalogParticipantId = technicalFhCatalogClient.addParticipantToFhCatalog(cs);
+            catalogParticipantId = technicalFhCatalogClient.addParticipantToFhCatalog(cs, verMethod);
         } catch (Exception e) {
             log.error("error when trying to send participant to catalog!", e);
             throw e;
@@ -92,6 +93,20 @@ public class FhCatalogClientImpl implements FhCatalogClient {
                 PxExtendedLegalParticipantCredentialSubject.class);
         } catch (JsonLdError | JsonProcessingException e) {
             throw new RuntimeException("failed to parse fh catalog participant json: " + participantJsonContent, e);
+        }
+    }
+
+    @Override
+    public void deleteParticipantFromCatalog(String participantId) throws ParticipantNotFoundException {
+
+        log.info("deleting participant from fh catalog with ID {}", participantId);
+        try {
+            technicalFhCatalogClient.deleteParticipantFromCatalog(participantId);
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == 404) {
+                throw new ParticipantNotFoundException("no FH Catalog participant found with ID " + participantId);
+            }
+            throw e;
         }
     }
 }

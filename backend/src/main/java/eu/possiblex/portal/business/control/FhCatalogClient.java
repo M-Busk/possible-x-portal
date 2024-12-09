@@ -10,4 +10,6 @@ public interface FhCatalogClient {
 
     PxExtendedLegalParticipantCredentialSubject getParticipantFromCatalog(String participantId)
         throws ParticipantNotFoundException;
+
+    void deleteParticipantFromCatalog(String participantId) throws ParticipantNotFoundException;
 }

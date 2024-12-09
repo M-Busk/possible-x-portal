@@ -10,5 +10,8 @@ EXPOSE 8088
 RUN mkdir /app
 
 COPY --from=build /home/gradle/src/backend/build/libs/*.jar /app/backend.jar
-
+ARG VERSION_NO="unknown"
+ENV VERSION_NO=$VERSION_NO
+ARG VERSION_DATE="unknown"
+ENV VERSION_DATE=$VERSION_DATE
 ENTRYPOINT ["java","-jar","/app/backend.jar"]
