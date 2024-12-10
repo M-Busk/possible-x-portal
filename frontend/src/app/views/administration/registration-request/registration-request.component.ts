@@ -56,7 +56,7 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
         this.isClickableDelete = true;
         break;
       case IRequestStatus.ACCEPTED:
-        this.isClickableAccept = false;
+        this.isClickableAccept = true;
         this.isClickableReject = true;
         this.isClickableDelete = true;
         break;
