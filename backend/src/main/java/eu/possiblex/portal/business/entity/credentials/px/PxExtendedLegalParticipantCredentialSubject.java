@@ -3,7 +3,6 @@ package eu.possiblex.portal.business.entity.credentials.px;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalParticipantCredentialSubject;
-import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -31,7 +30,7 @@ public class PxExtendedLegalParticipantCredentialSubject {
 
     @NotNull
     @JsonProperty("gx:legalRegistrationNumber")
-    private GxLegalRegistrationNumberCredentialSubject legalRegistrationNumber;
+    private GxNestedLegalRegistrationNumberCredentialSubject legalRegistrationNumber;
 
     @NotNull
     @JsonProperty("gx:legalAddress")

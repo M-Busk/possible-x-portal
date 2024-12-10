@@ -1,7 +1,9 @@
 package eu.possiblex.portal.business.control;
 
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
+import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
+import eu.possiblex.portal.business.entity.credentials.px.GxNestedLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
@@ -168,11 +170,12 @@ class ParticipantRegistrationServiceTest {
     private PxExtendedLegalParticipantCredentialSubject getParticipantCs() {
 
         ParticipantRegistrationRequestBE be = ParticipantRegistrationRequestDAOFake.getExampleParticipant();
+        GxLegalRegistrationNumberCredentialSubject regNum = be.getLegalRegistrationNumber();
 
-        return PxExtendedLegalParticipantCredentialSubject.builder().id("validId")
-            .legalRegistrationNumber(be.getLegalRegistrationNumber()).headquarterAddress(be.getHeadquarterAddress())
-            .legalAddress(be.getLegalAddress()).name(be.getName()).description(be.getDescription())
-            .mailAddress("example@address.com").build();
+        return PxExtendedLegalParticipantCredentialSubject.builder().id("validId").legalRegistrationNumber(
+                new GxNestedLegalRegistrationNumberCredentialSubject(regNum.getEori(), regNum.getVatID(),
+                    regNum.getLeiCode())).headquarterAddress(be.getHeadquarterAddress()).legalAddress(be.getLegalAddress())
+            .name(be.getName()).description(be.getDescription()).mailAddress("example@address.com").build();
     }
 
     // Test-specific configuration to provide mocks

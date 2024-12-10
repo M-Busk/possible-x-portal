@@ -1,9 +1,9 @@
 package eu.possiblex.portal.persistence.dao;
 
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
-import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.RequestStatus;
+import eu.possiblex.portal.business.entity.credentials.px.GxNestedLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-@TestPropertySource(properties = {"version.no = thisistheversion", "version.date = 21.03.2022"})
+@TestPropertySource(properties = { "version.no = thisistheversion", "version.date = 21.03.2022" })
 @Transactional
 class ParticipantRegistrationRequestDAOTest {
     @SpyBean
@@ -145,7 +145,7 @@ class ParticipantRegistrationRequestDAOTest {
         vcard.setPostalCode("validPostalCode");
 
         return PxExtendedLegalParticipantCredentialSubject.builder().id("validId").legalRegistrationNumber(
-                new GxLegalRegistrationNumberCredentialSubject("validEori", "validVatId", "validLeiCode"))
+                new GxNestedLegalRegistrationNumberCredentialSubject("validEori", "validVatId", "validLeiCode"))
             .headquarterAddress(vcard).legalAddress(vcard).name("validName").description("validDescription")
             .mailAddress("example@address.com").build();
     }
