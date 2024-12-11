@@ -1,8 +1,12 @@
 FROM gradle:8.9.0-jdk17 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
-RUN apt-get install -y wget
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+RUN apt-get update && \
+  apt-get -y upgrade && \
+  apt-get install -yq curl libgconf-2-4 gnupg wget
+RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb stable main' >> /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update && apt-get install -y  --no-install-recommends google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst
 WORKDIR /home/gradle/src
 RUN gradle build -PnpmEnv=dev --no-daemon
 
