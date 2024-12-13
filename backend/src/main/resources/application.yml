@@ -29,7 +29,9 @@ sd-creation-wizard-api:
   base-url: http://localhost:8085
 
 daps-server:
-  base-url: http://localhost:4567
+  url:
+    internal: http://localhost:4567
+    external: http://localhost:4567
 
 did-web-service:
   base-url: https://localhost:4443

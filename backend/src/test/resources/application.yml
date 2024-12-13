@@ -15,7 +15,9 @@ sd-creation-wizard-api:
   base-url: test
 
 daps-server:
-  base-url: test
+  url:
+    internal: test
+    external: test
 
 did-web-service:
   base-url: test

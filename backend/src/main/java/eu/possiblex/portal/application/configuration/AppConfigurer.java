@@ -30,8 +30,8 @@ public class AppConfigurer {
     @Value("${sd-creation-wizard-api.base-url}")
     private String sdCreationWizardApiBaseUri;
 
-    @Value("${daps-server.base-url}")
-    private String dapsServerBaseUri;
+    @Value("${daps-server.url.internal}")
+    private String dapsServerInternalUri;
 
     @Value("${did-web-service.base-url}")
     private String didWebServiceBaseUri;
@@ -58,7 +58,7 @@ public class AppConfigurer {
     @Bean
     public OmejdnConnectorApiClient dapsConnectorApiClient() {
 
-        WebClient webClient = WebClient.builder().baseUrl(dapsServerBaseUri + "/api/v1/connectors").build();
+        WebClient webClient = WebClient.builder().baseUrl(dapsServerInternalUri + "/api/v1/connectors").build();
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builder()
             .exchangeAdapter(WebClientAdapter.create(webClient)).build();
         return httpServiceProxyFactory.createClient(OmejdnConnectorApiClient.class);

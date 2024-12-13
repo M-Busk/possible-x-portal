@@ -45,7 +45,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         @Autowired ParticipantRegistrationServiceMapper participantRegistrationServiceMapper,
         @Autowired OmejdnConnectorApiClient omejdnConnectorApiClient,
         @Autowired DidWebServiceApiClient didWebServiceApiClient, @Autowired FhCatalogClient fhCatalogClient,
-        @Value("${fh.catalog.url}") String fhCatalogUrl, @Value("${daps-server.base-url}") String dapsServerBaseUrl) {
+        @Value("${fh.catalog.url}") String fhCatalogUrl,
+        @Value("${daps-server.url.external}") String dapsServerExternalUrl) {
 
         this.participantRegistrationRequestDAO = participantRegistrationRequestDAO;
         this.participantRegistrationServiceMapper = participantRegistrationServiceMapper;
@@ -53,7 +54,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         this.didWebServiceApiClient = didWebServiceApiClient;
         this.fhCatalogClient = fhCatalogClient;
         this.fhCatalogParticipantBaseUrl = fhCatalogUrl + "/resources/legal-participant/";
-        this.dapsIdBaseUrl = dapsServerBaseUrl + "/api/v1/connectors/";
+        this.dapsIdBaseUrl = dapsServerExternalUrl + "/api/v1/connectors/";
     }
 
     /**
