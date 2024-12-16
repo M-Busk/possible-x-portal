@@ -1,14 +1,10 @@
 .page-container {
   @apply flex flex-col bg-brand-700;
-  min-height: calc(100vh - 5rem - 26rem);
+  min-height: 75vh;
 }
 
 .admin-page-container {
-  @apply min-h-screen bg-brand-50;
-}
-
-.main-page-container {
-  min-height: calc(100vh - 5rem);
+  @apply bg-brand-50;
 }
 
 .main-page-content {
@@ -20,5 +16,5 @@
 }
 
 .content {
-  @apply flex-1 mx-auto h-auto lg:max-w-screen-xl;
+  @apply flex-1 mx-auto h-auto xl:max-w-screen-xl;
 }

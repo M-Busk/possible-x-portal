@@ -1,47 +1,49 @@
-<div class="header-wrapper">
-  <c-navbar class="header border-0" expand="lg">
-    <c-container fluid>
-      <a [routerLink]="['/']" cNavbarBrand class="logo">
-        <img [alt]="'POSSIBLE-X Logo'" width="142" src="assets/images/brand/possible_blue.svg"/>
-      </a>
-      <c-navbar-nav class="navbar-nav">
-        <c-nav-item>
-          <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
-        </c-nav-item>
-        <c-nav-item>
-          <a [href]="environment.possible_website_group_url" cNavLink target="_blank">Verbund</a>
-        </c-nav-item>
-      </c-navbar-nav>
+<div class="h-screen">
+  <div class="header-wrapper">
+    <c-navbar class="header border-0" expand="lg">
+      <c-container fluid>
+        <a [routerLink]="['/']" cNavbarBrand class="logo">
+          <img [alt]="'POSSIBLE-X Logo'" width="142" src="assets/images/brand/possible_blue.svg"/>
+        </a>
+        <c-navbar-nav class="navbar-nav">
+          <c-nav-item>
+            <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
+          </c-nav-item>
+          <c-nav-item>
+            <a [href]="environment.possible_website_group_url" cNavLink target="_blank">Verbund</a>
+          </c-nav-item>
+        </c-navbar-nav>
+      </c-container>
+    </c-navbar>
+  </div>
+  <div class="page-container" [ngClass]="{'admin-page-container': isAdminPage}">
+    <c-container [fluid]="isMainPage" [ngClass]="{'main-page-content': isMainPage, 'content': !isMainPage}">
+      <router-outlet></router-outlet>
     </c-container>
-  </c-navbar>
-</div>
-<div class="page-container" [ngClass]="{'admin-page-container': isAdminPage, 'main-page-container': isMainPage}">
-  <c-container [fluid]="isMainPage" [ngClass]="{'main-page-content': isMainPage, 'content': !isMainPage}">
-    <router-outlet></router-outlet>
-  </c-container>
-</div>
-<div class="footer-wrapper" [ngClass]="{'admin-footer-wrapper': isAdminPage, 'main-footer-wrapper': isMainPage}">
-  <ng-container *ngIf="!isMainPage">
-    <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423" height="238"/>
-    <ng-template #defaultImage>
-      <img alt="" ngSrc="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423" height="238"/>
-    </ng-template>
-  </ng-container>
-  <div>
-    <c-footer class="footer border-0">
-      <div class="logo">
-        <div class="circle-visual"></div>
-        <img alt="POSSIBLE-X Logo" height="49" src="assets/images/brand/possible_white.svg" width="190"/>
-      </div>
-      <div>
-        <div class="mb-8">
-          <div class="mb-2 text-2xl">POSSIBLE-X</div>
+  </div>
+  <div class="footer-wrapper" [ngClass]="{'admin-footer-wrapper': isAdminPage, 'main-footer-wrapper': isMainPage}">
+    <ng-container *ngIf="!isMainPage">
+      <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423" height="238"/>
+      <ng-template #defaultImage>
+        <img alt="" ngSrc="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423" height="238"/>
+      </ng-template>
+    </ng-container>
+    <div>
+      <c-footer class="footer border-0">
+        <div class="logo">
+          <div class="circle-visual"></div>
+          <img alt="POSSIBLE-X Logo" height="49" src="assets/images/brand/possible_white.svg" width="190"/>
         </div>
-        <div class="text-sm">© 2024 POSSIBLE Consortium</div>
-      </div>
-      <div class="flex justify-end">
-        Release: {{ versionNumber }} ({{ versionDate | date:'yyyy-MM-dd' }})
-      </div>
-    </c-footer>
+        <div>
+          <div class="mb-8">
+            <div class="mb-2 text-2xl">POSSIBLE-X</div>
+          </div>
+          <div class="text-sm">© 2024 POSSIBLE Consortium</div>
+        </div>
+        <div class="flex justify-end">
+          Release: {{ versionNumber }} ({{ versionDate | date:'yyyy-MM-dd' }})
+        </div>
+      </c-footer>
+    </div>
   </div>
 </div>

@@ -1,11 +1,13 @@
 .header-wrapper {
   @apply bg-white;
+  height: 8vh;
 }
 
 .header {
   @apply flex items-end justify-between;
-  @apply container max-w-screen-4xl px-8 py-4 xl:px-20;
+  @apply container fixed max-w-screen-4xl px-8 py-4 xl:px-20;
   @apply pr-4;
+  z-index: 998;
 
   .logo {
     @apply flex flex-shrink-0 items-baseline;
@@ -18,19 +20,16 @@
 
 .footer-wrapper {
   @apply overflow-hidden bg-brand-700;
-  @apply w-full h-[26rem];
+  @apply w-full h-[40vh];
   @apply divide-y divide-brand-100;
 }
 
 .admin-footer-wrapper {
-  @apply overflow-hidden bg-brand-50;
-  @apply w-full h-[26rem];
-  @apply divide-y divide-brand-100;
+  @apply bg-brand-50;
 }
 
 .main-footer-wrapper {
-  @apply border-t border-brand-100;
-  height: calc(26rem - 238px);
+  @apply border-t border-brand-100 h-[17vh];
 }
 
 .footer {
