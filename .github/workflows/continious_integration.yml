@@ -59,7 +59,8 @@ jobs:
             VERSION_NO=${{ github.sha }}
             VERSION_DATE=${{ env.VERSION_DATE }}
 
-      - name: 'Invoke Kubectl Provider'
+      - name: 'Auto-deploy to dev'
+        if: github.ref == 'refs/heads/develop'
         uses: actions-hub/kubectl@v1.31.0
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
