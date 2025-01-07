@@ -1,0 +1,22 @@
+.grid-container {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  height: auto;
+  //background-color: white;
+  text-align: left;
+}
+
+.custom-link {
+  color: #007bff;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.text-overlay {
+  @apply text-White;
+  max-width: 800px;
+  padding: 20px;
+}
