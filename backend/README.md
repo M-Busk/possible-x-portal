@@ -11,7 +11,7 @@ from the central DAPS server for the new dataspace participant.
 If you only want to build the project, you can go to the root of the repository and run
 
 ```
-./gradlew build
+./gradlew buildBackend
 ```
 
 after which the built jar can be found at `backend/build/libs/backend-x.y.z.jar`.
@@ -20,6 +20,7 @@ after which the built jar can be found at `backend/build/libs/backend-x.y.z.jar`
 
 The following environment variables can be set as needed.
 Replace the right hand side with the actual values.
+
 ```
 export SDCREATIONWIZARDAPI_BASEURL="SD Creation Wizard API base URL"
 export DAPSSERVER_BASEURL="DAPS Server base URL"
@@ -31,7 +32,7 @@ export SPRING_DATASOURCE_PASSWORD="Datasource Password"
 Through gradle:
 
 ```
-./gradlew bootRun
+./gradlew startBackend
 ```
 
 Alternatively running the jar directly (if built previously):

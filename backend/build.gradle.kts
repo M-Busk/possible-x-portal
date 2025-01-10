@@ -70,31 +70,24 @@ tasks.getByName<Jar>("jar") {
   enabled = false
 }
 
-tasks.register<Copy>("copyWebApp") {
-  outputs.upToDateWhen { false }
-  description = "Copies the GUI into the resources of the Spring project."
-  group = "Application"
-  from("$rootDir/frontend/build/resources")
-  into(layout.buildDirectory.dir("resources/main/static/."))
+tasks.register("buildBackend") {
+  dependsOn(":backend:build")
+  description = "Builds the backend application."
+  group = "build"
 }
 
-tasks.named("compileJava") {
-  if (!project.hasProperty("backendOnly")) { // skip frontend if user wants only backend
-    println("Hint: You can skip frontend build with '-PbackendOnly'")
-    dependsOn(":frontend:npmTestConditional")
-  }
-  else {
-    println("skipping frontend")
-  }
-}
 
-tasks.named("processResources") {
-  if (!project.hasProperty("backendOnly")) { // skip frontend if user wants only backend
-    dependsOn("copyWebApp")
+tasks.register<JavaExec>("startBackend") {
+  dependsOn("bootJar")
+  description = "Runs the backend application."
+  group = "application"
+  mainClass.set("eu.possiblex.portal.PortalApplication")
+  classpath = sourceSets["main"].runtimeClasspath
+  val activeProfile = project.findProperty("activeProfile")?.toString()
+  if (activeProfile != null) {
+    systemProperty("spring.profiles.active", activeProfile)
   }
-  else {
-    println("skipping frontend")
-  }
+
 }
 
 tasks {

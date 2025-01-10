@@ -3,6 +3,7 @@
 The POSSIBLE-X Portal is the centralized landing page for interacting with the POSSIBLE-X Dataspace.
 
 It consists of three different parts:
+
 * The main page which is the landing page and links to other pages.
 * The registration page for registering new participants.
 * An administrative page to manage registration requests.
@@ -18,6 +19,7 @@ The repository is structured as a Gradle multi-project build.
 (...)
 ├── libs.versions.toml          # configuration file of version catalog for dependencies
 ├── settings.gradle.kts         # root project settings
+├── build.gradle.kts            # root build file
 ├── buildSrc/                   # shared build configuration
 ├── frontend/                   # Angular frontend code for the GUI
 │   └── build.gradle.kts        # build file for the Angular frontend
@@ -40,42 +42,102 @@ Afterwards they can be found at
 frontend/src/app/services/mgnt/api/backend.ts
 ```
 
-## Build
+## Build Backend
 
-If you only want to build the project, you can run
+If you only want to build the backend, you can run
 
 ```
-./gradlew build
+./gradlew buildBackend
 ```
 
 after which the built jar can be found at `backend/build/libs/backend-x.y.z.jar`
 
-## Run Portal Backend (currently including frontend)
+## Run Backend
 
 Through gradle:
 
 ```
-./gradlew bootRun
+./gradlew startBackend
+```
+
+Running a specific configuration:
+
+E.g. for local portal:
+
+```
+./gradlew startBackend -PactiveProfile=local
 ```
 
 Alternatively running the jar directly (if built previously):
 
 ```
-java -jar backend/build/libs/backend-x.y.z.jar
+java -jar backend/build/libs/backend-x.y.z.jar --spring.profiles.active=-local
 ```
 
-Once the service is running, you can access it at e.g. http://localhost:8088/ (depending on the used configuration).
+Once the service is running, you can access it at http://localhost:8088/.
 
 The OpenAPI documentation can be found at http://localhost:8088/swagger-ui.html .
 
-## Run Portal Frontend
+## Build Frontend
 
-Consumer (local testing):
+If you only want to build the frontend, you can run
 
 ```
-cd frontend/
-npm start
+./gradlew buildFrontend
 ```
 
-Once the service is running, you can access it at e.g. http://localhost:4300/  (depending on the used configuration).
+after which the built frontend can be found at `frontend/build/resources/`.
 
+## Run Frontend
+
+Through gradle:
+
+```
+./gradlew startFrontend
+```
+
+Running a specific configuration:
+
+E.g. for local portal:
+
+```
+./gradlew startFrontend -PactiveProfile=local
+```
+
+Alternatively running with npm directly:
+
+```
+npm --prefix frontend/ run ng -- serve --configuration local --port 4208
+```
+
+Once the service is running, you can access it at http://localhost:4208/.
+
+## Run Full Application (Frontend and Backend)
+
+In addition to running the frontend and backend individually, there is also a gradle task for running both in parallel.
+Note that when the app is started through this task, the IntelliJ debugger will not be able to attach to the backend and
+hence won't stop at breakpoints.
+Through gradle:
+
+```
+./gradlew startFull
+```
+
+Running a specific configuration:
+
+E.g. for local portal:
+
+```
+./gradlew startFull -PactiveProfile=local
+```
+
+## Killing orphaned processes
+
+If for any reason the application is not shut down properly, the following command can be used to kill a service that is
+running on the specified port:
+
+```
+sudo fuser -k 8088/tcp
+```
+
+where 8088 can be replaced with any other port.
