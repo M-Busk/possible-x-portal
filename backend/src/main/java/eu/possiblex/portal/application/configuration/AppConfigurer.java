@@ -7,19 +7,38 @@ import eu.possiblex.portal.business.control.TechnicalFhCatalogClient;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.SSLException;
 
 @Configuration
+@EnableWebSecurity
 public class AppConfigurer {
 
     private static final int EXCHANGE_STRATEGY_SIZE = 16 * 1024 * 1024;
@@ -44,6 +63,12 @@ public class AppConfigurer {
 
     @Value("${fh.catalog.secret-key}")
     private String fhCatalogSecretKey;
+
+    @Value("${spring.security.admin.username}")
+    private String adminUsername;
+
+    @Value("${spring.security.admin.password}")
+    private String adminPassword;
 
     @Bean
     public SdCreationWizardApiClient sdCreationWizardApiClient() {
@@ -95,4 +120,50 @@ public class AppConfigurer {
             .exchangeAdapter(WebClientAdapter.create(webClient)).build();
         return httpServiceProxyFactory.createClient(TechnicalFhCatalogClient.class);
     }
+
+    @Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests((authorizeHttpRequests) ->
+                authorizeHttpRequests
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/registration/request").permitAll()
+                .requestMatchers("/registration/**").authenticated()
+                .anyRequest().permitAll()
+            )
+            .httpBasic(Customizer.withDefaults())
+            .csrf(AbstractHttpConfigurer::disable);
+		return http.build();
+	}
+
+    @Bean
+	public UserDetailsService userDetailsService() {
+		UserDetails admin =
+			 User.builder()
+                .username(adminUsername)
+				.password(passwordEncoder().encode(adminPassword))
+                .roles("ADMIN")
+				.build();
+
+		return new InMemoryUserDetailsManager(admin);
+	}
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                    .allowedOriginPatterns("*")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true);
+            }
+        };
+    }
+
 }

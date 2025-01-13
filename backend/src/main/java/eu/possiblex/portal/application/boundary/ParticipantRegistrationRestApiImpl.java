@@ -9,7 +9,6 @@ import eu.possiblex.portal.business.entity.exception.ParticipantComplianceExcept
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*") // TODO replace this with proper CORS configuration
 @Slf4j
 public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrationRestApi {
 

@@ -1,9 +1,11 @@
 package eu.possiblex.portal.application.boundary;
 
+import eu.possiblex.portal.application.configuration.AppConfigurer;
 import eu.possiblex.portal.application.control.ParticipantRegistrationRestApiMapper;
 import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.control.ParticipantRegistrationServiceFake;
+
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,7 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ParticipantRegistrationRestApiImpl.class)
 @ContextConfiguration(classes = { ParticipantRegistrationRestApiTest.TestConfig.class,
-    ParticipantRegistrationRestApiImpl.class })
+    ParticipantRegistrationRestApiImpl.class, AppConfigurer.class })
+
 class ParticipantRegistrationRestApiTest {
 
     @Autowired
@@ -44,6 +48,7 @@ class ParticipantRegistrationRestApiTest {
         verify(participantRegistrationService).registerParticipant(any());
     }
 
+    @WithMockUser(username = "admin")
     @Test
     void getAllRegistrationRequests() throws Exception {
 
@@ -53,6 +58,7 @@ class ParticipantRegistrationRestApiTest {
         verify(participantRegistrationService).getAllParticipantRegistrationRequests();
     }
 
+    @WithMockUser(username = "admin")
     @Test
     void getRegistrationRequestByDid() throws Exception {
 
@@ -62,6 +68,7 @@ class ParticipantRegistrationRestApiTest {
         verify(participantRegistrationService).getParticipantRegistrationRequestByDid("someDid");
     }
 
+    @WithMockUser(username = "admin")
     @Test
     void acceptRegistrationRequest() throws Exception {
 
@@ -71,6 +78,7 @@ class ParticipantRegistrationRestApiTest {
         verify(participantRegistrationService).acceptRegistrationRequest("validId");
     }
 
+    @WithMockUser(username = "admin")
     @Test
     void rejectRegistrationRequest() throws Exception {
 
@@ -80,6 +88,7 @@ class ParticipantRegistrationRestApiTest {
         verify(participantRegistrationService).rejectRegistrationRequest("validId");
     }
 
+    @WithMockUser(username = "admin")
     @Test
     void deleteRegistrationRequest() throws Exception {
 

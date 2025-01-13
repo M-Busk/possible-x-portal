@@ -34,6 +34,7 @@ dependencies {
   implementation(libs.springBootStarterWeb)
   implementation(libs.springBootStarterWebflux)
   implementation(libs.springBootStarterDataJpa)
+  implementation(libs.springBootStarterSecurity)
   implementation(libs.hibernateValidator)
   implementation(libs.openApi)
   implementation(libs.titaniumJsonLd)
@@ -50,6 +51,7 @@ dependencies {
   testImplementation(libs.springBootStarterTest)
   testImplementation(libs.reactorTest)
   testImplementation(libs.h2)
+  testImplementation(libs.springSecurityTest)
   testRuntimeOnly(libs.jUnit)
 }
 

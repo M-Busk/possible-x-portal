@@ -1,5 +1,6 @@
 package eu.possiblex.portal.application.boundary;
 
+import eu.possiblex.portal.application.configuration.AppConfigurer;
 import eu.possiblex.portal.business.control.SdCreationWizardApiService;
 import eu.possiblex.portal.business.control.SdCreationWizardApiServiceFake;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ParticipantShapeRestApiImpl.class)
-@ContextConfiguration(classes = { ParticipantShapeRestApiTest.TestConfig.class, ParticipantShapeRestApiImpl.class })
+@ContextConfiguration(classes = { ParticipantShapeRestApiTest.TestConfig.class, ParticipantShapeRestApiImpl.class, AppConfigurer.class })
 class ParticipantShapeRestApiTest {
     @Autowired
     SdCreationWizardApiService sdCreationWizardApiService;

@@ -9,6 +9,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    admin:
+      username: admin
+      password: admin
 
 
 sd-creation-wizard-api:

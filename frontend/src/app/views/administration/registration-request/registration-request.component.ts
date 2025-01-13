@@ -21,6 +21,7 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   isClickableReject: boolean = true;
   isClickableDelete: boolean = true;
 
+
   constructor(private apiService: ApiService) {
   }
 
@@ -81,7 +82,6 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   async acceptRequest(event: Event, request: IRegistrationRequestEntryTO): Promise<void> {
     event.stopPropagation();
     this.disableAllButtons();
-
     this.apiService.acceptRegistrationRequest(request.name).then(() => {
       console.log("Accept request for: " + request.name);
       this.response.emit({isError: false, message: "Request accepted successfully. Participant was checked for compliance and stored in the catalog."});
@@ -95,7 +95,6 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   async deleteRequest(event: Event, request: IRegistrationRequestEntryTO): Promise<void> {
     event.stopPropagation();
     this.disableAllButtons();
-
     this.apiService.deleteRegistrationRequest(request.name).then(() => {
       console.log("Delete request for: " + request.name);
       this.response.emit({isError: false, message: "Request deleted successfully"});
@@ -119,4 +118,5 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
       this.response.emit({isError: true, message: "Unknown error occurred"});
     });
   }
+
 }
