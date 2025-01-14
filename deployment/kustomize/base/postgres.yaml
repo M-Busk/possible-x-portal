@@ -1,0 +1,17 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: possible-portal-db
+spec:
+  teamId: "ops"
+  volume:
+    size: 1Gi
+  numberOfInstances: 1
+  users:
+    main-portal:  # database owner
+      - superuser
+      - createdb
+  databases:
+    portal: main-portal  # dbname: owner
+  postgresql:
+    version: "16"
