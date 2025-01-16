@@ -134,11 +134,8 @@ public class AppConfigurer {
                 .requestMatchers("/registration/**").authenticated()
                 .anyRequest().permitAll()
             )
-            .httpBasic(Customizer.withDefaults())
-            .csrf(AbstractHttpConfigurer::disable)
-            .exceptionHandling(exceptionHandling ->
-                exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-            );
+            .httpBasic(basic -> basic.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+            .csrf(AbstractHttpConfigurer::disable);
         return http.build();
 	}
 
