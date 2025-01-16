@@ -8,6 +8,8 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
@@ -131,23 +135,10 @@ public class AppConfigurer {
                 .anyRequest().permitAll()
             )
             .httpBasic(Customizer.withDefaults())
-            .exceptionHandling(exceptionHandling ->
-                exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint())
-            )
-            .csrf(AbstractHttpConfigurer::disable);
+            .csrf(AbstractHttpConfigurer::disable)
+            .addFilterAfter(new RemoveAuthenticateHeaderFilter(), BasicAuthenticationFilter.class);
 		return http.build();
 	}
-
-    @Bean
-    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return new AuthenticationEntryPoint() {
-            @Override
-            public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws
-                IOException {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
-            }
-        };
-    }
 
     @Bean
 	public UserDetailsService userDetailsService() {
@@ -178,6 +169,15 @@ public class AppConfigurer {
                     .allowCredentials(true);
             }
         };
+    }
+
+    private class RemoveAuthenticateHeaderFilter extends OncePerRequestFilter {
+        @Override
+        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+            filterChain.doFilter(request, response);
+            response.setHeader("WWW-Authenticate", "");
+        }
     }
 
 }
