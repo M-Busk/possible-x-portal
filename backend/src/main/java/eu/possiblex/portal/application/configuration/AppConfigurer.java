@@ -136,8 +136,10 @@ public class AppConfigurer {
             )
             .httpBasic(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
-            .addFilterAfter(new RemoveAuthenticateHeaderFilter(), BasicAuthenticationFilter.class);
-		return http.build();
+            .exceptionHandling(exceptionHandling ->
+                exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+            );
+        return http.build();
 	}
 
     @Bean
@@ -171,13 +173,13 @@ public class AppConfigurer {
         };
     }
 
-    private class RemoveAuthenticateHeaderFilter extends OncePerRequestFilter {
+    private class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
         @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-            filterChain.doFilter(request, response);
+        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader("WWW-Authenticate", "");
+            response.getWriter().write("Unauthorized");
         }
     }
-
 }
