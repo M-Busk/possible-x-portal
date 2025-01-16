@@ -33,7 +33,9 @@ export class AuthInterceptor implements HttpInterceptor {
             console.log(error)
             alert('Something went wrong.');
           }
-          this.router.navigate(["/login"]);
+          this.router.navigate(["/login"]).then(() => {
+            window.location.reload();
+          });
           return throwError(() => new Error(error.message));
           }));
     } else {
