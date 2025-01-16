@@ -12,32 +12,28 @@ export class AuthInterceptor implements HttpInterceptor {
     // basic authentification for /registration/** path except POST /registration/request
     if (req.url.includes("/registration/") && !(req.url.match("\/registration\/request$") && req.method === "POST")) {
       var authToken = sessionStorage.getItem('authToken');
-      if (!authToken) {
-        var username = prompt("Please enter your username");
-        var password = prompt("Please enter your password");
-        var authToken = btoa(`${username}:${password}`);
-        sessionStorage.setItem('authToken', authToken);
+      if (authToken) {
+        req = req.clone({
+          setHeaders: {
+            Authorization: `Basic ${authToken}`
+          }
+        });
       }
-      req = req.clone({
-        setHeaders: {
-          Authorization: `Basic ${authToken}`
-        }
-      });
       return next.handle(req).pipe(catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
             sessionStorage.removeItem('authToken');
             console.log(error)
-            alert('Invalid Token generated. Please log in again.');
+            alert('Invalid Credentials used. Please log in again.');
           } else if (error.status === 403) {
             sessionStorage.removeItem('authToken');
             console.log(error)
-            alert('Unauthorized Token used. Please log in with the correct Role.');
+            alert('Unauthorized Credentials used. Please log in with the correct Role.');
           } else {
             sessionStorage.removeItem('authToken');
             console.log(error)
             alert('Something went wrong.');
           }
-          this.router.navigate(["/"]);
+          this.router.navigate(["/login"]);
           return throwError(() => new Error(error.message));
           }));
     } else {

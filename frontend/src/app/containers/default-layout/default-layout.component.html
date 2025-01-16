@@ -6,6 +6,12 @@
           <img [alt]="'POSSIBLE-X Logo'" width="142" src="assets/images/brand/possible_blue.svg"/>
         </a>
         <c-navbar-nav class="navbar-nav">
+          <c-nav-item *ngIf="authToken">
+            <a [routerLink]="['/administration/management']" cNavLink>Management</a>
+          </c-nav-item>
+          <c-nav-item *ngIf="!authToken">
+            <a [routerLink]="['/login']" cNavLink>Login</a>
+          </c-nav-item>
           <c-nav-item>
             <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
           </c-nav-item>

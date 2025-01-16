@@ -1,0 +1,39 @@
+.grid-container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  text-align: center;
+  gap: 1rem;
+}
+
+.text {
+  @apply text-White;
+}
+
+.custom-button {
+  @apply text-brand-50 border-2 border-brand-50 p-2;
+  width: 60px;
+  display: flex;
+  justify-self: center;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    @apply bg-brand-600;
+  }
+}
+
+.input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  label {
+    margin-right: 0.5rem;
+  }
+
+  input {
+    width: 300px;
+    font-family: 'Arial', sans-serif;
+  }
+}

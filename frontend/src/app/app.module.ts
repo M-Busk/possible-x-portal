@@ -37,6 +37,7 @@ import {DefaultLayoutComponent} from './containers';
 import {NgOptimizedImage} from "@angular/common";
 import {HomeModule} from "./views/home/home.module";
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import {MaterialModule} from "./sdwizard/material.module";
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     BrowserAnimationsModule,
     WizardAppModule,
     WizardExtensionModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    MaterialModule
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

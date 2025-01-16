@@ -14,6 +14,7 @@ export class DefaultLayoutComponent implements OnInit {
   isMainPage = false;
   versionNumber: string = '';
   versionDate: string = '';
+  authToken: string | null = null;
 
   constructor(private router: Router, private apiService: ApiService) {
     this.router.events.subscribe(event => {
@@ -25,6 +26,7 @@ export class DefaultLayoutComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authToken = sessionStorage.getItem('authToken');
     this.apiService.getVersion().then(response => {
       this.versionNumber = response.version;
       this.versionDate = response.date;

@@ -30,6 +30,11 @@ const routes: Routes = [
         path: 'impressum',
         loadChildren: () =>
           import('./views/impressum/impressum.module').then((m) => m.ImpressumModule)
+      },
+      {
+        path: 'login',
+        loadChildren: () =>
+          import('./views/login/login.module').then((m) => m.LoginModule)
       }
     ]
   },

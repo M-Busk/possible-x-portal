@@ -8,6 +8,8 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +17,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,21 +26,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.SSLException;
+import java.io.IOException;
 
 @Configuration
-@EnableWebSecurity
 public class AppConfigurer {
 
     private static final int EXCHANGE_STRATEGY_SIZE = 16 * 1024 * 1024;
@@ -131,9 +131,23 @@ public class AppConfigurer {
                 .anyRequest().permitAll()
             )
             .httpBasic(Customizer.withDefaults())
+            .exceptionHandling(exceptionHandling ->
+                exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint())
+            )
             .csrf(AbstractHttpConfigurer::disable);
 		return http.build();
 	}
+
+    @Bean
+    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return new AuthenticationEntryPoint() {
+            @Override
+            public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws
+                IOException {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+            }
+        };
+    }
 
     @Bean
 	public UserDetailsService userDetailsService() {
