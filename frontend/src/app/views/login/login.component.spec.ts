@@ -3,15 +3,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import {HomeComponent} from "../home/home.component";
 import {RouterTestingModule} from "@angular/router/testing";
+import { FormsModule } from '@angular/forms';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [RouterTestingModule]
+      imports: [RouterTestingModule, FormsModule]
     })
       .compileComponents();
     fixture = TestBed.createComponent(LoginComponent);
