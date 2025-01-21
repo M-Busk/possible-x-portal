@@ -35,6 +35,12 @@ export interface ICreateRegistrationRequestTO {
 export interface ICreateRegistrationRequestTOBuilder {
 }
 
+export interface IErrorResponseTO {
+    timestamp: Date;
+    message: string;
+    details: string;
+}
+
 export interface IParticipantDidDataTO {
     did: string;
 }
@@ -165,26 +171,26 @@ export interface IClass<T> extends ISerializable, IGenericDeclaration, IType, IA
 }
 
 export interface IValueInstantiator {
-    valueTypeDesc: string;
-    defaultCreator: IAnnotatedWithParams;
-    withArgsCreator: IAnnotatedWithParams;
     valueClass: IClass<any>;
     arrayDelegateCreator: IAnnotatedWithParams;
     delegateCreator: IAnnotatedWithParams;
+    withArgsCreator: IAnnotatedWithParams;
+    valueTypeDesc: string;
+    defaultCreator: IAnnotatedWithParams;
 }
 
 export interface IJavaType extends IResolvedType, ISerializable, IType {
+    recordType: boolean;
     typeHandler: any;
     valueHandler: any;
     enumImplType: boolean;
-    recordType: boolean;
+    referencedType: IJavaType;
     contentValueHandler: any;
     contentTypeHandler: any;
     erasedSignature: string;
     javaLangObject: boolean;
-    referencedType: IJavaType;
-    keyType: IJavaType;
     superClass: IJavaType;
+    keyType: IJavaType;
     interfaces: IJavaType[];
     genericSignature: string;
     contentType: IJavaType;
@@ -192,10 +198,10 @@ export interface IJavaType extends IResolvedType, ISerializable, IType {
 }
 
 export interface IJsonDeserializer<T> extends INullValueProvider {
-    emptyAccessPattern: IAccessPattern;
     delegatee: IJsonDeserializer<any>;
     knownPropertyNames: any[];
     objectIdReader: IObjectIdReader;
+    emptyAccessPattern: IAccessPattern;
     /**
      * @deprecated
      */
@@ -217,8 +223,8 @@ export interface IObjectIdReader extends ISerializable {
 }
 
 export interface IJsonSerializer<T> extends IJsonFormatVisitable {
-    delegatee: IJsonSerializer<any>;
     unwrappingSerializer: boolean;
+    delegatee: IJsonSerializer<any>;
 }
 
 export interface ISerializable {
@@ -255,16 +261,16 @@ export interface IResolvedType {
     concrete: boolean;
     collectionLikeType: boolean;
     mapLikeType: boolean;
+    referencedType: IResolvedType;
     /**
      * @deprecated
      */
     parameterSource: IClass<any>;
-    enumType: boolean;
-    referencedType: IResolvedType;
     arrayType: boolean;
-    keyType: IResolvedType;
-    rawClass: IClass<any>;
+    enumType: boolean;
     throwable: boolean;
+    rawClass: IClass<any>;
+    keyType: IResolvedType;
     interface: boolean;
     primitive: boolean;
     final: boolean;
@@ -292,14 +298,14 @@ export interface IObjectIdResolver {
 
 export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISerializable {
     valueDeserializer: IJsonDeserializer<any>;
-    objectIdInfo: IObjectIdInfo;
-    managedReferenceName: string;
     creatorIndex: number;
+    managedReferenceName: string;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
     injectableValueId: any;
     injectionOnly: boolean;
+    objectIdInfo: IObjectIdInfo;
     ignorable: boolean;
 }
 
@@ -356,19 +362,19 @@ export interface IAnnotatedMember extends IAnnotated, ISerializable {
     fullName: string;
 }
 
-export interface IObjectIdInfo {
-    alwaysAsId: boolean;
-    generatorType: IClass<IObjectIdGenerator<any>>;
-    resolverType: IClass<IObjectIdResolver>;
-    scope: IClass<any>;
-    propertyName: IPropertyName;
-}
-
 export interface ITypeDeserializer {
-    typeInclusion: IAs;
     typeIdResolver: ITypeIdResolver;
+    typeInclusion: IAs;
     defaultImpl: IClass<any>;
     propertyName: string;
+}
+
+export interface IObjectIdInfo {
+    generatorType: IClass<IObjectIdGenerator<any>>;
+    resolverType: IClass<IObjectIdResolver>;
+    alwaysAsId: boolean;
+    scope: IClass<any>;
+    propertyName: IPropertyName;
 }
 
 export interface IPropertyMetadata extends ISerializable {
@@ -411,8 +417,8 @@ export interface IAnnotated {
 }
 
 export interface ITypeIdResolver {
-    descForKnownTypeIds: string;
     mechanism: IId;
+    descForKnownTypeIds: string;
 }
 
 export interface IMergeInfo {

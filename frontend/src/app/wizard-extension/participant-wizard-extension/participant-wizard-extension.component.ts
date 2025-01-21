@@ -12,6 +12,7 @@ import {
   IPojoCredentialSubject,
   IPxParticipantExtensionCredentialSubject
 } from "../../services/mgmt/api/backend";
+import {commonMessages} from "../../../environments/common-messages";
 
 @Component({
   selector: 'app-participant-wizard-extension',
@@ -96,9 +97,13 @@ export class ParticipantWizardExtensionComponent {
       console.log(response);
       this.participantRegistrationStatusMessage.showSuccessMessage();
     }).catch((e: HttpErrorResponse) => {
-      this.participantRegistrationStatusMessage.showErrorMessage(e.error.detail|| e.error || e.message);
+      if (e.status === 500) {
+        this.participantRegistrationStatusMessage.showErrorMessage(commonMessages.general_error);
+      } else {
+        this.participantRegistrationStatusMessage.showErrorMessage(e.error.details);
+      }
     }).catch(_ => {
-      this.participantRegistrationStatusMessage.showErrorMessage("Unbekannter Fehler");
+      this.participantRegistrationStatusMessage.showErrorMessage(commonMessages.general_error);
     });
 
   }
@@ -107,6 +112,20 @@ export class ParticipantWizardExtensionComponent {
     this.gxParticipantWizard.ngOnDestroy();
     this.gxRegistrationNumberWizard.ngOnDestroy();
     this.participantRegistrationStatusMessage.hideAllMessages();
+  }
+
+  trimStringsInDataStructure(obj: any): any {
+    if (typeof obj === 'string') {
+      return obj.trim();
+    } else if (Array.isArray(obj)) {
+      return obj.map(this.trimStringsInDataStructure);
+    } else if (typeof obj === 'object' && obj !== null) {
+      return Object.keys(obj).reduce((acc, key) => {
+        acc[key] = this.trimStringsInDataStructure(obj[key]);
+        return acc;
+      }, {} as any);
+    }
+    return obj;
   }
 
   protected isWizardFormInvalid(): boolean {
@@ -163,20 +182,6 @@ export class ParticipantWizardExtensionComponent {
       return false;
     }
     return true;
-  }
-
-  trimStringsInDataStructure(obj: any): any {
-    if (typeof obj === 'string') {
-      return obj.trim();
-    } else if (Array.isArray(obj)) {
-      return obj.map(this.trimStringsInDataStructure);
-    } else if (typeof obj === 'object' && obj !== null) {
-      return Object.keys(obj).reduce((acc, key) => {
-        acc[key] = this.trimStringsInDataStructure(obj[key]);
-        return acc;
-      }, {} as any);
-    }
-    return obj;
   }
 
 }

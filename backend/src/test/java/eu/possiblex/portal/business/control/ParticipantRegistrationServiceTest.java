@@ -9,7 +9,7 @@ import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
-import eu.possiblex.portal.business.entity.exception.RegistrationRequestException;
+import eu.possiblex.portal.business.entity.exception.RegistrationRequestConflictException;
 import eu.possiblex.portal.persistence.control.ParticipantRegistrationEntityMapper;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAOFake;
@@ -72,7 +72,7 @@ class ParticipantRegistrationServiceTest {
         PxExtendedLegalParticipantCredentialSubject participant = getParticipantCs();
         participant.setName(ParticipantRegistrationRequestDAOFake.EXISTING_NAME);
 
-        assertThrows(RegistrationRequestException.class, () -> {
+        assertThrows(RegistrationRequestConflictException.class, () -> {
             participantRegistrationService.registerParticipant(participant);
         });
 

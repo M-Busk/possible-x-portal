@@ -52,6 +52,7 @@ public class FhCatalogClientImpl implements FhCatalogClient {
 
     @Override
     public FhCatalogIdResponse addParticipantToCatalog(PxExtendedLegalParticipantCredentialSubject cs) {
+
         String verMethod = cs.getId() + "#JWK2020-PossibleLetsEncrypt";
         log.info("sending to catalog: {} with verMethod {}", LogUtils.serializeObjectToJson(cs), verMethod);
 
@@ -67,8 +68,7 @@ public class FhCatalogClientImpl implements FhCatalogClient {
     }
 
     @Override
-    public PxExtendedLegalParticipantCredentialSubject getParticipantFromCatalog(String participantId)
-        throws ParticipantNotFoundException {
+    public PxExtendedLegalParticipantCredentialSubject getParticipantFromCatalog(String participantId) {
 
         log.info("fetching participant for fh catalog ID " + participantId);
         String participantJsonContent;
@@ -96,7 +96,7 @@ public class FhCatalogClientImpl implements FhCatalogClient {
     }
 
     @Override
-    public void deleteParticipantFromCatalog(String participantId) throws ParticipantNotFoundException {
+    public void deleteParticipantFromCatalog(String participantId) {
 
         log.info("deleting participant from fh catalog with ID {}", participantId);
         try {

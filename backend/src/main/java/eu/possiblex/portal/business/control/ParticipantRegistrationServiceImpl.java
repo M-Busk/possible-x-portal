@@ -10,8 +10,8 @@ import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidUpdateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
-import eu.possiblex.portal.business.entity.exception.ParticipantNotFoundException;
-import eu.possiblex.portal.business.entity.exception.RegistrationRequestException;
+import eu.possiblex.portal.business.entity.exception.RegistrationRequestConflictException;
+import eu.possiblex.portal.business.entity.exception.RegistrationRequestProcessingException;
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         log.info("Processing participant registration: {}", cs);
 
         if (participantRegistrationRequestDAO.getRegistrationRequestByName(cs.getName()) != null) {
-            throw new RegistrationRequestException(
+            throw new RegistrationRequestConflictException(
                 "A registration request has already been made under this organization name: " + cs.getName());
         }
 
@@ -105,7 +105,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
      * @param id registration request id
      */
     @Override
-    public void acceptRegistrationRequest(String id) throws ParticipantComplianceException {
+    public void acceptRegistrationRequest(String id) {
 
         log.info("Processing acceptance of participant: {}", id);
 
@@ -113,7 +113,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         completeRegistrationRequest(id);
     }
 
-    private void completeRegistrationRequest(String id) throws ParticipantComplianceException {
+    private void completeRegistrationRequest(String id) {
 
         // load registration request entity from db
         ParticipantRegistrationRequestBE be = participantRegistrationRequestDAO.getRegistrationRequestByName(id);
@@ -126,7 +126,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         FhCatalogIdResponse idResponse;
         try {
             idResponse = enrollParticipantInCatalog(be, didWeb.getDid());
-        } catch (ParticipantComplianceException e) {
+        } catch (Exception e) {
             // revert did if catalog won't work
             deleteDidWeb(didWeb.getDid());
             throw e;
@@ -139,7 +139,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         OmejdnConnectorCertificateBE certificate;
         try {
             certificate = requestDapsCertificate(didWeb.getDid(), didWeb.getDid());
-        } catch (RegistrationRequestException e) {
+        } catch (Exception e) {
             // revert catalog and did if daps won't work
             deleteParticipantFromCatalog(idResponse.getId());
             deleteDidWeb(didWeb.getDid());
@@ -150,7 +150,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         String dapsIdUrl = dapsIdBaseUrl + certificate.getClientId();
         try {
             updateDidWebWithAliases(didWeb.getDid(), List.of(dapsIdUrl));
-        } catch (RegistrationRequestException e) {
+        } catch (Exception e) {
             // revert all changes if something goes wrong
             deleteDapsCertificate(certificate.getClientId());
             deleteParticipantFromCatalog(idResponse.getId());
@@ -203,7 +203,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName, did));
         } catch (WebClientResponseException e) {
             log.error("Failed to request DAPS certificate: {}", e.getResponseBodyAsString());
-            throw new RegistrationRequestException("Failed to request DAPS certificate", e);
+            throw new RegistrationRequestProcessingException("Failed to request DAPS certificate", e);
         }
     }
 
@@ -224,7 +224,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             return didWebServiceApiClient.generateDidWeb(createRequestBE);
         } catch (WebClientResponseException e) {
             log.error("Failed to generate DID: {}", e.getResponseBodyAsString());
-            throw new RegistrationRequestException("Failed to generate DID", e);
+            throw new RegistrationRequestProcessingException("Failed to generate DID", e);
         }
     }
 
@@ -235,7 +235,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             didWebServiceApiClient.updateDidWeb(updateRequestBE);
         } catch (WebClientResponseException e) {
             log.error("Failed to update DID: {}", e.getResponseBodyAsString());
-            throw new RegistrationRequestException("Failed to update DID document with DAPS ID", e);
+            throw new RegistrationRequestProcessingException("Failed to update DID document with DAPS ID", e);
         }
     }
 
@@ -273,7 +273,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         try {
             fhCatalogClient.deleteParticipantFromCatalog(id);
-        } catch (WebClientResponseException | ParticipantNotFoundException e) {
+        } catch (Exception e) {
             log.error("Failed to delete participant from catalog", e);
         }
     }

@@ -1,6 +1,6 @@
 package eu.possiblex.portal.business.entity.exception;
 
-public class ParticipantComplianceException extends Exception {
+public class ParticipantComplianceException extends RuntimeException {
 
     public ParticipantComplianceException(String message) {
 

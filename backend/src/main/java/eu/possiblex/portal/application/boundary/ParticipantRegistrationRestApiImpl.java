@@ -5,14 +5,11 @@ import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
-import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -77,11 +74,7 @@ public class ParticipantRegistrationRestApiImpl implements ParticipantRegistrati
     public void acceptRegistrationRequest(@PathVariable String id) {
 
         log.info("Received request to accept participant: {}", id);
-        try {
-            participantRegistrationService.acceptRegistrationRequest(id);
-        } catch (ParticipantComplianceException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        }
+        participantRegistrationService.acceptRegistrationRequest(id);
     }
 
     /**

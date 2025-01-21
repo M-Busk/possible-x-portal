@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {IRegistrationRequestEntryTO, IRequestStatus} from "../../../services/mgmt/api/backend";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ApiService} from "../../../services/mgmt/api/api.service";
+import {commonMessages} from "../../../../environments/common-messages";
 
 export interface RequestResponse {
   isError: boolean;
@@ -31,22 +32,6 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.computeButtonStates();
-  }
-
-  protected isRegistrationRequestNew(request: IRegistrationRequestEntryTO): boolean {
-    return request.status === IRequestStatus.NEW;
-  }
-
-  protected isRegistrationRequestAccepted(request: IRegistrationRequestEntryTO): boolean {
-    return request.status === IRequestStatus.ACCEPTED;
-  }
-
-  protected isRegistrationRequestRejected(request: IRegistrationRequestEntryTO): boolean {
-    return request.status === IRequestStatus.REJECTED;
-  }
-
-  protected isRegistrationRequestCompleted(request: IRegistrationRequestEntryTO): boolean {
-    return request.status === IRequestStatus.COMPLETED;
   }
 
   computeButtonStates() {
@@ -84,11 +69,18 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
     this.disableAllButtons();
     this.apiService.acceptRegistrationRequest(request.name).then(() => {
       console.log("Accept request for: " + request.name);
-      this.response.emit({isError: false, message: "Request accepted successfully. Participant was checked for compliance and stored in the catalog."});
+      this.response.emit({
+        isError: false,
+        message: "Request accepted successfully. Participant was checked for compliance and stored in the catalog."
+      });
     }).catch((e: HttpErrorResponse) => {
-      this.response.emit({isError: true, message: e.message});
+      if (e.status === 500) {
+        this.response.emit({isError: true, message: commonMessages.general_error});
+      } else {
+        this.response.emit({isError: true, message: e.error.details});
+      }
     }).catch(_ => {
-      this.response.emit({isError: true, message: "Unknown error occurred"});
+      this.response.emit({isError: true, message: commonMessages.general_error});
     });
   }
 
@@ -99,9 +91,13 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
       console.log("Delete request for: " + request.name);
       this.response.emit({isError: false, message: "Request deleted successfully"});
     }).catch((e: HttpErrorResponse) => {
-      this.response.emit({isError: true, message: e.message});
+      if (e.status === 500) {
+        this.response.emit({isError: true, message: commonMessages.general_error});
+      } else {
+        this.response.emit({isError: true, message: e.error.details});
+      }
     }).catch(_ => {
-      this.response.emit({isError: true, message: "Unknown error occurred"});
+      this.response.emit({isError: true, message: commonMessages.general_error});
     });
   }
 
@@ -113,10 +109,30 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
       console.log("Reject request for: " + request.name);
       this.response.emit({isError: false, message: "Request rejected successfully"});
     }).catch((e: HttpErrorResponse) => {
-      this.response.emit({isError: true, message: e.message});
+      if (e.status === 500) {
+        this.response.emit({isError: true, message: commonMessages.general_error});
+      } else {
+        this.response.emit({isError: true, message: e.error.details});
+      }
     }).catch(_ => {
-      this.response.emit({isError: true, message: "Unknown error occurred"});
+      this.response.emit({isError: true, message: commonMessages.general_error});
     });
+  }
+
+  protected isRegistrationRequestNew(request: IRegistrationRequestEntryTO): boolean {
+    return request.status === IRequestStatus.NEW;
+  }
+
+  protected isRegistrationRequestAccepted(request: IRegistrationRequestEntryTO): boolean {
+    return request.status === IRequestStatus.ACCEPTED;
+  }
+
+  protected isRegistrationRequestRejected(request: IRegistrationRequestEntryTO): boolean {
+    return request.status === IRequestStatus.REJECTED;
+  }
+
+  protected isRegistrationRequestCompleted(request: IRegistrationRequestEntryTO): boolean {
+    return request.status === IRequestStatus.COMPLETED;
   }
 
 }

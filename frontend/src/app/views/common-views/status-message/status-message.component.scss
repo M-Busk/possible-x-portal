@@ -19,12 +19,15 @@
 
 .info-message {
   @apply text-black;
+  white-space: pre-wrap;
 }
 
 .error-message {
   @apply text-error;
+  white-space: pre-wrap;
 }
 
 .success-message {
   @apply text-success;
+  white-space: pre-wrap;
 }
