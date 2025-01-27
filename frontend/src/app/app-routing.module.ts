@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {DefaultLayoutComponent} from './containers';
 import {HomeComponent} from "./views/home/home.component";
+import {authGuard} from "./services/mgmt/auth/auth.guard";
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
           import('./views/participant/participant.module').then((m) => m.ParticipantModule)
       },
       {
+        canActivate: [authGuard],
         path: 'administration',
         loadChildren: () =>
           import('./views/administration/administration.module').then((m) => m.AdministrationModule)

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
 import {ApiService} from "../../services/mgmt/api/api.service";
+import {AuthService} from "../../services/mgmt/auth/auth.service";
 
 @Component({
   selector: 'app-default-layout',
@@ -14,9 +15,8 @@ export class DefaultLayoutComponent implements OnInit {
   isMainPage = false;
   versionNumber: string = '';
   versionDate: string = '';
-  authToken: string | null = null;
 
-  constructor(private router: Router, private apiService: ApiService) {
+  constructor(private router: Router, private apiService: ApiService, protected auth: AuthService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isAdminPage = event.urlAfterRedirects.includes('administration/management');
@@ -26,7 +26,6 @@ export class DefaultLayoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authToken = sessionStorage.getItem('authToken');
     this.apiService.getVersion().then(response => {
       this.versionNumber = response.version;
       this.versionDate = response.date;

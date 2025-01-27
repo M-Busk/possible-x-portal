@@ -135,7 +135,8 @@ public class AppConfigurer {
                 .anyRequest().permitAll()
             )
             .httpBasic(basic -> basic.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
-            .csrf(AbstractHttpConfigurer::disable);
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(Customizer.withDefaults());
         return http.build();
 	}
 
