@@ -57,6 +57,7 @@ configMapGenerator:
       - DIDWEBSERVICE_BASEURL=http://did-web-service:8080
       - DIDWEBSERVICE_IGNORESSL="false"
       - FH_CATALOG_URL=https://hub.catalog.dev.possible-x.de/
+      - FH_CATALOG_UIURL=https://catalog.dev.possible-x.de/
       - SDCREATIONWIZARDAPI_BASEURL=https://sd-creation-wizard.dev.possible-x.de
       - SPRING_PROFILES_ACTIVE=dev
 
