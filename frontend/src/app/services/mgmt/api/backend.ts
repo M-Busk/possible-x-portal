@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 export interface ICommonPortalRestApi {
+    environment: IEnvironmentTO;
     version: IVersionTO;
 }
 
@@ -33,6 +34,13 @@ export interface ICreateRegistrationRequestTO {
 }
 
 export interface ICreateRegistrationRequestTOBuilder {
+}
+
+export interface IEnvironmentTO {
+    catalogUiUrl: string;
+}
+
+export interface IEnvironmentTOBuilder {
 }
 
 export interface IErrorResponseTO {
@@ -170,38 +178,38 @@ export interface IOmejdnConnectorCertificateDto {
 export interface IClass<T> extends ISerializable, IGenericDeclaration, IType, IAnnotatedElement, IOfField<IClass<any>>, IConstable {
 }
 
-export interface IValueInstantiator {
-    valueClass: IClass<any>;
-    arrayDelegateCreator: IAnnotatedWithParams;
-    delegateCreator: IAnnotatedWithParams;
-    withArgsCreator: IAnnotatedWithParams;
-    valueTypeDesc: string;
-    defaultCreator: IAnnotatedWithParams;
-}
-
 export interface IJavaType extends IResolvedType, ISerializable, IType {
     recordType: boolean;
     typeHandler: any;
     valueHandler: any;
     enumImplType: boolean;
+    keyType: IJavaType;
     referencedType: IJavaType;
     contentValueHandler: any;
     contentTypeHandler: any;
     erasedSignature: string;
     javaLangObject: boolean;
     superClass: IJavaType;
-    keyType: IJavaType;
     interfaces: IJavaType[];
     genericSignature: string;
     contentType: IJavaType;
     bindings: ITypeBindings;
 }
 
+export interface IValueInstantiator {
+    arrayDelegateCreator: IAnnotatedWithParams;
+    delegateCreator: IAnnotatedWithParams;
+    withArgsCreator: IAnnotatedWithParams;
+    valueTypeDesc: string;
+    defaultCreator: IAnnotatedWithParams;
+    valueClass: IClass<any>;
+}
+
 export interface IJsonDeserializer<T> extends INullValueProvider {
+    emptyAccessPattern: IAccessPattern;
     delegatee: IJsonDeserializer<any>;
     knownPropertyNames: any[];
     objectIdReader: IObjectIdReader;
-    emptyAccessPattern: IAccessPattern;
     /**
      * @deprecated
      */
@@ -223,8 +231,8 @@ export interface IObjectIdReader extends ISerializable {
 }
 
 export interface IJsonSerializer<T> extends IJsonFormatVisitable {
-    unwrappingSerializer: boolean;
     delegatee: IJsonSerializer<any>;
+    unwrappingSerializer: boolean;
 }
 
 export interface ISerializable {
@@ -246,11 +254,6 @@ export interface IAnnotatedElement {
 export interface IConstable {
 }
 
-export interface IAnnotatedWithParams extends IAnnotatedMember {
-    annotationCount: number;
-    parameterCount: number;
-}
-
 export interface ITypeBindings extends ISerializable {
     empty: boolean;
     typeParameters: IJavaType[];
@@ -261,22 +264,27 @@ export interface IResolvedType {
     concrete: boolean;
     collectionLikeType: boolean;
     mapLikeType: boolean;
+    keyType: IResolvedType;
     referencedType: IResolvedType;
     /**
      * @deprecated
      */
     parameterSource: IClass<any>;
-    arrayType: boolean;
     enumType: boolean;
-    throwable: boolean;
+    arrayType: boolean;
     rawClass: IClass<any>;
-    keyType: IResolvedType;
+    throwable: boolean;
     interface: boolean;
     primitive: boolean;
     final: boolean;
     abstract: boolean;
     referenceType: boolean;
     contentType: IResolvedType;
+}
+
+export interface IAnnotatedWithParams extends IAnnotatedMember {
+    annotationCount: number;
+    parameterCount: number;
 }
 
 export interface INullValueProvider {
@@ -297,15 +305,15 @@ export interface IObjectIdResolver {
 }
 
 export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISerializable {
-    valueDeserializer: IJsonDeserializer<any>;
     creatorIndex: number;
+    valueDeserializer: IJsonDeserializer<any>;
+    objectIdInfo: IObjectIdInfo;
     managedReferenceName: string;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
     injectableValueId: any;
     injectionOnly: boolean;
-    objectIdInfo: IObjectIdInfo;
     ignorable: boolean;
 }
 
@@ -362,19 +370,19 @@ export interface IAnnotatedMember extends IAnnotated, ISerializable {
     fullName: string;
 }
 
-export interface ITypeDeserializer {
-    typeIdResolver: ITypeIdResolver;
-    typeInclusion: IAs;
-    defaultImpl: IClass<any>;
-    propertyName: string;
-}
-
 export interface IObjectIdInfo {
     generatorType: IClass<IObjectIdGenerator<any>>;
     resolverType: IClass<IObjectIdResolver>;
     alwaysAsId: boolean;
     scope: IClass<any>;
     propertyName: IPropertyName;
+}
+
+export interface ITypeDeserializer {
+    typeInclusion: IAs;
+    typeIdResolver: ITypeIdResolver;
+    defaultImpl: IClass<any>;
+    propertyName: string;
 }
 
 export interface IPropertyMetadata extends ISerializable {
@@ -417,8 +425,8 @@ export interface IAnnotated {
 }
 
 export interface ITypeIdResolver {
-    mechanism: IId;
     descForKnownTypeIds: string;
+    mechanism: IId;
 }
 
 export interface IMergeInfo {
@@ -448,6 +456,14 @@ export interface HttpClient {
 export class RestApplicationClient {
 
     constructor(protected httpClient: HttpClient) {
+    }
+
+    /**
+     * HTTP GET /common/environment
+     * Java method: eu.possiblex.portal.application.boundary.CommonPortalRestApiImpl.getEnvironment
+     */
+    getEnvironment(): RestResponse<IEnvironmentTO> {
+        return this.httpClient.request({ method: "GET", url: uriEncoding`common/environment` });
     }
 
     /**

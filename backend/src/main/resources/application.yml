@@ -43,6 +43,7 @@ did-web-service:
 
 fh:
   catalog:
+    ui-url: https://possible.fokus.fraunhofer.de/
     url: url
     secret-key: secret
 

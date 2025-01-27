@@ -1,2 +1,8 @@
 server:
   port: 8088
+
+fh:
+  catalog:
+    ui-url: http://localhost:5080/
+    url: http://localhost:5081/
+    secret-key: yourRepoApiKey

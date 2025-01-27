@@ -29,5 +29,6 @@ did-web-service:
 
 fh:
   catalog:
+    ui-url: https://example.com/
     url: url
     secret-key: secret
