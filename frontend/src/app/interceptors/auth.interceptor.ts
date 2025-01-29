@@ -20,26 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
           }
         });
       }
-      return next.handle(req).pipe(catchError((error: HttpErrorResponse) => {
-        if (error.status.valueOf() === 401 || error.status.valueOf() === 403) {
-          this.auth.logout();
-          console.log(error);
-          switch (error.status) {
-            case 401:
-              alert(`Invalid Credentials used. Please log in again.`);
-              break;
-            case 403:
-              alert(`Unauthorized Credentials used. Please log in with the correct Role.`);
-              break
-          }
-          this.router.navigate(["/login"]).then(() => {
-            window.location.reload();
-          });
-        }
-        return throwError(() => new Error(error.message));
-      }));
-    } else {
-      return next.handle(req);
     }
+    return next.handle(req);
   }
 }

@@ -27,13 +27,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
+  @apply font-acumin-pro;
   label {
     margin-right: 0.5rem;
   }
 
   input {
     width: 300px;
-    font-family: 'Arial', sans-serif;
+    height: 32px;
   }
 }

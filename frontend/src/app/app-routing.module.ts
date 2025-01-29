@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {DefaultLayoutComponent} from './containers';
 import {HomeComponent} from "./views/home/home.component";
 import {authGuard} from "./services/mgmt/auth/auth.guard";
+import {isAuthenticated} from "./services/mgmt/auth/auth-resolver.service";
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
       },
       {
         canActivate: [authGuard],
+        resolve: { isAuthenticated: isAuthenticated},
         path: 'administration',
         loadChildren: () =>
           import('./views/administration/administration.module').then((m) => m.AdministrationModule)
