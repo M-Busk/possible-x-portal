@@ -5,8 +5,8 @@ import {StatusMessageComponent} from "../../common-views/status-message/status-m
 import {HttpErrorResponse} from "@angular/common/http";
 import {ModalComponent} from "@coreui/angular";
 import {RequestResponse} from "../registration-request/registration-request.component";
-import {MatSort, MatSortable, Sort} from "@angular/material/sort";
-import { MatTableDataSource } from '@angular/material/table';
+import {MatSort, Sort} from "@angular/material/sort";
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-registration-request-management',
@@ -20,75 +20,71 @@ export class RegistrationRequestManagementComponent implements OnInit, AfterView
   @ViewChild("responseModal") responseModal: ModalComponent;
   @ViewChild(MatSort) sort: MatSort;
   registrationRequests = new MatTableDataSource<IRegistrationRequestEntryTO>();
+  pageSize = 10;
+  pageIndex = 0;
+  totalNumberOfRegistrationRequests = 0;
 
-  constructor(private apiService: ApiService) {
+  constructor(private readonly apiService: ApiService) {
   }
 
-  async getRegistrationRequestsWithSort() {
-    this.registrationRequests.data = await this.apiService.getAllRegistrationRequests();
-    this.sort.sort(({id: 'organizationName', start: 'asc'}) as MatSortable);
-    this.registrationRequests.sort = this.sort;
-  }
+  async getRegistrationRequests(params: any) {
+    const requestsResponseTO = await this.apiService.getRegistrationRequests(params);
 
-  async getRegistrationRequestsWithoutSort() {
-    this.registrationRequests.data = await this.apiService.getAllRegistrationRequests();
+    console.log(requestsResponseTO);
+
+    this.registrationRequests.data = requestsResponseTO.content;
+    this.totalNumberOfRegistrationRequests = requestsResponseTO.totalElements;
     this.registrationRequests.sort = this.sort;
   }
 
   ngOnInit(): void {
+    // get registration requests with default sorting
     this.handleGetRegistrationRequests();
   }
 
   ngAfterViewInit() {
     this.sort.sortChange.subscribe((sortState: Sort) => {
-      this.customSort(sortState);
+      if (!sortState.active || sortState.direction === '') {
+        // do nothing if sort is not active or direction is empty
+        return;
+      }
+      // get registration requests with new sorting
+      this.handleGetRegistrationRequests(sortState);
     });
   }
 
-  handleGetRegistrationRequests() {
-    this.getRegistrationRequestsWithSort().catch((e: HttpErrorResponse) => {
-      this.requestListStatusMessage.showErrorMessage(e.error.detail);
-    }).catch(_ => {
+  handleGetRegistrationRequests(sortState: Sort = undefined) {
+    // set params for pagination
+    let params: any = {page: this.pageIndex, size: this.pageSize};
+
+    // set sorting params if sortState is provided and active
+    if (sortState?.active && sortState?.direction !== '') {
+      params.sort = sortState.active + ',' + sortState.direction;
+    }
+
+    // get registration requests with params for pagination and sorting
+    this.getRegistrationRequests(params)
+      .catch((e: HttpErrorResponse) => {
+        this.requestListStatusMessage.showErrorMessage(e.error.detail);
+      }).catch(_ => {
       this.requestListStatusMessage.showErrorMessage("Unknown error occurred");
     });
   }
 
-  showResponse(response: RequestResponse){
-    if(!response.isError) {
+  showResponse(response: RequestResponse) {
+    if (!response.isError) {
       this.operationStatusMessage.showSuccessMessage(response.message);
     } else {
       this.operationStatusMessage.showErrorMessage(response.message);
     }
 
     this.responseModal.visible = true;
-    this.handleGetRegistrationRequests();
+    this.handleGetRegistrationRequests(this.sort);
   }
 
-  async customSort(sortState: Sort) {
-    const data = this.registrationRequests.data.slice();
-    if (!sortState.active || sortState.direction === '') {
-      this.getRegistrationRequestsWithoutSort().catch((e: HttpErrorResponse) => {
-        this.requestListStatusMessage.showErrorMessage(e.error.detail);
-      }).catch(_ => {
-        this.requestListStatusMessage.showErrorMessage("Unknown error occurred");
-      });
-      return;
-    }
-
-    this.registrationRequests.data = data.sort((a, b) => {
-      const isAsc = sortState.direction === 'asc';
-      switch (sortState.active) {
-        case 'organizationName':
-          return this.compare(a.name, b.name, isAsc);
-        case 'status':
-          return this.compare(a.status, b.status, isAsc);
-        default:
-          return 0;
-      }
-    });
-  }
-
-  compare(a: string | number, b: string | number, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  onPageChange(event: any): void {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.handleGetRegistrationRequests(this.sort);
   }
 }

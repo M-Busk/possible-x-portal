@@ -4,8 +4,8 @@ import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ParticipantRegistrationRequestDAO {
     /**
@@ -40,11 +40,11 @@ public interface ParticipantRegistrationRequestDAO {
         OmejdnConnectorCertificateBE certificate);
 
     /**
-     * Get a list of all registration requests.
+     * Get a list of registration requests for given pageable.
      *
      * @return list of registration requests
      */
-    List<ParticipantRegistrationRequestBE> getAllRegistrationRequests();
+    Page<ParticipantRegistrationRequestBE> getRegistrationRequests(Pageable paginationRequest);
 
     /**
      * Get a registration request by DID.

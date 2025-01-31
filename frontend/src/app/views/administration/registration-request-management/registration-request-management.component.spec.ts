@@ -7,6 +7,7 @@ import {CommonViewsModule} from '../../common-views/common-views.module';
 import {IRegistrationRequestEntryTO} from "../../../services/mgmt/api/backend";
 import {provideAnimations} from "@angular/platform-browser/animations";
 import {MatSortModule} from "@angular/material/sort";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 describe('RegistrationRequestManagementComponent', () => {
   let component: RegistrationRequestManagementComponent;
@@ -14,10 +15,10 @@ describe('RegistrationRequestManagementComponent', () => {
   let apiService: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
-    const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getAllRegistrationRequests']);
+    const apiServiceSpy = jasmine.createSpyObj('ApiService', ['getRegistrationRequests']);
     TestBed.configureTestingModule({
       declarations: [RegistrationRequestManagementComponent],
-      imports: [AccordionModule, ModalModule, CommonViewsModule, MatSortModule],
+      imports: [AccordionModule, ModalModule, CommonViewsModule, MatSortModule, MatPaginatorModule],
       providers: [
         {provide: ApiService, useValue: apiServiceSpy},
         provideAnimations()
@@ -33,13 +34,13 @@ describe('RegistrationRequestManagementComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getAllRegistrationRequests on apiService when getAllRegistrationRequests is called', async () => {
+  it('should call getRegistrationRequests on apiService when getRegistrationRequests is called', async () => {
     const emptyList: IRegistrationRequestEntryTO[] = [];
-    apiService.getAllRegistrationRequests.and.returnValue(Promise.resolve(emptyList));
+    apiService.getRegistrationRequests.and.returnValue(Promise.resolve({registrationRequests: emptyList, totalNumberOfRegistrationRequests: 0}));
 
-    component.getRegistrationRequestsWithSort();
+    component.getRegistrationRequests(undefined);
 
-    expect(apiService.getAllRegistrationRequests).toHaveBeenCalled();
+    expect(apiService.getRegistrationRequests).toHaveBeenCalled();
 
   });
 });

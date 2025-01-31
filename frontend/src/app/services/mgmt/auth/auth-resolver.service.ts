@@ -10,7 +10,7 @@ export const isAuthenticated: ResolveFn<any> =
     const authService = inject(AuthService);
 
     try {
-      const response = await apiService.getAllRegistrationRequests();
+      await apiService.getRegistrationRequests();
       return true;
     } catch (e) {
       console.log(e);

@@ -7,7 +7,6 @@ export interface ICommonPortalRestApi {
 }
 
 export interface IParticipantRegistrationRestApi {
-    allRegistrationRequests: IRegistrationRequestEntryTO[];
 }
 
 export interface IParticipantShapeRestApi {
@@ -179,6 +178,7 @@ export interface IClass<T> extends ISerializable, IGenericDeclaration, IType, IA
 }
 
 export interface IJavaType extends IResolvedType, ISerializable, IType {
+    javaLangObject: boolean;
     recordType: boolean;
     typeHandler: any;
     valueHandler: any;
@@ -188,28 +188,23 @@ export interface IJavaType extends IResolvedType, ISerializable, IType {
     contentValueHandler: any;
     contentTypeHandler: any;
     erasedSignature: string;
-    javaLangObject: boolean;
     superClass: IJavaType;
     interfaces: IJavaType[];
     genericSignature: string;
-    contentType: IJavaType;
     bindings: ITypeBindings;
+    contentType: IJavaType;
 }
 
 export interface IValueInstantiator {
+    valueClass: IClass<any>;
     arrayDelegateCreator: IAnnotatedWithParams;
     delegateCreator: IAnnotatedWithParams;
     withArgsCreator: IAnnotatedWithParams;
     valueTypeDesc: string;
     defaultCreator: IAnnotatedWithParams;
-    valueClass: IClass<any>;
 }
 
 export interface IJsonDeserializer<T> extends INullValueProvider {
-    emptyAccessPattern: IAccessPattern;
-    delegatee: IJsonDeserializer<any>;
-    knownPropertyNames: any[];
-    objectIdReader: IObjectIdReader;
     /**
      * @deprecated
      */
@@ -218,6 +213,10 @@ export interface IJsonDeserializer<T> extends INullValueProvider {
      * @deprecated
      */
     nullValue: T;
+    emptyAccessPattern: IAccessPattern;
+    delegatee: IJsonDeserializer<any>;
+    knownPropertyNames: any[];
+    objectIdReader: IObjectIdReader;
     cachable: boolean;
 }
 
@@ -231,8 +230,13 @@ export interface IObjectIdReader extends ISerializable {
 }
 
 export interface IJsonSerializer<T> extends IJsonFormatVisitable {
-    delegatee: IJsonSerializer<any>;
     unwrappingSerializer: boolean;
+    delegatee: IJsonSerializer<any>;
+}
+
+export interface IPage<T> extends ISlice<T> {
+    totalPages: number;
+    totalElements: number;
 }
 
 export interface ISerializable {
@@ -261,7 +265,9 @@ export interface ITypeBindings extends ISerializable {
 
 export interface IResolvedType {
     containerType: boolean;
+    arrayType: boolean;
     concrete: boolean;
+    enumType: boolean;
     collectionLikeType: boolean;
     mapLikeType: boolean;
     keyType: IResolvedType;
@@ -270,10 +276,8 @@ export interface IResolvedType {
      * @deprecated
      */
     parameterSource: IClass<any>;
-    enumType: boolean;
-    arrayType: boolean;
-    rawClass: IClass<any>;
     throwable: boolean;
+    rawClass: IClass<any>;
     interface: boolean;
     primitive: boolean;
     final: boolean;
@@ -305,16 +309,16 @@ export interface IObjectIdResolver {
 }
 
 export interface ISettableBeanProperty extends IConcreteBeanPropertyBase, ISerializable {
-    creatorIndex: number;
+    injectableValueId: any;
     valueDeserializer: IJsonDeserializer<any>;
+    creatorIndex: number;
     objectIdInfo: IObjectIdInfo;
     managedReferenceName: string;
+    ignorable: boolean;
     valueTypeDeserializer: ITypeDeserializer;
     nullValueProvider: INullValueProvider;
     propertyIndex: number;
-    injectableValueId: any;
     injectionOnly: boolean;
-    ignorable: boolean;
 }
 
 export interface IStdDeserializer<T> extends IJsonDeserializer<T>, ISerializable, IGettable {
@@ -329,6 +333,20 @@ export interface IJsonFormatVisitable {
 }
 
 export interface IStdSerializer<T> extends IJsonSerializer<T>, IJsonFormatVisitable, ISchemaAware, ISerializable {
+}
+
+export interface IPageable {
+    paged: boolean;
+    unpaged: boolean;
+    pageNumber: number;
+    pageSize: number;
+    offset: number;
+    sort: ISort;
+}
+
+export interface ISort extends IStreamable<IOrder>, ISerializable {
+    sorted: boolean;
+    unsorted: boolean;
 }
 
 export interface ITypeVariable<D> extends IType, IAnnotatedElement {
@@ -374,14 +392,14 @@ export interface IObjectIdInfo {
     generatorType: IClass<IObjectIdGenerator<any>>;
     resolverType: IClass<IObjectIdResolver>;
     alwaysAsId: boolean;
-    scope: IClass<any>;
     propertyName: IPropertyName;
+    scope: IClass<any>;
 }
 
 export interface ITypeDeserializer {
-    typeInclusion: IAs;
     typeIdResolver: ITypeIdResolver;
     defaultImpl: IClass<any>;
+    typeInclusion: IAs;
     propertyName: string;
 }
 
@@ -405,6 +423,17 @@ export interface IGettable {
 export interface ISchemaAware {
 }
 
+export interface ISlice<T> extends IStreamable<T> {
+    numberOfElements: number;
+    pageable: IPageable;
+    first: boolean;
+    last: boolean;
+    size: number;
+    content: T[];
+    number: number;
+    sort: ISort;
+}
+
 export interface IAnnotatedType extends IAnnotatedElement {
     annotatedOwnerType: IAnnotatedType;
     type: IType;
@@ -425,8 +454,8 @@ export interface IAnnotated {
 }
 
 export interface ITypeIdResolver {
-    descForKnownTypeIds: string;
     mechanism: IId;
+    descForKnownTypeIds: string;
 }
 
 export interface IMergeInfo {
@@ -444,8 +473,37 @@ export interface IBeanProperty extends INamed {
     metadata: IPropertyMetadata;
 }
 
+export interface IStreamable<T> extends IIterable<T>, ISupplier<IStream<T>> {
+    empty: boolean;
+}
+
+export interface IOrder extends ISerializable {
+    direction: IDirection;
+    property: string;
+    ignoreCase: boolean;
+    nullHandling: INullHandling;
+    ascending: boolean;
+    descending: boolean;
+}
+
 export interface INamed {
     name: string;
+}
+
+export interface IIterable<T> {
+}
+
+export interface ISupplier<T> {
+}
+
+export interface IStream<T> extends IBaseStream<T, IStream<T>> {
+}
+
+export interface IBaseStream<T, S> extends IAutoCloseable {
+    parallel: boolean;
+}
+
+export interface IAutoCloseable {
 }
 
 export interface HttpClient {
@@ -476,10 +534,10 @@ export class RestApplicationClient {
 
     /**
      * HTTP GET /registration/request
-     * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.getAllRegistrationRequests
+     * Java method: eu.possiblex.portal.application.boundary.ParticipantRegistrationRestApiImpl.getRegistrationRequests
      */
-    getAllRegistrationRequests(): RestResponse<IRegistrationRequestEntryTO[]> {
-        return this.httpClient.request({ method: "GET", url: uriEncoding`registration/request` });
+    getRegistrationRequests(queryParams?: { page?: number; size?: number; sort?: string; }): RestResponse<IPage<IRegistrationRequestEntryTO>> {
+        return this.httpClient.request({ method: "GET", url: uriEncoding`registration/request`, queryParams: queryParams });
     }
 
     /**
@@ -587,6 +645,17 @@ export const enum IId {
     NAME = "NAME",
     DEDUCTION = "DEDUCTION",
     CUSTOM = "CUSTOM",
+}
+
+export const enum IDirection {
+    ASC = "ASC",
+    DESC = "DESC",
+}
+
+export const enum INullHandling {
+    NATIVE = "NATIVE",
+    NULLS_FIRST = "NULLS_FIRST",
+    NULLS_LAST = "NULLS_LAST",
 }
 
 function uriEncoding(template: TemplateStringsArray, ...substitutions: any[]): string {

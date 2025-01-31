@@ -12,9 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,8 +44,8 @@ class ParticipantRegistrationRequestDAOTest {
     @Test
     void getAllParticipantRegistrationRequests() {
 
-        participantRegistrationRequestDAO.getAllRegistrationRequests();
-        verify(participantRegistrationRequestRepository).findAll();
+        participantRegistrationRequestDAO.getRegistrationRequests(PageRequest.of(0, 1));
+        verify(participantRegistrationRequestRepository).findAll(any(Pageable.class));
     }
 
     @Test
@@ -70,9 +71,10 @@ class ParticipantRegistrationRequestDAOTest {
         participantRegistrationRequestDAO.acceptRegistrationRequest(participant.getName());
         verify(participantRegistrationRequestRepository, times(1)).save(any());
 
-        List<ParticipantRegistrationRequestBE> repoParticipants = participantRegistrationRequestDAO.getAllRegistrationRequests();
-        assertEquals(1, repoParticipants.size());
-        ParticipantRegistrationRequestBE repoParticipant = repoParticipants.get(0);
+        Page<ParticipantRegistrationRequestBE> listBe = participantRegistrationRequestDAO.getRegistrationRequests(
+            PageRequest.of(0, 1));
+        assertEquals(1, listBe.getContent().size());
+        ParticipantRegistrationRequestBE repoParticipant = listBe.getContent().get(0);
         assertEquals(participant.getName(), repoParticipant.getName());
         assertEquals(participant.getDescription(), repoParticipant.getDescription());
 

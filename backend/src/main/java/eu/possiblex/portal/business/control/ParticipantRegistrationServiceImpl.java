@@ -17,6 +17,8 @@ import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -76,18 +78,18 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
     }
 
     /**
-     * Get all registration requests.
+     * Get registration requests for a given page number and page size sorted by sort field and sort order.
      *
-     * @return list of registration requests
+     * @return TO with list of registration requests
      */
     @Override
-    public List<RegistrationRequestEntryTO> getAllParticipantRegistrationRequests() {
+    public Page<RegistrationRequestEntryTO> getParticipantRegistrationRequests(Pageable paginationRequest) {
 
-        log.info("Processing retrieval of all participant registration requests");
-
-        return participantRegistrationRequestDAO.getAllRegistrationRequests().stream()
-            .map(participantRegistrationServiceMapper::participantRegistrationRequestBEToRegistrationRequestEntryTO)
-            .toList();
+        log.info("Processing retrieval of participant registration requests for page {}", paginationRequest);
+        Page<ParticipantRegistrationRequestBE> registrationRequests = participantRegistrationRequestDAO.getRegistrationRequests(
+            paginationRequest);
+        return registrationRequests.map(
+            participantRegistrationServiceMapper::participantRegistrationRequestBEToRegistrationRequestEntryTO);
     }
 
     @Override

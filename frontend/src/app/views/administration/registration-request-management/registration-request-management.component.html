@@ -1,15 +1,23 @@
 <div class="p-4">
   <h2 class="font-bold">Registration Requests</h2><br/>
 
-  <div matSort class="accordion-header grid grid-cols-4 gap-5">
-    <span mat-sort-header="organizationName" id="organizationName">Organization Name</span>
-    <span mat-sort-header="status" id="status">Registration Request Status</span>
+  <div class="accordion-header grid grid-cols-4 gap-5" matSort>
+    <span id="name" mat-sort-header="name">Organization Name</span>
+    <span id="status" mat-sort-header="status">Registration Request Status</span>
   </div>
 
   <c-accordion>
-    <app-registration-request *ngFor="let request of registrationRequests.data" [request]="request"
-                              (response)="showResponse($event)"></app-registration-request>
+    <app-registration-request (response)="showResponse($event)" *ngFor="let request of registrationRequests.data"
+                              [request]="request"></app-registration-request>
   </c-accordion>
+  <mat-paginator (page)="onPageChange($event)"
+                 [length]="totalNumberOfRegistrationRequests"
+                 [pageIndex]="pageIndex"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 [pageSize]="pageSize"
+                 [showFirstLastButtons]='true'
+                 class="custom-paginator">
+  </mat-paginator>
 </div>
 
 <c-modal #responseModal id="responseModal">

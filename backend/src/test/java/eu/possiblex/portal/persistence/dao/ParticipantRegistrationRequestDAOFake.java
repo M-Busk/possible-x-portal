@@ -7,6 +7,9 @@ import eu.possiblex.portal.business.entity.RequestStatus;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -41,9 +44,9 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     }
 
     @Override
-    public List<ParticipantRegistrationRequestBE> getAllRegistrationRequests() {
+    public Page<ParticipantRegistrationRequestBE> getRegistrationRequests(Pageable pageable) {
 
-        return List.of(getExampleParticipant());
+        return new PageImpl<>(List.of(getExampleParticipant()));
     }
 
     @Override

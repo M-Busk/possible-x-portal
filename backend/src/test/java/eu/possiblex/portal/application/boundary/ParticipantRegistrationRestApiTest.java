@@ -5,7 +5,6 @@ import eu.possiblex.portal.application.control.ParticipantRegistrationRestApiMap
 import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.business.control.ParticipantRegistrationService;
 import eu.possiblex.portal.business.control.ParticipantRegistrationServiceFake;
-
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
@@ -28,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ParticipantRegistrationRestApiImpl.class)
 @ContextConfiguration(classes = { ParticipantRegistrationRestApiTest.TestConfig.class,
     ParticipantRegistrationRestApiImpl.class, AppConfigurer.class })
-
 class ParticipantRegistrationRestApiTest {
 
     @Autowired
@@ -50,12 +48,12 @@ class ParticipantRegistrationRestApiTest {
 
     @WithMockUser(username = "admin")
     @Test
-    void getAllRegistrationRequests() throws Exception {
+    void getRegistrationRequests() throws Exception {
 
         reset(participantRegistrationService);
         this.mockMvc.perform(get("/registration/request")).andDo(print()).andExpect(status().isOk());
 
-        verify(participantRegistrationService).getAllParticipantRegistrationRequests();
+        verify(participantRegistrationService).getParticipantRegistrationRequests(any());
     }
 
     @WithMockUser(username = "admin")

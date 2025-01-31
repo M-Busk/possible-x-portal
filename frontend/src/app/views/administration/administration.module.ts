@@ -16,7 +16,7 @@ import {
 import {CommonViewsModule} from "../common-views/common-views.module";
 import { RegistrationRequestComponent } from './registration-request/registration-request.component';
 import {MatSortModule} from "@angular/material/sort";
-
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -41,7 +41,8 @@ import {MatSortModule} from "@angular/material/sort";
     ModalHeaderComponent,
     ModalFooterComponent,
     ModalToggleDirective,
-    MatSortModule
+    MatSortModule,
+    MatPaginatorModule
   ]
 })
 export class AdministrationModule { }

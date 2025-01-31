@@ -11,6 +11,10 @@ import eu.possiblex.portal.persistence.entity.RequestStatus;
 import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Slf4j
 public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistrationRequestDAO {
+    private static final List<String> VALID_ENTITY_SORT_FIELDS = List.of("name", "status");
+
     private final ParticipantRegistrationRequestRepository participantRegistrationRequestRepository;
 
     private final ParticipantRegistrationEntityMapper participantRegistrationEntityMapper;
@@ -54,11 +60,18 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
      * @return list of participant registration requests
      */
     @Override
-    public List<ParticipantRegistrationRequestBE> getAllRegistrationRequests() {
+    public Page<ParticipantRegistrationRequestBE> getRegistrationRequests(Pageable paginationRequest) {
 
-        log.info("Getting all participant registration requests");
-        return participantRegistrationRequestRepository.findAll().stream()
-            .map(participantRegistrationEntityMapper::entityToParticipantRegistrationRequestBe).toList();
+        List<Sort.Order> orders = paginationRequest.getSort().stream()
+            .filter(o -> VALID_ENTITY_SORT_FIELDS.contains(o.getProperty())).toList();
+
+        Pageable entityPageable = PageRequest.of(paginationRequest.getPageNumber(), paginationRequest.getPageSize(),
+            Sort.by(orders));
+        log.info("Getting participant registration requests for parsed pagination request: {}", entityPageable);
+
+        Page<ParticipantRegistrationRequestEntity> page = participantRegistrationRequestRepository.findAll(
+            entityPageable);
+        return page.map(participantRegistrationEntityMapper::entityToParticipantRegistrationRequestBe);
     }
 
     @Override
