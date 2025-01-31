@@ -36,7 +36,19 @@ describe('RegistrationRequestManagementComponent', () => {
 
   it('should call getRegistrationRequests on apiService when getRegistrationRequests is called', async () => {
     const emptyList: IRegistrationRequestEntryTO[] = [];
-    apiService.getRegistrationRequests.and.returnValue(Promise.resolve({registrationRequests: emptyList, totalNumberOfRegistrationRequests: 0}));
+    apiService.getRegistrationRequests.and.returnValue(Promise.resolve({
+      content: emptyList,
+      totalElements: 0,
+      numberOfElements: 0,
+      pageable: null,
+      first: null,
+      last: null,
+      size: 0,
+      number: 0,
+      sort: null,
+      totalPages: 1,
+      empty: true
+    }));
 
     component.getRegistrationRequests(undefined);
 
