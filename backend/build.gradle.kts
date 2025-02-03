@@ -5,6 +5,7 @@ import cz.habarta.typescript.generator.TypeScriptOutputKind
 
 plugins {
   java
+  jacoco
   alias(libs.plugins.springBoot)
   alias(libs.plugins.springDependencyManagement)
   alias(libs.plugins.typescriptGenerator)
@@ -107,5 +108,13 @@ tasks {
     outputFile = "../frontend/src/app/services/mgmt/api/backend.ts"
     noFileComment = true
     mapEnum = EnumMapping.asEnum
+  }
+
+  test {
+    finalizedBy(jacocoTestReport) // report is always generated after tests run
+  }
+
+  jacocoTestReport {
+    dependsOn(test) // tests are required to run before generating the report
   }
 }
