@@ -39,6 +39,11 @@ const routes: Routes = [
         path: 'login',
         loadChildren: () =>
           import('./views/login/login.module').then((m) => m.LoginModule)
+      },
+      {
+        path: 'attribution',
+        loadChildren: () =>
+          import('./views/attribution-document/attribution-document.module').then((m) => m.AttributionDocumentModule)
       }
     ]
   },
@@ -49,8 +54,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), RouterModule.forRoot(routes, { anchorScrolling: 'enabled'})],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule { }

@@ -1,0 +1,48 @@
+table {
+  width:auto;
+}
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+tr:nth-child(even) {
+  @apply bg-brand-600;
+  @apply bg-opacity-60;
+}
+tr:nth-child(odd) {
+  @apply bg-brand-600;
+  @apply bg-opacity-10;
+}
+th {
+  @apply bg-brand-800;
+  @apply bg-opacity-80;
+  @apply text-White;
+}
+div {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  line-height: 1.5;
+}
+ul {
+  list-style-type: square;
+  padding-left: 2em;
+}
+.link-like {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.license-text {
+  border: 1px solid black;
+  border-collapse: collapse;
+  white-space: nowrap;
+  text-align: left;
+  display: inline-block;
+  padding: 10px;
+  @apply text-brand-800;
+  @apply bg-brand-50;
+}

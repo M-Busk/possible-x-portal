@@ -20,7 +20,7 @@
 
 .footer-wrapper {
   @apply overflow-hidden bg-brand-700;
-  @apply w-full h-[40vh];
+  @apply w-full min-h-[40vh];
   @apply divide-y divide-brand-100;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .main-footer-wrapper {
-  @apply border-t border-brand-100 h-[17vh];
+  @apply border-t border-brand-100 min-h-[17vh];
 }
 
 .footer {
