@@ -41,7 +41,7 @@ const routes: Routes = [
           import('./views/login/login.module').then((m) => m.LoginModule)
       },
       {
-        path: 'attribution',
+        path: 'licenses',
         loadChildren: () =>
           import('./views/attribution-document/attribution-document.module').then((m) => m.AttributionDocumentModule)
       }
