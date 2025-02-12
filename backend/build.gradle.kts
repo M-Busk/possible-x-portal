@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+
   implementation(libs.springBootStarterActuator)
   implementation(libs.springBootStarterWeb)
   implementation(libs.springBootStarterWebflux)
