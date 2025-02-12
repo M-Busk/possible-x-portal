@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.possiblex.portal.application.entity.credentials.PojoCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
+import eu.possiblex.portal.application.entity.credentials.validation.AtLeastOneRegistrationNumberNotEmpty;
 import lombok.*;
 
 import java.util.Map;
@@ -35,6 +36,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true, value = { "type", "@context" }, allowGetters = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@AtLeastOneRegistrationNumberNotEmpty(message = "At least one registration number type must be provided")
 public class GxLegalRegistrationNumberCredentialSubject extends PojoCredentialSubject {
 
     @Getter(AccessLevel.NONE)

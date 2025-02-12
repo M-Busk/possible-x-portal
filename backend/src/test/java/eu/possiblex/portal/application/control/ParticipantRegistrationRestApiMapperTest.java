@@ -12,36 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ContextConfiguration(classes = { ParticipantRegistrationRestApiMapperTest.TestConfig.class,
-    ParticipantRegistrationRestApiMapper.class })
+@ContextConfiguration(classes = { ParticipantRegistrationRestApiMapperTest.TestConfig.class })
 class ParticipantRegistrationRestApiMapperTest {
-
-    private final String participantId = "1234";
-
-    private final String participantName = "SomeOrga Inc.";
-
-    private final String participantDescription = "This is an organization.";
-
-    private final String participantAddrCountryCode = "DE";
-
-    private final String participantAddrCountrySubdivisionCode = "DE-BE";
-
-    private final String participantAddrCountryStreetAddress = "Some Street 123";
-
-    private final String participantAddrCountryLocality = "Berlin";
-
-    private final String participantAddrPostalCode = "12345";
-
-    private final String participantRegNumEori = "1234";
-
-    private final String participantRegNumVatID = "5678";
-
-    private final String participantRegNumLeiCode = "9012";
 
     @Autowired
     private ParticipantRegistrationRestApiMapper participantRegistrationRestApiMapper;
@@ -62,35 +40,42 @@ class ParticipantRegistrationRestApiMapperTest {
             request);
 
         // then
-        assertEquals(participantName, participantCs.getName());
-        assertEquals(participantDescription, participantCs.getDescription());
+        assertEquals(participant.getName(), participantCs.getName());
+        assertEquals(participant.getDescription(), participantCs.getDescription());
 
-        assertEquals(participantAddrCountryCode, participantCs.getHeadquarterAddress().getCountryCode());
-        assertEquals(participantAddrCountrySubdivisionCode,
+        assertEquals(participant.getHeadquarterAddress().getCountryCode(),
+            participantCs.getHeadquarterAddress().getCountryCode());
+        assertEquals(participant.getHeadquarterAddress().getCountrySubdivisionCode(),
             participantCs.getHeadquarterAddress().getCountrySubdivisionCode());
-        assertEquals(participantAddrCountryStreetAddress, participantCs.getHeadquarterAddress().getStreetAddress());
-        assertEquals(participantAddrCountryLocality, participantCs.getHeadquarterAddress().getLocality());
-        assertEquals(participantAddrPostalCode, participantCs.getHeadquarterAddress().getPostalCode());
+        assertEquals(participant.getHeadquarterAddress().getStreetAddress(),
+            participantCs.getHeadquarterAddress().getStreetAddress());
+        assertEquals(participant.getHeadquarterAddress().getLocality(),
+            participantCs.getHeadquarterAddress().getLocality());
+        assertEquals(participant.getHeadquarterAddress().getPostalCode(),
+            participantCs.getHeadquarterAddress().getPostalCode());
 
-        assertEquals(participantAddrCountryCode, participantCs.getLegalAddress().getCountryCode());
-        assertEquals(participantAddrCountrySubdivisionCode,
+        assertEquals(participant.getLegalAddress().getCountryCode(), participantCs.getLegalAddress().getCountryCode());
+        assertEquals(participant.getLegalAddress().getCountrySubdivisionCode(),
             participantCs.getLegalAddress().getCountrySubdivisionCode());
-        assertEquals(participantAddrCountryStreetAddress, participantCs.getLegalAddress().getStreetAddress());
-        assertEquals(participantAddrCountryLocality, participantCs.getLegalAddress().getLocality());
-        assertEquals(participantAddrPostalCode, participantCs.getLegalAddress().getPostalCode());
+        assertEquals(participant.getLegalAddress().getStreetAddress(),
+            participantCs.getLegalAddress().getStreetAddress());
+        assertEquals(participant.getLegalAddress().getLocality(), participantCs.getLegalAddress().getLocality());
+        assertEquals(participant.getLegalAddress().getPostalCode(), participantCs.getLegalAddress().getPostalCode());
 
-        assertEquals(participantRegNumEori, participantCs.getLegalRegistrationNumber().getEori());
-        assertEquals(participantRegNumVatID, participantCs.getLegalRegistrationNumber().getVatID());
-        assertEquals(participantRegNumLeiCode, participantCs.getLegalRegistrationNumber().getLeiCode());
+        assertEquals(registrationNumber.getEori(), participantCs.getLegalRegistrationNumber().getEori());
+        assertEquals(registrationNumber.getVatID(), participantCs.getLegalRegistrationNumber().getVatID());
+        assertEquals(registrationNumber.getLeiCode(), participantCs.getLegalRegistrationNumber().getLeiCode());
+
+        assertEquals(extensionCs.getMailAddress(), participantCs.getMailAddress());
 
     }
 
     private GxLegalRegistrationNumberCredentialSubject getGxLegalRegistrationNumberCredentialSubjectExample() {
 
         GxLegalRegistrationNumberCredentialSubject registrationNumber = new GxLegalRegistrationNumberCredentialSubject();
-        registrationNumber.setEori(participantRegNumEori);
-        registrationNumber.setVatID(participantRegNumVatID);
-        registrationNumber.setLeiCode(participantRegNumLeiCode);
+        registrationNumber.setEori("1234");
+        registrationNumber.setVatID("5678");
+        registrationNumber.setLeiCode("9012");
         return registrationNumber;
     }
 
@@ -104,16 +89,16 @@ class ParticipantRegistrationRestApiMapperTest {
     private GxLegalParticipantCredentialSubject getGxLegalParticipantCredentialSubjectExample() {
 
         GxVcard vcard = new GxVcard();
-        vcard.setCountryCode(participantAddrCountryCode);
-        vcard.setCountrySubdivisionCode(participantAddrCountrySubdivisionCode);
-        vcard.setStreetAddress(participantAddrCountryStreetAddress);
-        vcard.setLocality(participantAddrCountryLocality);
-        vcard.setPostalCode(participantAddrPostalCode);
+        vcard.setCountryCode("DE");
+        vcard.setCountrySubdivisionCode("DE-BE");
+        vcard.setStreetAddress("Some Street 123");
+        vcard.setLocality("Berlin");
+        vcard.setPostalCode("12345");
 
         GxLegalParticipantCredentialSubject participant = new GxLegalParticipantCredentialSubject();
-        participant.setId(participantId);
-        participant.setName(participantName);
-        participant.setDescription(participantDescription);
+        participant.setId("1234");
+        participant.setName("SomeOrga Inc.");
+        participant.setDescription("This is an organization.");
         participant.setHeadquarterAddress(vcard);
         participant.setLegalAddress(vcard);
         return participant;
@@ -123,6 +108,7 @@ class ParticipantRegistrationRestApiMapperTest {
     static class TestConfig {
 
         @Bean
+        @Primary
         public ParticipantRegistrationRestApiMapper participantCredentialMapper() {
 
             return Mappers.getMapper(ParticipantRegistrationRestApiMapper.class);

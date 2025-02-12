@@ -19,16 +19,24 @@ package eu.possiblex.portal.business.control;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateBE;
 import eu.possiblex.portal.business.entity.daps.OmejdnConnectorCertificateRequest;
 import io.netty.util.internal.StringUtil;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.UUID;
 
 public class OmejdnConnectorApiClientFake implements OmejdnConnectorApiClient {
+
+    public static final String FAILING_NAME = "failDaps";
+
     @Override
     public OmejdnConnectorCertificateBE addConnector(OmejdnConnectorCertificateRequest request) {
 
+        if (request.getClientName().equals(FAILING_NAME)) {
+            throw WebClientResponseException.create(500, "daps creation failed", null, null, null);
+        }
+
         OmejdnConnectorCertificateBE dto = new OmejdnConnectorCertificateBE();
         dto.setClientId("12:34:56");
-        dto.setClientName((request == null || StringUtil.isNullOrEmpty(request.getClientName()))
+        dto.setClientName((StringUtil.isNullOrEmpty(request.getClientName()))
             ? UUID.randomUUID().toString()
             : request.getClientName());
         dto.setKeystore("keystore123");

@@ -27,6 +27,8 @@ import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.NodeKindIRITypeId;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -58,22 +60,25 @@ public class GxLegalParticipantCredentialSubject extends PojoCredentialSubject {
         "https://schema.org/");
 
     // Tagus
-    @NotNull
+    // no input validations as this will be set by the backend
     @JsonProperty("gx:legalRegistrationNumber")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<NodeKindIRITypeId> legalRegistrationNumber; // will be gx:registrationNumber in Loire
 
     // Loire
-    @NotNull
+    @Valid
+    @NotNull(message = "Legal address is needed")
     @JsonProperty("gx:legalAddress")
     private GxVcard legalAddress; // contains Tagus gx:countrySubdivisionCode
 
     // Loire
-    @NotNull
+    @Valid
+    @NotNull(message = "Headquarter address is needed")
     @JsonProperty("gx:headquarterAddress")
     private GxVcard headquarterAddress; // contains Tagus gx:countrySubdivisionCode
 
     // Loire
+    @NotBlank(message = "Name is needed")
     @JsonProperty("schema:name")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)

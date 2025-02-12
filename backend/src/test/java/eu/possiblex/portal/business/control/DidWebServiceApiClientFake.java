@@ -3,6 +3,7 @@ package eu.possiblex.portal.business.control;
 import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidUpdateRequestBE;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class DidWebServiceApiClientFake implements DidWebServiceApiClient {
 
@@ -10,12 +11,21 @@ public class DidWebServiceApiClientFake implements DidWebServiceApiClient {
 
     public static final String EXAMPLE_VERIFICATION_METHOD = "did:web:example.com:participant:1234#JWK2020-Example";
 
+    public static final String FAILING_REQUEST_SUBJECT = "failDid";
+
+    public static final String FAILING_UPDATE_DID = "failUpdateDid";
+
     @Override
     public ParticipantDidBE generateDidWeb(ParticipantDidCreateRequestBE request) {
 
+        if (request.getSubject().equals(FAILING_REQUEST_SUBJECT)) {
+            throw WebClientResponseException.create(500, "did creation failed", null, null, null);
+        }
+
         ParticipantDidBE be = new ParticipantDidBE();
-        be.setDid(EXAMPLE_DID);
+        be.setDid(request.getSubject());
         be.setVerificationMethod(EXAMPLE_VERIFICATION_METHOD);
+
         return be;
     }
 
@@ -26,6 +36,10 @@ public class DidWebServiceApiClientFake implements DidWebServiceApiClient {
 
     @Override
     public void updateDidWeb(ParticipantDidUpdateRequestBE request) {
+
+        if (request.getDid().equals(FAILING_UPDATE_DID)) {
+            throw WebClientResponseException.create(500, "did update failed", null, null, null);
+        }
         // request worked
     }
 
@@ -38,7 +52,8 @@ public class DidWebServiceApiClientFake implements DidWebServiceApiClient {
                 "https://www.w3.org/ns/did/v1",
                 "https://w3id.org/security/suites/jws-2020/v1"
               ],
-              "id": "did:web:example.com:participant:1234",
+              "id": \"""" + id + """
+            ",
               "verificationMethod": [
                 {
                   "@context": [

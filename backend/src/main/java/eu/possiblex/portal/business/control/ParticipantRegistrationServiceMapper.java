@@ -15,13 +15,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ParticipantRegistrationServiceMapper {
 
-    AddressTO gxVcardToAddressTO(GxVcard gxVcard);
-
-    RegistrationNumberTO legalRegistrationNumberToRegistrationNumberTO(
-        GxLegalRegistrationNumberCredentialSubject legalRegistrationNumber);
-
-    ParticipantDidDataTO didDataToDidDataTO(ParticipantDidBE didData);
-
     RegistrationRequestEntryTO participantRegistrationRequestBEToRegistrationRequestEntryTO(
         ParticipantRegistrationRequestBE participantRegistrationRequestBE);
 

@@ -9,6 +9,8 @@ import eu.possiblex.portal.persistence.entity.DidDataEntity;
 import eu.possiblex.portal.persistence.entity.ParticipantRegistrationRequestEntity;
 import eu.possiblex.portal.persistence.entity.RequestStatus;
 import eu.possiblex.portal.persistence.entity.daps.OmejdnConnectorCertificateEntity;
+import eu.possiblex.portal.persistence.entity.exception.ParticipantEntityNotFoundException;
+import eu.possiblex.portal.persistence.entity.exception.ParticipantEntityStateTransitionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -79,8 +81,13 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
 
         log.info("Getting participant registration request by did");
 
-        return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(
-            participantRegistrationRequestRepository.findByDidData_Did(did));
+        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByDidData_Did(did);
+
+        if (entity == null) {
+            return null;
+        }
+
+        return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(entity);
     }
 
     /**
@@ -93,18 +100,22 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     public void acceptRegistrationRequest(String id) {
 
         log.info("Accepting participant registration request: {}", id);
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            if (entity.getStatus() == RequestStatus.COMPLETED) {
-                log.error("Cannot accept completed participant registration request: {}", id);
-                throw new RuntimeException("Cannot accept completed participant registration request: " + id);
-            } else {
-                entity.setStatus(RequestStatus.ACCEPTED);
-            }
-        } else {
-            log.error("(Accept) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
+
+        ParticipantRegistrationRequestEntity entity = findParticipantRegistrationRequestById(id);
+
+        if (entity.getStatus() == RequestStatus.COMPLETED) {
+            log.error("Cannot accept completed participant registration request: {}", id);
+            throw new ParticipantEntityStateTransitionException(
+                "Cannot accept completed participant registration request: " + id);
         }
+
+        if (entity.getStatus() == RequestStatus.REJECTED) {
+            log.error("Cannot accept rejected participant registration request: {}", id);
+            throw new ParticipantEntityStateTransitionException(
+                "Cannot accept rejected participant registration request: " + id);
+        }
+
+        entity.setStatus(RequestStatus.ACCEPTED);
     }
 
     /**
@@ -117,18 +128,16 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     public void rejectRegistrationRequest(String id) {
 
         log.info("Rejecting participant registration request: {}", id);
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            if (entity.getStatus() == RequestStatus.COMPLETED) {
-                log.error("Cannot reject completed participant registration request: {}", id);
-                throw new RuntimeException("Cannot reject completed participant registration request: " + id);
-            } else {
-                entity.setStatus(RequestStatus.REJECTED);
-            }
-        } else {
-            log.error("(Reject) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
+
+        ParticipantRegistrationRequestEntity entity = findParticipantRegistrationRequestById(id);
+
+        if (entity.getStatus() == RequestStatus.COMPLETED) {
+            log.error("Cannot reject completed participant registration request: {}", id);
+            throw new ParticipantEntityStateTransitionException(
+                "Cannot reject completed participant registration request: " + id);
         }
+
+        entity.setStatus(RequestStatus.REJECTED);
     }
 
     /**
@@ -141,18 +150,16 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     public void deleteRegistrationRequest(String id) {
 
         log.info("Deleting participant registration request: {}", id);
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            if (entity.getStatus() == RequestStatus.COMPLETED) {
-                log.error("Cannot delete completed participant registration request: {}", id);
-                throw new RuntimeException("Cannot delete completed participant registration request: " + id);
-            } else {
-                participantRegistrationRequestRepository.delete(entity);
-            }
-        } else {
-            log.error("(Delete) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
+
+        ParticipantRegistrationRequestEntity entity = findParticipantRegistrationRequestById(id);
+
+        if (entity.getStatus() == RequestStatus.COMPLETED) {
+            log.error("Cannot delete completed participant registration request: {}", id);
+            throw new ParticipantEntityStateTransitionException(
+                "Cannot delete completed participant registration request: " + id);
         }
+
+        participantRegistrationRequestRepository.delete(entity);
     }
 
     /**
@@ -165,40 +172,55 @@ public class ParticipantRegistrationRequestDAOImpl implements ParticipantRegistr
     public void completeRegistrationRequest(String id, ParticipantDidBE did, String vpLink,
         OmejdnConnectorCertificateBE certificate) {
 
-        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
-        if (entity != null) {
-            log.info("Completing participant registration request: {}", id);
+        log.info("Completing participant registration request: {}", id);
 
-            // set did data
-            DidDataEntity didData = new DidDataEntity();
-            didData.setDid(did.getDid());
-            didData.setVerificationMethod(did.getVerificationMethod());
-            entity.setDidData(didData);
+        ParticipantRegistrationRequestEntity entity = findParticipantRegistrationRequestById(id);
 
-            // set daps data
-            OmejdnConnectorCertificateEntity certificateEntity = participantRegistrationEntityMapper.omejdnConnectorCertificateBEToOmejdnConnectorCertificateEntity(
-                certificate);
-            entity.setOmejdnConnectorCertificate(certificateEntity);
-
-            // set vp link
-            entity.setVpLink(vpLink);
-
-            // complete request
-            entity.setStatus(RequestStatus.COMPLETED);
-        } else {
-            log.error("(Complete) Participant not found: {}", id);
-            throw new RuntimeException("Participant not found: " + id);
+        if (entity.getStatus() != RequestStatus.ACCEPTED) {
+            log.error("Cannot complete non-accepted participant registration request: {}", id);
+            throw new ParticipantEntityStateTransitionException(
+                "Cannot complete non-accepted participant registration request: " + id);
         }
+
+        // set did data
+        DidDataEntity didData = new DidDataEntity();
+        didData.setDid(did.getDid());
+        didData.setVerificationMethod(did.getVerificationMethod());
+        entity.setDidData(didData);
+
+        // set daps data
+        OmejdnConnectorCertificateEntity certificateEntity = participantRegistrationEntityMapper.omejdnConnectorCertificateBEToOmejdnConnectorCertificateEntity(
+            certificate);
+        entity.setOmejdnConnectorCertificate(certificateEntity);
+
+        // set vp link
+        entity.setVpLink(vpLink);
+
+        // complete request
+        entity.setStatus(RequestStatus.COMPLETED);
     }
 
     @Override
     public ParticipantRegistrationRequestBE getRegistrationRequestByName(String name) {
 
         ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(name);
-        if (entity != null) {
-            return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(entity);
-        } else {
+
+        if (entity == null) {
             return null;
         }
+
+        return participantRegistrationEntityMapper.entityToParticipantRegistrationRequestBe(entity);
     }
+
+    private ParticipantRegistrationRequestEntity findParticipantRegistrationRequestById(String id) {
+
+        ParticipantRegistrationRequestEntity entity = participantRegistrationRequestRepository.findByName(id);
+        if (entity == null) {
+            log.error("Participant with id {} not found", id);
+            throw new ParticipantEntityNotFoundException("Participant not found: " + id);
+        }
+
+        return entity;
+    }
+
 }

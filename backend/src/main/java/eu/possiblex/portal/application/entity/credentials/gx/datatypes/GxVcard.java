@@ -23,7 +23,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -38,13 +39,15 @@ public class GxVcard {
     @JsonProperty("gx:countryCode")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
-    @NotNull
+    @NotBlank(message = "Country code is needed")
+    @Pattern(regexp = "^([A-Z]{2}|[A-Z]{3}|\\d{3})$", message = "An ISO 3166-1 alpha2, alpha-3 or numeric format value is expected.")
     private String countryCode;
 
     @JsonProperty("gx:countrySubdivisionCode")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
-    @NotNull
+    @NotBlank(message = "Country subdivision code is needed")
+    @Pattern(regexp = "^[A-Z]{2}-[A-Z0-9]{1,3}$", message = "An ISO 3166-2 format value is expected.")
     private String countrySubdivisionCode;
 
     @JsonProperty("vcard:street-address")

@@ -35,6 +35,7 @@ import lombok.*;
 @AllArgsConstructor
 public abstract class PojoCredentialSubject {
     // base fields
+    // no input validations as this will be set by the backend
     private String id;
 }
 

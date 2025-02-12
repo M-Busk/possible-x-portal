@@ -5,9 +5,4 @@ public class RegistrationRequestConflictException extends RuntimeException {
 
         super(message);
     }
-
-    public RegistrationRequestConflictException(String message, Exception e) {
-
-        super(message, e);
-    }
 }

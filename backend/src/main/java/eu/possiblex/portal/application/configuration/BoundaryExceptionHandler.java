@@ -5,10 +5,19 @@ import eu.possiblex.portal.business.entity.exception.ParticipantComplianceExcept
 import eu.possiblex.portal.business.entity.exception.RegistrationRequestConflictException;
 import eu.possiblex.portal.business.entity.exception.RegistrationRequestProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -52,6 +61,28 @@ public class BoundaryExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
             new ErrorResponseTO("Compliance was not attested for this participant", e.getMessage()),
             UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * Handle Spring validation exceptions.
+     */
+    @Override
+    public ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,
+        @NonNull HttpHeaders headers, @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+
+        logError(ex);
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        StringBuilder message = new StringBuilder();
+        errors.forEach((key, value) -> message.append(key).append(": ").append(value).append("; "));
+
+        return new ResponseEntity<>(new ErrorResponseTO("Request contained errors.", message.toString().strip()),
+            BAD_REQUEST);
     }
 
     /**

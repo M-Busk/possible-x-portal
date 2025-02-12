@@ -1,6 +1,5 @@
 package eu.possiblex.portal.business.control;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
@@ -10,17 +9,19 @@ import eu.possiblex.portal.business.entity.did.ParticipantDidBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidCreateRequestBE;
 import eu.possiblex.portal.business.entity.did.ParticipantDidUpdateRequestBE;
 import eu.possiblex.portal.business.entity.exception.ParticipantComplianceException;
+import eu.possiblex.portal.business.entity.exception.ParticipantNotFoundException;
 import eu.possiblex.portal.business.entity.exception.RegistrationRequestConflictException;
 import eu.possiblex.portal.business.entity.exception.RegistrationRequestProcessingException;
 import eu.possiblex.portal.business.entity.fh.FhCatalogIdResponse;
 import eu.possiblex.portal.persistence.dao.ParticipantRegistrationRequestDAO;
+import eu.possiblex.portal.persistence.entity.exception.ParticipantEntityNotFoundException;
+import eu.possiblex.portal.persistence.entity.exception.ParticipantEntityStateTransitionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 
@@ -69,7 +70,10 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing participant registration: {}", cs);
 
-        if (participantRegistrationRequestDAO.getRegistrationRequestByName(cs.getName()) != null) {
+        ParticipantRegistrationRequestBE be = participantRegistrationRequestDAO.getRegistrationRequestByName(
+            cs.getName());
+
+        if (be != null) {
             throw new RegistrationRequestConflictException(
                 "A registration request has already been made under this organization name: " + cs.getName());
         }
@@ -97,8 +101,13 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing retrieval of participant registration requests with did {}", did);
 
-        return participantRegistrationServiceMapper.participantRegistrationRequestBEToRegistrationRequestEntryTO(
-            participantRegistrationRequestDAO.getRegistrationRequestByDid(did));
+        ParticipantRegistrationRequestBE be = participantRegistrationRequestDAO.getRegistrationRequestByDid(did);
+
+        if (be == null) {
+            throw new ParticipantNotFoundException("No registration request found for DID: " + did);
+        }
+
+        return participantRegistrationServiceMapper.participantRegistrationRequestBEToRegistrationRequestEntryTO(be);
     }
 
     /**
@@ -111,7 +120,12 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing acceptance of participant: {}", id);
 
-        participantRegistrationRequestDAO.acceptRegistrationRequest(id);
+        try {
+            participantRegistrationRequestDAO.acceptRegistrationRequest(id);
+        } catch (Exception e) {
+            handleEntityProcessingException(e);
+        }
+
         completeRegistrationRequest(id);
     }
 
@@ -169,7 +183,7 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             deleteDapsCertificate(certificate.getClientId());
             deleteParticipantFromCatalog(idResponse.getId());
             deleteDidWeb(didWeb.getDid());
-            throw e;
+            handleEntityProcessingException(e);
         }
         log.info("Stored finalized registration request for participant: {}", id);
     }
@@ -184,7 +198,12 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         log.info("Processing rejection of participant: {}", id);
 
-        participantRegistrationRequestDAO.rejectRegistrationRequest(id);
+        try {
+            participantRegistrationRequestDAO.rejectRegistrationRequest(id);
+        } catch (Exception e) {
+            handleEntityProcessingException(e);
+        }
+
     }
 
     /**
@@ -196,15 +215,21 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
     public void deleteRegistrationRequest(String id) {
 
         log.info("Processing deletion of participant: {}", id);
-        participantRegistrationRequestDAO.deleteRegistrationRequest(id);
+
+        try {
+            participantRegistrationRequestDAO.deleteRegistrationRequest(id);
+        } catch (Exception e) {
+            handleEntityProcessingException(e);
+        }
+
     }
 
     private OmejdnConnectorCertificateBE requestDapsCertificate(String clientName, String did) {
 
         try {
             return omejdnConnectorApiClient.addConnector(new OmejdnConnectorCertificateRequest(clientName, did));
-        } catch (WebClientResponseException e) {
-            log.error("Failed to request DAPS certificate: {}", e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("Failed to request DAPS certificate {}", clientName, e);
             throw new RegistrationRequestProcessingException("Failed to request DAPS certificate", e);
         }
     }
@@ -213,8 +238,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         try {
             omejdnConnectorApiClient.deleteConnector(clientId);
-        } catch (WebClientResponseException e) {
-            log.error("Failed to delete DAPS certificate", e);
+        } catch (Exception e) {
+            log.error("Failed to delete DAPS certificate {}", clientId, e);
         }
     }
 
@@ -224,8 +249,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         createRequestBE.setSubject(id);
         try {
             return didWebServiceApiClient.generateDidWeb(createRequestBE);
-        } catch (WebClientResponseException e) {
-            log.error("Failed to generate DID: {}", e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("Failed to generate DID {}", id, e);
             throw new RegistrationRequestProcessingException("Failed to generate DID", e);
         }
     }
@@ -235,8 +260,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
         ParticipantDidUpdateRequestBE updateRequestBE = new ParticipantDidUpdateRequestBE(did, aliases);
         try {
             didWebServiceApiClient.updateDidWeb(updateRequestBE);
-        } catch (WebClientResponseException e) {
-            log.error("Failed to update DID: {}", e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("Failed to update DID {}", did, e);
             throw new RegistrationRequestProcessingException("Failed to update DID document with DAPS ID", e);
         }
     }
@@ -245,8 +270,8 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
 
         try {
             didWebServiceApiClient.deleteDidWeb(id);
-        } catch (WebClientResponseException e) {
-            log.error("Failed to delete DID: {}", e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("Failed to delete DID {}", id, e);
         }
     }
 
@@ -262,12 +287,12 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             log.info("Stored CS for participant {} in catalog: {}", idResponse, cs);
 
             return idResponse;
-        } catch (WebClientResponseException.UnprocessableEntity e) {
-            JsonNode error = e.getResponseBodyAs(JsonNode.class);
-            if (error != null && error.get("error") != null) {
-                throw new ParticipantComplianceException(error.get("error").textValue(), e);
-            }
-            throw new ParticipantComplianceException("Unknown catalog processing exception", e);
+        } catch (ParticipantComplianceException e) {
+            log.error("Participant {} does not fulfill compliance", cs);
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to store participant in catalog", e);
+            throw new RegistrationRequestProcessingException("Failed to store participant in catalog", e);
         }
     }
 
@@ -277,6 +302,18 @@ public class ParticipantRegistrationServiceImpl implements ParticipantRegistrati
             fhCatalogClient.deleteParticipantFromCatalog(id);
         } catch (Exception e) {
             log.error("Failed to delete participant from catalog", e);
+        }
+    }
+
+    private void handleEntityProcessingException(Exception e) {
+
+        if (e instanceof ParticipantEntityNotFoundException notFoundException) {
+            throw new ParticipantNotFoundException(notFoundException.getMessage());
+        } else if (e instanceof ParticipantEntityStateTransitionException transitionException) {
+            throw new RegistrationRequestProcessingException(
+                "Cannot transition participant registration request: " + transitionException.getMessage(), e);
+        } else {
+            throw new RegistrationRequestProcessingException("Unknown error during request processing", e);
         }
     }
 }

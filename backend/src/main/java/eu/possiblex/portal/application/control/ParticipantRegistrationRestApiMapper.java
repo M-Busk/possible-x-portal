@@ -19,8 +19,5 @@ public interface ParticipantRegistrationRestApiMapper {
     @Mapping(target = "id", ignore = true)
     PxExtendedLegalParticipantCredentialSubject credentialSubjectsToExtendedLegalParticipantCs(
         CreateRegistrationRequestTO request);
-
-    GxNestedLegalRegistrationNumberCredentialSubject registrationNumberCsToNestedLegalRegistrationNumberCs(
-        GxLegalRegistrationNumberCredentialSubject request);
 }
 

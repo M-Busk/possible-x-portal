@@ -33,7 +33,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class NodeKindIRITypeId {
 
-    @NotNull
+    // no input validations as this will be set by the backend
     @JsonAlias("@id")
     private String id;
 

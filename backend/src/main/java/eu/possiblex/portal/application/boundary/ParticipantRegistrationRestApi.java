@@ -2,6 +2,7 @@ package eu.possiblex.portal.application.boundary;
 
 import eu.possiblex.portal.application.entity.CreateRegistrationRequestTO;
 import eu.possiblex.portal.application.entity.RegistrationRequestEntryTO;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,7 +17,7 @@ public interface ParticipantRegistrationRestApi {
      * @param request participant registration request
      */
     @PostMapping(value = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
-    void registerParticipant(@RequestBody CreateRegistrationRequestTO request);
+    void registerParticipant(@Valid @RequestBody CreateRegistrationRequestTO request);
 
     /**
      * GET request for retrieving registration requests for the given pagination request.
