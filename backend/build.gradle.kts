@@ -43,18 +43,24 @@ dependencies {
   implementation(libs.titaniumJsonLd)
   implementation(libs.jakartaJson)
   implementation(libs.postgresql)
-  compileOnly(libs.lombok)
-  annotationProcessor(libs.lombokMapStructBinding)
   implementation(libs.mapStruct)
+
+  annotationProcessor(libs.lombokMapStructBinding)
   annotationProcessor(libs.mapStructProcessor)
-  developmentOnly(libs.springBootDevtools)
-  runtimeOnly(libs.therApi)
   annotationProcessor(libs.lombok)
   annotationProcessor(libs.therApiScribe)
+
+  developmentOnly(libs.springBootDevtools)
+
+  runtimeOnly(libs.therApi)
+
+  compileOnly(libs.lombok)
+
   testImplementation(libs.springBootStarterTest)
   testImplementation(libs.reactorTest)
   testImplementation(libs.h2)
   testImplementation(libs.springSecurityTest)
+
   testRuntimeOnly(libs.jUnit)
 }
 

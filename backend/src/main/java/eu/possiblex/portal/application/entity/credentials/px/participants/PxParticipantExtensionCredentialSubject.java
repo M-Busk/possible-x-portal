@@ -39,7 +39,7 @@ public class PxParticipantExtensionCredentialSubject extends PojoCredentialSubje
     @JsonProperty("px:mailAddress")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
-    @Pattern(regexp = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$", message = "Mail address must be a valid email address")
+    @Pattern(regexp = "^((?!\\.)[\\w\\-.]*[^.])(@[\\w-]+)(\\.\\w+(\\.\\w+)?\\w)$", message = "Mail address must be a valid email address")
     private String mailAddress;
 
     @JsonProperty("type")

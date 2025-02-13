@@ -22,12 +22,12 @@ import {commonMessages} from "../../../environments/common-messages";
 export class ParticipantWizardExtensionComponent {
   @ViewChild("participantRegistrationStatusMessage") public participantRegistrationStatusMessage!: StatusMessageComponent;
   public prefillDone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  @ViewChild("pxParticipantExtensionWizard") private pxParticipantExtensionWizard: BaseWizardExtensionComponent;
-  @ViewChild("gxParticipantWizard") private gxParticipantWizard: BaseWizardExtensionComponent;
-  @ViewChild("gxRegistrationNumberWizard") private gxRegistrationNumberWizard: BaseWizardExtensionComponent;
+  @ViewChild("pxParticipantExtensionWizard") private readonly pxParticipantExtensionWizard: BaseWizardExtensionComponent;
+  @ViewChild("gxParticipantWizard") private readonly gxParticipantWizard: BaseWizardExtensionComponent;
+  @ViewChild("gxRegistrationNumberWizard") private readonly gxRegistrationNumberWizard: BaseWizardExtensionComponent;
 
   constructor(
-    private apiService: ApiService
+    private readonly apiService: ApiService
   ) {
   }
 

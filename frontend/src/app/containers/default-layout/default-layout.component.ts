@@ -16,7 +16,7 @@ export class DefaultLayoutComponent implements OnInit {
   versionNumber: string = '';
   versionDate: string = '';
 
-  constructor(private router: Router, private apiService: ApiService, protected auth: AuthService) {
+  constructor(private readonly router: Router, private readonly apiService: ApiService, protected auth: AuthService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isAdminPage = event.urlAfterRedirects.includes('administration/management');

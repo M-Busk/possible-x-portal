@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = { "version.no = thisistheversion", "version.date = 21.03.2022",
     "fh.catalog.ui-url = http://localhost:8080" })
 @Import(CommonPortalRestApiImpl.class)
-public class CommonPortalModuleTest {
+class CommonPortalModuleTest {
 
     @Autowired
     private MockMvc mockMvc;

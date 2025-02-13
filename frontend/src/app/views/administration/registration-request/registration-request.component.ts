@@ -23,7 +23,7 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   isClickableDelete: boolean = true;
 
 
-  constructor(private apiService: ApiService) {
+  constructor(private readonly apiService: ApiService) {
   }
 
   ngOnInit() {
@@ -37,10 +37,6 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   computeButtonStates() {
     switch (this.request.status) {
       case IRequestStatus.NEW:
-        this.isClickableAccept = true;
-        this.isClickableReject = true;
-        this.isClickableDelete = true;
-        break;
       case IRequestStatus.ACCEPTED:
         this.isClickableAccept = true;
         this.isClickableReject = true;

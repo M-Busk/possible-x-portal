@@ -94,13 +94,7 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     @Override
     public void acceptRegistrationRequest(String id) {
 
-        if (id.equals(NON_EXISTING_NAME)) {
-            throw new ParticipantEntityNotFoundException("Participant not found");
-        }
-
-        if (id.equals(BAD_TRANSITION_NAME)) {
-            throw new ParticipantEntityStateTransitionException("Bad Transition");
-        }
+        handleIdExceptions(id);
 
         // request worked
     }
@@ -108,13 +102,7 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     @Override
     public void rejectRegistrationRequest(String id) {
 
-        if (id.equals(NON_EXISTING_NAME)) {
-            throw new ParticipantEntityNotFoundException("Participant not found");
-        }
-
-        if (id.equals(BAD_TRANSITION_NAME)) {
-            throw new ParticipantEntityStateTransitionException("Bad Transition");
-        }
+        handleIdExceptions(id);
 
         // request worked
     }
@@ -122,13 +110,7 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     @Override
     public void deleteRegistrationRequest(String id) {
 
-        if (id.equals(NON_EXISTING_NAME)) {
-            throw new ParticipantEntityNotFoundException("Participant not found");
-        }
-
-        if (id.equals(BAD_TRANSITION_NAME)) {
-            throw new ParticipantEntityStateTransitionException("Bad Transition");
-        }
+        handleIdExceptions(id);
 
         // request worked
     }
@@ -137,11 +119,9 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
     public void completeRegistrationRequest(String id, ParticipantDidBE did, String vpLink,
         OmejdnConnectorCertificateBE certificate) {
 
-        if (id.equals(NON_EXISTING_NAME)) {
-            throw new ParticipantEntityNotFoundException("Participant not found");
-        }
+        handleIdExceptions(id);
 
-        if (id.equals(BAD_TRANSITION_NAME) || id.equals(BAD_COMPLETION_NAME)) {
+        if (id.equals(BAD_COMPLETION_NAME)) {
             throw new ParticipantEntityStateTransitionException("Bad Transition");
         }
 
@@ -157,5 +137,16 @@ public class ParticipantRegistrationRequestDAOFake implements ParticipantRegistr
 
         return getExampleParticipant();
 
+    }
+
+    private void handleIdExceptions(String id) {
+
+        if (id.equals(NON_EXISTING_NAME)) {
+            throw new ParticipantEntityNotFoundException("Participant not found");
+        }
+
+        if (id.equals(BAD_TRANSITION_NAME)) {
+            throw new ParticipantEntityStateTransitionException("Bad Transition");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package eu.possiblex.portal.persistence.dao;
 
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
+import eu.possiblex.portal.application.entity.credentials.gx.participants.GxLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.ParticipantRegistrationRequestBE;
 import eu.possiblex.portal.business.entity.credentials.px.GxNestedLegalRegistrationNumberCredentialSubject;
 import eu.possiblex.portal.business.entity.credentials.px.PxExtendedLegalParticipantCredentialSubject;
@@ -28,6 +29,50 @@ class ParticipantRegistrationEntityMapperTest {
     @Autowired
     private ParticipantRegistrationEntityMapper participantRegistrationServiceMapper;
 
+    private static void assertAddressIsEqual(GxVcard expected, VcardEntity actual) {
+
+        assertEquals(expected.getCountryCode(), actual.getCountryCode());
+        assertEquals(expected.getCountrySubdivisionCode(), actual.getCountrySubdivisionCode());
+        assertEquals(expected.getStreetAddress(), actual.getStreetAddress());
+        assertEquals(expected.getLocality(), actual.getLocality());
+        assertEquals(expected.getPostalCode(), actual.getPostalCode());
+    }
+
+    private static void assertAddressIsEqual(VcardEntity expected, GxVcard actual) {
+
+        assertEquals(expected.getCountryCode(), actual.getCountryCode());
+        assertEquals(expected.getCountrySubdivisionCode(), actual.getCountrySubdivisionCode());
+        assertEquals(expected.getStreetAddress(), actual.getStreetAddress());
+        assertEquals(expected.getLocality(), actual.getLocality());
+        assertEquals(expected.getPostalCode(), actual.getPostalCode());
+    }
+
+    private static void assertRegistrationNumberIsEqual(GxNestedLegalRegistrationNumberCredentialSubject expected,
+        RegistrationNumberEntity actual) {
+
+        assertEquals(expected.getEori(), actual.getEori());
+        assertEquals(expected.getVatID(), actual.getVatID());
+        assertEquals(expected.getLeiCode(), actual.getLeiCode());
+    }
+
+    private static void assertRegistrationNumberIsEqual(RegistrationNumberEntity expected,
+        GxLegalRegistrationNumberCredentialSubject actual) {
+
+        assertEquals(expected.getEori(), actual.getEori());
+        assertEquals(expected.getVatID(), actual.getVatID());
+        assertEquals(expected.getLeiCode(), actual.getLeiCode());
+    }
+
+    private static void assertConnectorCertificateIsEqual(OmejdnConnectorCertificateEntity expected,
+        OmejdnConnectorCertificateBE actual) {
+
+        assertEquals(expected.getClientId(), actual.getClientId());
+        assertEquals(expected.getClientName(), actual.getClientName());
+        assertEquals(expected.getScope(), actual.getScope());
+        assertEquals(expected.getKeystore(), actual.getKeystore());
+        assertEquals(expected.getPassword(), actual.getPassword());
+    }
+
     @Test
     void mapParticipantCredentialSubjectToEntity() {
         // given
@@ -52,23 +97,10 @@ class ParticipantRegistrationEntityMapperTest {
         assertEquals(cs.getDescription(), entity.getDescription());
         assertEquals(cs.getMailAddress(), entity.getEmailAddress());
 
-        assertEquals(cs.getLegalAddress().getCountryCode(), entity.getLegalAddress().getCountryCode());
-        assertEquals(cs.getLegalAddress().getCountrySubdivisionCode(),
-            entity.getLegalAddress().getCountrySubdivisionCode());
-        assertEquals(cs.getLegalAddress().getStreetAddress(), entity.getLegalAddress().getStreetAddress());
-        assertEquals(cs.getLegalAddress().getLocality(), entity.getLegalAddress().getLocality());
-        assertEquals(cs.getLegalAddress().getPostalCode(), entity.getLegalAddress().getPostalCode());
+        assertAddressIsEqual(cs.getLegalAddress(), entity.getLegalAddress());
+        assertAddressIsEqual(cs.getHeadquarterAddress(), entity.getHeadquarterAddress());
 
-        assertEquals(cs.getHeadquarterAddress().getCountryCode(), entity.getHeadquarterAddress().getCountryCode());
-        assertEquals(cs.getHeadquarterAddress().getCountrySubdivisionCode(),
-            entity.getHeadquarterAddress().getCountrySubdivisionCode());
-        assertEquals(cs.getHeadquarterAddress().getStreetAddress(), entity.getHeadquarterAddress().getStreetAddress());
-        assertEquals(cs.getHeadquarterAddress().getLocality(), entity.getHeadquarterAddress().getLocality());
-        assertEquals(cs.getHeadquarterAddress().getPostalCode(), entity.getHeadquarterAddress().getPostalCode());
-
-        assertEquals(cs.getLegalRegistrationNumber().getEori(), entity.getLegalRegistrationNumber().getEori());
-        assertEquals(cs.getLegalRegistrationNumber().getVatID(), entity.getLegalRegistrationNumber().getVatID());
-        assertEquals(cs.getLegalRegistrationNumber().getLeiCode(), entity.getLegalRegistrationNumber().getLeiCode());
+        assertRegistrationNumberIsEqual(cs.getLegalRegistrationNumber(), entity.getLegalRegistrationNumber());
     }
 
     @Test
@@ -89,33 +121,11 @@ class ParticipantRegistrationEntityMapperTest {
         assertEquals(entity.getStatus().name(), be.getStatus().name());
         assertEquals(entity.getVpLink(), be.getVpLink());
 
-        assertEquals(entity.getLegalRegistrationNumber().getEori(), be.getLegalRegistrationNumber().getEori());
-        assertEquals(entity.getLegalRegistrationNumber().getVatID(), be.getLegalRegistrationNumber().getVatID());
-        assertEquals(entity.getLegalRegistrationNumber().getLeiCode(), be.getLegalRegistrationNumber().getLeiCode());
+        assertRegistrationNumberIsEqual(entity.getLegalRegistrationNumber(), be.getLegalRegistrationNumber());
+        assertAddressIsEqual(entity.getLegalAddress(), be.getLegalAddress());
+        assertAddressIsEqual(entity.getHeadquarterAddress(), be.getHeadquarterAddress());
 
-        assertEquals(entity.getLegalAddress().getCountryCode(), be.getLegalAddress().getCountryCode());
-        assertEquals(entity.getLegalAddress().getCountrySubdivisionCode(),
-            be.getLegalAddress().getCountrySubdivisionCode());
-        assertEquals(entity.getLegalAddress().getStreetAddress(), be.getLegalAddress().getStreetAddress());
-        assertEquals(entity.getLegalAddress().getLocality(), be.getLegalAddress().getLocality());
-        assertEquals(entity.getLegalAddress().getPostalCode(), be.getLegalAddress().getPostalCode());
-
-        assertEquals(entity.getHeadquarterAddress().getCountryCode(), be.getHeadquarterAddress().getCountryCode());
-        assertEquals(entity.getHeadquarterAddress().getCountrySubdivisionCode(),
-            be.getHeadquarterAddress().getCountrySubdivisionCode());
-        assertEquals(entity.getHeadquarterAddress().getStreetAddress(), be.getHeadquarterAddress().getStreetAddress());
-        assertEquals(entity.getHeadquarterAddress().getLocality(), be.getHeadquarterAddress().getLocality());
-        assertEquals(entity.getHeadquarterAddress().getPostalCode(), be.getHeadquarterAddress().getPostalCode());
-
-        assertEquals(entity.getOmejdnConnectorCertificate().getClientId(),
-            be.getOmejdnConnectorCertificate().getClientId());
-        assertEquals(entity.getOmejdnConnectorCertificate().getClientName(),
-            be.getOmejdnConnectorCertificate().getClientName());
-        assertEquals(entity.getOmejdnConnectorCertificate().getKeystore(),
-            be.getOmejdnConnectorCertificate().getKeystore());
-        assertEquals(entity.getOmejdnConnectorCertificate().getPassword(),
-            be.getOmejdnConnectorCertificate().getPassword());
-        assertEquals(entity.getOmejdnConnectorCertificate().getScope(), be.getOmejdnConnectorCertificate().getScope());
+        assertConnectorCertificateIsEqual(entity.getOmejdnConnectorCertificate(), be.getOmejdnConnectorCertificate());
 
         assertEquals(entity.getDidData().getDid(), be.getDidData().getDid());
         assertEquals(entity.getDidData().getVerificationMethod(), be.getDidData().getVerificationMethod());

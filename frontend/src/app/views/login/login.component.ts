@@ -11,10 +11,10 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router, private auth: AuthService)  {}
+  constructor(private readonly router: Router, private readonly auth: AuthService) {
+  }
 
   login(username: string, password: string) {
-    var authToken = btoa(username + ':' + password);
     this.auth.login(username, password);
     this.username = '';
     this.password = '';

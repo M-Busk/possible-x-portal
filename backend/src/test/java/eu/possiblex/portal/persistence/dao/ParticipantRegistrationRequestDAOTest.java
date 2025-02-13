@@ -117,19 +117,25 @@ class ParticipantRegistrationRequestDAOTest {
     @Test
     void completeRegistrationRequestNotExistingParticipant() {
 
+        ParticipantDidBE participantDidBE = new ParticipantDidBE("validDid", "validVerificationMethod");
+        OmejdnConnectorCertificateBE omejdnConnectorCertificateBE = new OmejdnConnectorCertificateBE("validClientId",
+            "validPassword", "validKeystore", "123", "1234");
+
         assertThrows(ParticipantEntityNotFoundException.class,
             () -> participantRegistrationRequestDAO.completeRegistrationRequest("notExistingParticipant",
-                new ParticipantDidBE("validDid", "validVerificationMethod"), "validVpLink",
-                new OmejdnConnectorCertificateBE("validClientId", "validPassword", "validKeystore", "123", "1234")));
+                participantDidBE, "validVpLink", omejdnConnectorCertificateBE));
     }
 
     @Test
     void completeRegistrationRequestNotAcceptedParticipant() {
 
+        ParticipantDidBE participantDidBE = new ParticipantDidBE("validDid", "validVerificationMethod");
+        OmejdnConnectorCertificateBE omejdnConnectorCertificateBE = new OmejdnConnectorCertificateBE("validClientId",
+            "validPassword", "validKeystore", "123", "1234");
+
         assertThrows(ParticipantEntityStateTransitionException.class,
             () -> participantRegistrationRequestDAO.completeRegistrationRequest(EXAMPLE_PARTICIPANT_NAME,
-                new ParticipantDidBE("validDid", "validVerificationMethod"), "validVpLink",
-                new OmejdnConnectorCertificateBE("validClientId", "validPassword", "validKeystore", "123", "1234")));
+                participantDidBE, "validVpLink", omejdnConnectorCertificateBE));
     }
 
     @Test

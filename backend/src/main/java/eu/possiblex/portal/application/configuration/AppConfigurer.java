@@ -7,9 +7,6 @@ import eu.possiblex.portal.business.control.TechnicalFhCatalogClient;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,16 +24,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.SSLException;
@@ -126,46 +121,41 @@ public class AppConfigurer {
     }
 
     @Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/registration/request").permitAll()
-                .requestMatchers("/registration/**").authenticated()
-                .anyRequest().permitAll()
-            )
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http.authorizeHttpRequests(
+                authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/registration/request").permitAll()
+                    .requestMatchers("/registration/**").authenticated().anyRequest().permitAll())
             .httpBasic(basic -> basic.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(Customizer.withDefaults());
+            .csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults());
         return http.build();
-	}
+    }
 
     @Bean
-	public UserDetailsService userDetailsService() {
-		UserDetails admin =
-			 User.builder()
-                .username(adminUsername)
-				.password(passwordEncoder().encode(adminPassword))
-                .roles("ADMIN")
-				.build();
+    public UserDetailsService userDetailsService() {
 
-		return new InMemoryUserDetailsManager(admin);
-	}
+        UserDetails admin = User.builder().username(adminUsername).password(passwordEncoder().encode(adminPassword))
+            .roles("ADMIN").build();
+
+        return new InMemoryUserDetailsManager(admin);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
+
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                    .allowedOriginPatterns("*")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .allowedHeaders("*")
+
+                registry.addMapping("/**").allowedOriginPatterns("*")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").allowedHeaders("*")
                     .allowCredentials(true);
             }
         };
@@ -174,7 +164,9 @@ public class AppConfigurer {
     private class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         @Override
-        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException {
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader("WWW-Authenticate", "");
             response.getWriter().write("Unauthorized");

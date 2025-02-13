@@ -8,6 +8,9 @@ import {WizardExtensionModule} from './wizard-extension/wizard-extension.module'
 import {WizardAppModule} from './sdwizard/wizardapp.module';
 
 import {
+  AccordionButtonDirective,
+  AccordionComponent,
+  AccordionItemComponent,
   AvatarModule,
   BadgeModule,
   BreadcrumbModule,
@@ -27,16 +30,12 @@ import {
   SharedModule,
   SidebarModule,
   TabsModule,
-  UtilitiesModule,
-  AccordionComponent,
-  AccordionItemComponent,
   TemplateIdDirective,
-  AccordionButtonDirective
+  UtilitiesModule
 } from '@coreui/angular';
 import {DefaultLayoutComponent} from './containers';
 import {NgOptimizedImage} from "@angular/common";
-import {HomeModule} from "./views/home/home.module";
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import {AuthInterceptor} from './interceptors/auth.interceptor';
 import {MaterialModule} from "./sdwizard/material.module";
 
 @NgModule({
