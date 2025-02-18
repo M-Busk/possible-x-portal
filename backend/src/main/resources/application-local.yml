@@ -5,4 +5,4 @@ fh:
   catalog:
     ui-url: http://localhost:5080/
     url: http://localhost:5081/
-    secret-key: yourRepoApiKey
+    secret-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ.lIFGx3dAAwI3ck57PFUo2PdEUG7qGWFMPLu6-J_EaHM
