@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.possiblex.portal.application.entity.credentials.PojoCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -35,6 +36,7 @@ public class PxParticipantExtensionCredentialSubject extends PojoCredentialSubje
     public static final Map<String, String> CONTEXT = Map.of(TYPE_NAMESPACE, "http://w3id.org/gaia-x/possible-x#",
         "vcard", "http://www.w3.org/2006/vcard/ns#", "xsd", "http://www.w3.org/2001/XMLSchema#");
 
+    @Schema(description = "Email address", example = "contact@someorg.com")
     @NotBlank(message = "Mail address is needed")
     @JsonProperty("px:mailAddress")
     @JsonSerialize(using = StringSerializer.class)
@@ -42,12 +44,14 @@ public class PxParticipantExtensionCredentialSubject extends PojoCredentialSubje
     @Pattern(regexp = "^((?!\\.)[\\w\\-.]*[^.])(@[\\w-]+)(\\.\\w+(\\.\\w+)?\\w)$", message = "Mail address must be a valid email address")
     private String mailAddress;
 
+    @Schema(description = "JSON-LD type", example = "px:PossibleXLegalParticipantExtension")
     @JsonProperty("type")
     public String getType() {
 
         return TYPE;
     }
 
+    @Schema(description = "JSON-LD context", example = "{\"px\": \"http://w3id.org/gaia-x/possible-x#\"}")
     @JsonProperty("@context")
     public Map<String, String> getContext() {
 

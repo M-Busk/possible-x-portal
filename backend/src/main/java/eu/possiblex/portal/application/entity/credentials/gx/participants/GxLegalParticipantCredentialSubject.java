@@ -27,6 +27,7 @@ import eu.possiblex.portal.application.entity.credentials.gx.datatypes.GxVcard;
 import eu.possiblex.portal.application.entity.credentials.gx.datatypes.NodeKindIRITypeId;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -61,23 +62,27 @@ public class GxLegalParticipantCredentialSubject extends PojoCredentialSubject {
 
     // Tagus
     // no input validations as this will be set by the backend
+    @Schema(description = "List of resolvable links to the registration numbers related to the participant")
     @JsonProperty("gx:legalRegistrationNumber")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<NodeKindIRITypeId> legalRegistrationNumber; // will be gx:registrationNumber in Loire
 
     // Loire
+    @Schema(description = "Legal address of the participant")
     @Valid
     @NotNull(message = "Legal address is needed")
     @JsonProperty("gx:legalAddress")
     private GxVcard legalAddress; // contains Tagus gx:countrySubdivisionCode
 
     // Loire
+    @Schema(description = "Headquarter address of the participant")
     @Valid
     @NotNull(message = "Headquarter address is needed")
     @JsonProperty("gx:headquarterAddress")
     private GxVcard headquarterAddress; // contains Tagus gx:countrySubdivisionCode
 
     // Loire
+    @Schema(description = "Name of the participant", example = "Some Organization Ltd.")
     @NotBlank(message = "Name is needed")
     @JsonProperty("schema:name")
     @JsonSerialize(using = StringSerializer.class)
@@ -85,17 +90,20 @@ public class GxLegalParticipantCredentialSubject extends PojoCredentialSubject {
     private String name;
 
     // Loire
+    @Schema(description = "Description of the participant", example = "Some Organization Ltd. Description")
     @JsonProperty("schema:description")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String description;
 
+    @Schema(description = "JSON-LD type", example = "gx:LegalParticipant")
     @JsonProperty("type")
     public String getType() {
 
         return TYPE;
     }
 
+    @Schema(description = "JSON-LD context", example = "{\"gx\": \"https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#\"}")
     @JsonProperty("@context")
     public Map<String, String> getContext() {
 

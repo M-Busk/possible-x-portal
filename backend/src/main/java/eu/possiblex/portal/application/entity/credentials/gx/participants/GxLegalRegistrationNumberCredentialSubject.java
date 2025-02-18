@@ -25,6 +25,7 @@ import eu.possiblex.portal.application.entity.credentials.PojoCredentialSubject;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
 import eu.possiblex.portal.application.entity.credentials.validation.AtLeastOneRegistrationNumberNotEmpty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.Map;
@@ -53,27 +54,33 @@ public class GxLegalRegistrationNumberCredentialSubject extends PojoCredentialSu
         "https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#", "xsd",
         "http://www.w3.org/2001/XMLSchema#");
 
+    @Schema(description = "EORI", example = "DE123456789012345")
     @JsonProperty("gx:EORI")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String eori;
 
+    @Schema(description = "VAT ID", example = "DE269448547")
     @JsonProperty("gx:vatID")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String vatID;
 
+    @Schema(description = "LEI Code", example = "391200RT75XV0TG47X87")
     @JsonProperty("gx:leiCode")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String leiCode;
 
+
+    @Schema(description = "JSON-LD type", example = "gx:legalRegistrationNumber")
     @JsonProperty("type")
     public String getType() {
 
         return TYPE;
     }
 
+    @Schema(description = "JSON-LD context", example = "{\"gx\": \"https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#\"}")
     @JsonProperty("@context")
     public Map<String, String> getContext() {
 

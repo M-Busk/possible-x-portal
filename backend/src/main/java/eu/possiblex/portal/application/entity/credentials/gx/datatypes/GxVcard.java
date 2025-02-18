@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringDeserializer;
 import eu.possiblex.portal.application.entity.credentials.serialization.StringSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -36,6 +37,7 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GxVcard {
 
+    @Schema(description = "Country code as an ISO 3166-1 alpha2, alpha-3 or numeric format value", example = "DE")
     @JsonProperty("gx:countryCode")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
@@ -43,6 +45,7 @@ public class GxVcard {
     @Pattern(regexp = "^([A-Z]{2}|[A-Z]{3}|\\d{3})$", message = "An ISO 3166-1 alpha2, alpha-3 or numeric format value is expected.")
     private String countryCode;
 
+    @Schema(description = "Country subdivision code as an ISO 3166-2 format value", example = "DE-NI")
     @JsonProperty("gx:countrySubdivisionCode")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
@@ -50,16 +53,19 @@ public class GxVcard {
     @Pattern(regexp = "^[A-Z]{2}-[A-Z0-9]{1,3}$", message = "An ISO 3166-2 format value is expected.")
     private String countrySubdivisionCode;
 
+    @Schema(description = "Street address", example = "Some Street 123")
     @JsonProperty("vcard:street-address")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String streetAddress;
 
+    @Schema(description = "Locality", example = "Some City")
     @JsonProperty("vcard:locality")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
     private String locality;
 
+    @Schema(description = "Postal Code", example = "12345")
     @JsonProperty("vcard:postal-code")
     @JsonSerialize(using = StringSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)

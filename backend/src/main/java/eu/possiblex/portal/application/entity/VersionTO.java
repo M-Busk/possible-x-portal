@@ -1,5 +1,6 @@
 package eu.possiblex.portal.application.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,13 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VersionTO {
-    /**
-     * the version of the participant portal
-     */
+    @Schema(description = "Version of the portal", example = "1.0.0")
     private String version;
 
-    /**
-     * the date of the version of the participant portal
-     */
+    @Schema(description = "Date of the version of the portal", example = "2024-12-31")
     private String date;
 }

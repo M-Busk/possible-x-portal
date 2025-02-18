@@ -17,6 +17,7 @@
 package eu.possiblex.portal.application.entity.daps;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,18 +26,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OmejdnConnectorCertificateDto {
+    @Schema(description = "DAPS client name of the participant", example = "did:web:example.com:participant:someorgltd")
     @JsonProperty("client_name")
     private String clientName;
 
+    @Schema(description = "DAPS client ID of the participant", example = "A4:22:E0:E1:E6:7A:0F:D7:AD:11:2B:A1:D9:58:1E:38:62:2C:13:31:keyid:A4:22:E0:E1:E6:7A:0F:D7:AD:11:2B:A1:D9:58:1E:38:62:2C:13:31")
     @JsonProperty("client_id")
     private String clientId;
 
+    @Schema(description = "Certificate keystore as base64 encoded string", example = "a2V5c3RvcmU=")
     @JsonProperty("keystore")
     private String keystore;
 
+    @Schema(description = "Password for the certificate keystore", example = "password")
     @JsonProperty("password")
     private String password;
 
+    @Schema(description = "Scope for fetching claims", example = "idsc:IDS_CONNECTOR_ATTRIBUTES_ALL")
     @JsonProperty("scope")
     private String scope;
 }
