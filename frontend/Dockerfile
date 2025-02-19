@@ -28,7 +28,7 @@ RUN apt-get update &&  \
 
 WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle . .
-RUN gradle buildFrontend --no-daemon -DactiveProfile=${ACTIVEPROFILE}
+RUN gradle buildFrontend --no-daemon -PactiveProfile=${ACTIVEPROFILE}
 
 FROM nginx:stable-alpine
 COPY --from=build /home/gradle/src/build/resources /usr/share/nginx/html
