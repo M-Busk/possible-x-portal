@@ -15,22 +15,26 @@
 -->
 
 <div class="grid-container">
-    <br><br>
-    <div class="pb-3 text-2xl font-bold text-brand-50">
-      Login Page
-    </div>
+  <br><br>
+  <div class="pb-3 text-2xl font-bold text-brand-50">
+    Login Page
+  </div>
   <div class="text">
     Please enter your username and password to login to the administration area.
   </div>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="input">
       <label cLabel for="username" class="text">Username:</label>
-      <input class="form-control rounded-none" type="text" id="username" [(ngModel)]="username">
+      <input class="form-control rounded-none" type="text" id="username" formControlName="username"
+             (keydown.enter)="passwordField.focus()">
     </div>
     <div class="input">
       <label cLabel for="password" class="text">Password:</label>
-      <input class="form-control rounded-none" type="password" id="password" [(ngModel)]="password">
+      <input class="form-control rounded-none" type="password" id="password" #passwordField formControlName="password"
+             (keydown.enter)="login()">
     </div>
-  <button shape="rounded-0" (click)="login(username, password)" cButton class="custom-button">
-    Login
-  </button>
+    <button shape="rounded-0" type="submit" cButton class="custom-button" [disabled]="loginForm.invalid">
+      Login
+    </button>
+  </form>
 </div>
