@@ -120,7 +120,7 @@ jobs:
           tags: ${{ steps.frontend-meta.outputs.tags }}
           labels: ${{ steps.frontend-meta.outputs.labels }}
           build-args: |
-            ACTIVEPROFILE="remote"
+            ACTIVEPROFILE=remote
 
   deploy-portal-to-dev:
     runs-on: 'ubuntu-latest'
