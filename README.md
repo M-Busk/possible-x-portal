@@ -36,7 +36,7 @@ controller classes using the following command:
 ./gradlew generateTypeScript
 ```
 
-Afterwards they can be found at
+Afterward they can be found at
 
 ```
 frontend/src/app/services/mgnt/api/backend.ts

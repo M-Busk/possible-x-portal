@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // basic authentification for /registration/** path except POST /registration/request
+    // basic authentication for /registration/** path except POST /registration/request
     if (req.url.includes("/registration/") && !(/\/registration\/request$/.exec(req.url) && req.method === "POST")) {
       const authToken = this.auth.getToken();
       if (authToken) {
