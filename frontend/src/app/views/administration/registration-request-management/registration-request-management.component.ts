@@ -39,6 +39,7 @@ export class RegistrationRequestManagementComponent implements OnInit, AfterView
   pageSize = 10;
   pageIndex = 0;
   totalNumberOfRegistrationRequests = 0;
+  waitingForRequests: boolean = false;
 
   constructor(private readonly apiService: ApiService) {
   }
@@ -78,12 +79,19 @@ export class RegistrationRequestManagementComponent implements OnInit, AfterView
       params.sort = sortState.active + ',' + sortState.direction;
     }
 
+    this.waitingForRequests = true;
+
     // get registration requests with params for pagination and sorting
     this.getRegistrationRequests(params)
+      .then(() => {
+        this.waitingForRequests = false;
+      })
       .catch((e: HttpErrorResponse) => {
         this.requestListStatusMessage.showErrorMessage(e.error.detail);
+        this.waitingForRequests = false;
       }).catch(_ => {
       this.requestListStatusMessage.showErrorMessage("Unknown error occurred");
+      this.waitingForRequests = false;
     });
   }
 

@@ -18,7 +18,7 @@
   <div class="flex pb-3 text-2xl font-bold text-brand-50">
     Gaia-X Legal Participant Fields
   </div>
-
+  <app-loading-animation [light]="true" *ngIf="!pxParticipantExtensionWizard?.isShapeLoaded() || !gxParticipantWizard?.isShapeLoaded()"></app-loading-animation>
   <app-base-wizard-extension #pxParticipantExtensionWizard></app-base-wizard-extension>
   <app-base-wizard-extension #gxParticipantWizard></app-base-wizard-extension>
 </div>
@@ -34,6 +34,7 @@
     <small>At least one of VatID, EORI or LEI Code is required.</small>
   </div>
   <br/>
+  <app-loading-animation [light]="true" *ngIf="!gxRegistrationNumberWizard?.isShapeLoaded()"></app-loading-animation>
   <app-base-wizard-extension #gxRegistrationNumberWizard></app-base-wizard-extension>
 </div>
 
@@ -49,6 +50,7 @@
 <div class="flex justify-center mt-3">
   <app-status-message
     #participantRegistrationStatusMessage
+    [light]="true"
     [errorMessage]="'Participant registration request failed.'"
     [infoMessage]="'Participant registration request ongoing.'"
     [successMessage]="'Participant registration request submitted. Your request will be checked by a POSSIBLE-X data space administrator and your data will be verified by a Gaia-X Clearing House.'">

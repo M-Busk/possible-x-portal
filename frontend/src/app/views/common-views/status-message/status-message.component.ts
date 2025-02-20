@@ -31,6 +31,7 @@ export class StatusMessageComponent {
   @Input() successMessage: string = "Test";
   @Input() errorMessage: string = "Test";
   @Input() infoMessage: string = "Test";
+  @Input() light: boolean = false;
   public isMessageVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   protected successMessageVisible: boolean = false;
   protected errorMessageVisible: boolean = false;

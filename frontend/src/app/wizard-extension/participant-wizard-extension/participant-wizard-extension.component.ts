@@ -61,11 +61,6 @@ export class ParticipantWizardExtensionComponent {
 
   }
 
-  public isShapeLoaded(): boolean {
-    return this.gxParticipantWizard?.isShapeLoaded() && this.gxRegistrationNumberWizard?.isShapeLoaded()
-      && this.pxParticipantExtensionWizard?.isShapeLoaded();
-  }
-
   public prefillFields(csList: IPojoCredentialSubject[]) {
     for (let cs of csList) {
       this.prefillHandleCs(cs)
@@ -92,6 +87,7 @@ export class ParticipantWizardExtensionComponent {
   async registerParticipant() {
     console.log("Register participant.");
     this.participantRegistrationStatusMessage.hideAllMessages();
+    this.participantRegistrationStatusMessage.showInfoMessage();
 
     let gxParticipantJson: IGxLegalParticipantCredentialSubject = this.gxParticipantWizard.generateJsonCs();
     let gxRegistrationNumberJson: IGxLegalRegistrationNumberCredentialSubject = this.gxRegistrationNumberWizard.generateJsonCs();

@@ -52,15 +52,18 @@
 
       <div class="action-buttons-container">
         <button class="custom-button" (click)="acceptRequest($event, request)" [disabled]="!isClickableAccept">
-          <img class="icon" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20" width="20"/>
+          <img *ngIf="!accepting" class="icon" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20" width="20"/>
+          <img *ngIf="accepting" class="icon icon-fade-in" ngSrc="assets/images/icons/accept.svg" alt="Accepted Icon" height="20" width="20"/>
           Accept
         </button>
         <button class="custom-button" (click)="rejectRequest($event, request)" [disabled]="!isClickableReject">
-          <img class="icon" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20" width="20"/>
+          <img *ngIf="!rejecting" class="icon" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20" width="20"/>
+          <img *ngIf="rejecting" class="icon icon-fade-in" ngSrc="assets/images/icons/reject.svg" alt="Rejected Icon" height="20" width="20"/>
           Reject
         </button>
         <button class="custom-button" (click)="deleteRequest($event, request)" [disabled]="!isClickableDelete">
-          <img class="icon" ngSrc="assets/images/icons/delete.svg" alt="Accepted Icon" height="20" width="20"/>
+          <img *ngIf="!deleting" class="icon" ngSrc="assets/images/icons/delete.svg" alt="Accepted Icon" height="20" width="20"/>
+          <img *ngIf="deleting" class="icon icon-fade-in" ngSrc="assets/images/icons/delete.svg" alt="Accepted Icon" height="20" width="20"/>
           Delete
         </button>
       </div>

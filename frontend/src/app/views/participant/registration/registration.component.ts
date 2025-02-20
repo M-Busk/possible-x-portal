@@ -34,7 +34,7 @@ export class RegistrationComponent implements AfterViewInit {
 
 
   async prefillWizardNewParticipant() {
-    this.wizardExtension.loadShape("did:web:WILL_BE_GENERATED", "urn:uuid:WILL_BE_GENERATED");
+    await this.wizardExtension.loadShape("did:web:WILL_BE_GENERATED", "urn:uuid:WILL_BE_GENERATED");
 
     this.wizardExtension.prefillFields([]);
   }

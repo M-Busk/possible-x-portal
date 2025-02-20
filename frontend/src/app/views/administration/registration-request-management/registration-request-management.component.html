@@ -26,6 +26,7 @@
     <app-registration-request (response)="showResponse($event)" *ngFor="let request of registrationRequests.data"
                               [request]="request"></app-registration-request>
   </c-accordion>
+  <app-loading-animation *ngIf="waitingForRequests"></app-loading-animation>
   <mat-paginator (page)="onPageChange($event)"
                  [length]="totalNumberOfRegistrationRequests"
                  [pageIndex]="pageIndex"

@@ -23,6 +23,11 @@
   white-space: pre-wrap;
 }
 
+.info-message-light {
+  @apply text-white;
+  white-space: pre-wrap;
+}
+
 .error-message {
   @apply text-error;
   white-space: pre-wrap;

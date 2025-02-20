@@ -38,6 +38,9 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   isClickableReject: boolean = true;
   isClickableDelete: boolean = true;
 
+  accepting: boolean = false;
+  rejecting: boolean = false;
+  deleting: boolean = false;
 
   constructor(private readonly apiService: ApiService) {
   }
@@ -79,55 +82,66 @@ export class RegistrationRequestComponent implements OnInit, OnChanges {
   async acceptRequest(event: Event, request: IRegistrationRequestEntryTO): Promise<void> {
     event.stopPropagation();
     this.disableAllButtons();
+    this.accepting = true;
     this.apiService.acceptRegistrationRequest(request.name).then(() => {
       console.log("Accept request for: " + request.name);
       this.response.emit({
         isError: false,
         message: "Request accepted successfully. Participant was checked for compliance and stored in the catalog."
       });
+      this.accepting = false;
     }).catch((e: HttpErrorResponse) => {
       if (e.status === 500) {
         this.response.emit({isError: true, message: commonMessages.general_error});
       } else {
         this.response.emit({isError: true, message: e.error.details});
       }
+      this.accepting = false;
     }).catch(_ => {
       this.response.emit({isError: true, message: commonMessages.general_error});
+      this.accepting = false;
     });
   }
 
   async deleteRequest(event: Event, request: IRegistrationRequestEntryTO): Promise<void> {
     event.stopPropagation();
     this.disableAllButtons();
+    this.deleting = true;
     this.apiService.deleteRegistrationRequest(request.name).then(() => {
       console.log("Delete request for: " + request.name);
       this.response.emit({isError: false, message: "Request deleted successfully"});
+      this.deleting = false;
     }).catch((e: HttpErrorResponse) => {
       if (e.status === 500) {
         this.response.emit({isError: true, message: commonMessages.general_error});
       } else {
         this.response.emit({isError: true, message: e.error.details});
       }
+      this.deleting = false;
     }).catch(_ => {
       this.response.emit({isError: true, message: commonMessages.general_error});
+      this.deleting = false;
     });
   }
 
   async rejectRequest(event: Event, request: IRegistrationRequestEntryTO): Promise<void> {
     event.stopPropagation();
     this.disableAllButtons();
-
+    this.rejecting = true;
     this.apiService.rejectRegistrationRequest(request.name).then(() => {
       console.log("Reject request for: " + request.name);
       this.response.emit({isError: false, message: "Request rejected successfully"});
+      this.rejecting = false;
     }).catch((e: HttpErrorResponse) => {
       if (e.status === 500) {
         this.response.emit({isError: true, message: commonMessages.general_error});
       } else {
         this.response.emit({isError: true, message: e.error.details});
       }
+      this.rejecting = false;
     }).catch(_ => {
       this.response.emit({isError: true, message: commonMessages.general_error});
+      this.rejecting = false;
     });
   }
 

@@ -22,8 +22,12 @@
   <strong *ngIf="errorMessageVisible" class="error-message">{{ errorMessage }}<br *ngIf="errorDetails"/>{{
       errorDetails
     }}</strong>
-  <strong *ngIf="infoMessageVisible" class="info-message">{{ infoMessage }}<br *ngIf="infoDetails"/>{{
-      infoDetails
-    }}</strong>
+  <div *ngIf="infoMessageVisible" class="flex items-center">
+    <strong [ngClass]="{ 'info-message-light': light, 'info-message': !light }">{{ infoMessage }}<br
+      *ngIf="infoDetails"/>{{
+        infoDetails
+      }}</strong>
+    <app-loading-animation class="ml-1 mt-1" [light]="light"></app-loading-animation>
+  </div>
 </div>
 

@@ -14,18 +14,27 @@
  *  limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, Input} from '@angular/core';
 
-import {StatusMessageComponent} from './status-message/status-message.component';
-import {LoadingAnimationComponent} from './loading-animation/loading-animation.component';
-import {SpinnerModule} from "@coreui/angular";
-
-@NgModule({
-  declarations: [StatusMessageComponent, LoadingAnimationComponent],
-  imports: [CommonModule, SpinnerModule],
-  exports: [StatusMessageComponent, LoadingAnimationComponent],
+@Component({
+  selector: 'app-loading-animation',
+  templateUrl: './loading-animation.component.html',
+  styleUrls: ['./loading-animation.component.scss']
 })
+export class LoadingAnimationComponent {
+  @Input() light: boolean = false;
 
-export class CommonViewsModule {
+  imageUrl: string = 'assets/images/brand/x-blue.svg';
+  imageLightUrl: string = 'assets/images/brand/x-white.svg';
+
+  color: string = 'primary';
+  colorLight: string = 'light';
+
+  getColor(): string {
+    return this.light ? this.colorLight : this.color;
+  }
+
+  getImageUrl(): string {
+    return this.light ? this.imageLightUrl : this.imageUrl;
+  }
 }

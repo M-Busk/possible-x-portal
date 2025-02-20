@@ -66,3 +66,18 @@
   font-weight: bold;
   @apply text-brand-700;
 }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.icon-fade-in {
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
