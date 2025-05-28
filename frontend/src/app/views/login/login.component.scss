@@ -28,6 +28,7 @@
 }
 
 .custom-button {
+  @apply bg-brand-600;
   @apply text-brand-50 border-2 border-brand-50 p-2;
   width: 60px;
   display: flex;
@@ -35,7 +36,7 @@
   transition: background-color 0.2s ease;
 
   &:hover {
-    @apply bg-brand-600;
+    @apply bg-brand-200 bg-opacity-10;
   }
 }
 
