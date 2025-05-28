@@ -30,7 +30,7 @@
   transition: background-color 0.2s ease;
 
   &:hover {
-    @apply bg-brand-600;
+    @apply bg-brand-200 bg-opacity-10;
   }
 }
 
@@ -85,7 +85,7 @@
     background-image: url('../../../assets/images/stock/capgemini_hero.jpg');
     background-size: cover;
     background-position: 100% center;
-    opacity: 0.4;
+    opacity: 0.5;
     z-index: 0;
   }
 }
