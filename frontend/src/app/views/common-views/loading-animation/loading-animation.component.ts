@@ -24,8 +24,8 @@ import {Component, Input} from '@angular/core';
 export class LoadingAnimationComponent {
   @Input() light: boolean = false;
 
-  imageUrl: string = 'assets/images/brand/x-blue.svg';
-  imageLightUrl: string = 'assets/images/brand/x-white.svg';
+  imageUrl: string = 'assets/images/brand/spade-blue.png';
+  imageLightUrl: string = 'assets/images/brand/spade-white.png';
 
   color: string = 'primary';
   colorLight: string = 'light';

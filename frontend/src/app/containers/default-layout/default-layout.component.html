@@ -19,7 +19,7 @@
     <c-navbar class="header border-0" expand="lg">
       <c-container fluid>
         <a [routerLink]="['/']" cNavbarBrand class="logo">
-          <img [alt]="'POSSIBLE-X Logo'" width="142" src="assets/images/brand/possible_blue.svg"/>
+          <img [alt]="'Capgemini Logo'" width="142" src="assets/images/brand/capgemini_blue.png"/>
         </a>
         <c-navbar-nav class="navbar-nav">
           <c-nav-item *ngIf="!!auth.getToken()">
@@ -28,6 +28,7 @@
           <c-nav-item *ngIf="!auth.getToken()">
             <a [routerLink]="['/login']" cNavLink>Login</a>
           </c-nav-item>
+          <!---
           <c-nav-item>
             <a [href]="environment.possible_website_possible_url" cNavLink target="_blank">Possible</a>
           </c-nav-item>
@@ -36,6 +37,10 @@
           </c-nav-item>
           <c-nav-item>
             <a [routerLink]="['/impressum']" cNavLink>Impressum</a>
+          </c-nav-item>
+          --->
+          <c-nav-item>
+            <a cNavLink>Impressum</a>
           </c-nav-item>
         </c-navbar-nav>
       </c-container>
@@ -48,25 +53,22 @@
   </div>
   <div class="footer-wrapper" [ngClass]="{'admin-footer-wrapper': isAdminPage, 'main-footer-wrapper': isMainPage}">
     <ng-container *ngIf="!isMainPage">
-      <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.svg" style="margin-left: auto;" width="423" height="238"/>
+      <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.png" style="margin-left: auto;" width="423" height="238"/>
       <ng-template #defaultImage>
-        <img alt="" ngSrc="assets/images/brand/bottom-white.svg" style="margin-left: auto;" width="423" height="238"/>
+        <img alt="" ngSrc="assets/images/brand/bottom-white.png" style="margin-left: auto;" width="423" height="238"/>
       </ng-template>
     </ng-container>
     <div>
       <c-footer class="footer border-0">
         <div class="logo">
-          <div class="circle-visual"></div>
-          <img alt="POSSIBLE-X Logo" height="49" src="assets/images/brand/possible_white.svg" width="190"/>
+
+          <img alt="Capgemini Logo" height="49" src="assets/images/brand/capgemini_white.png" width="190"/>
         </div>
         <div>
-          <div class="mb-8">
-            <div class="mb-2 text-2xl">POSSIBLE-X</div>
-          </div>
           <div class="mb-2">
             <a [routerLink]="['/licenses']">License Information</a>
           </div>
-          <div class="text-sm">© 2024 POSSIBLE Consortium</div>
+          <div class="text-sm">© 2025 Capgemini</div>
         </div>
         <div class="flex justify-end">
           Release: {{ versionNumber }} ({{ versionDate | date:'yyyy-MM-dd' }})
