@@ -33,7 +33,7 @@ module.exports = {
         success: "#10B15C",
         error: "#DC2626",
         brand: {
-          50: "#ffffff",
+          50: "#F6F6F6",
           100: "#F6F6F6",
           200: "#F6F6F6",
           300: "#F6F6F6",

@@ -18,5 +18,5 @@
   <c-spinner size="sm" [color]="getColor()" variant="grow" />
   <c-spinner size="sm" [color]="getColor()" variant="grow" />
   <c-spinner size="sm" [color]="getColor()" variant="grow" />
-  <img class="img-fade-in" [src]="getImageUrl()" alt="Spinning POSSIBLE-X Logo" />
+  <img class="img-fade-in" [ngClass]="{ 'color-logo': !light }" [src]="getImageUrl()" alt="Spinning Capgemini Logo" />
 </div>

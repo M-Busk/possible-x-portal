@@ -35,12 +35,9 @@
           <c-nav-item>
             <a [href]="environment.possible_website_group_url" cNavLink target="_blank">Verbund</a>
           </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/impressum']" cNavLink>Impressum</a>
-          </c-nav-item>
           --->
           <c-nav-item>
-            <a cNavLink>Impressum</a>
+            <a [routerLink]="['/impressum']" cNavLink>Impressum</a>
           </c-nav-item>
         </c-navbar-nav>
       </c-container>
@@ -55,13 +52,12 @@
     <ng-container *ngIf="!isMainPage">
       <img *ngIf="isAdminPage; else defaultImage" alt="" ngSrc="assets/images/brand/bottom-blue.png" style="margin-left: auto;" width="423" height="238"/>
       <ng-template #defaultImage>
-        <img alt="" ngSrc="assets/images/brand/bottom-white.png" style="margin-left: auto;" width="423" height="238"/>
+        <img alt="" ngSrc="assets/images/brand/bottom-blue.png" style="margin-left: auto;" width="423" height="238"/>
       </ng-template>
     </ng-container>
     <div>
       <c-footer class="footer border-0">
         <div class="logo">
-
           <img alt="Capgemini Logo" height="49" src="assets/images/brand/capgemini_white.png" width="190"/>
         </div>
         <div>

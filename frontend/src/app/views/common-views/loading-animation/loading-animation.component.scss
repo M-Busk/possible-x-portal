@@ -70,3 +70,7 @@ c-spinner[size="sm"] {
 .slow-spinner .img-fade-in {
   animation-delay: 1s;
 }
+
+.color-logo {
+  filter: brightness(0) saturate(100%) invert(13%) sepia(22%) saturate(1925%) hue-rotate(184deg) brightness(98%) contrast(89%);
+}
